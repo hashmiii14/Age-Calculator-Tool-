@@ -68,7 +68,7 @@ export default function PersonalizedHero({ profile, onClearDate }: PersonalizedH
           </p>
         )}
         {nextBirthday.isToday && (
-          <p style={{ color: '#E85D36' }} className="text-sm font-bold">🎉 Happy Birthday! You're turning {nextBirthday.turningAge} today!</p>
+          <p style={{ color: '#E85D36' }} className="text-sm font-bold">🎉 Happy Birthday! You&apos;re turning {nextBirthday.turningAge} today!</p>
         )}
 
         {/* Subtle divider + secondary stats */}

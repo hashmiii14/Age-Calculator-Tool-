@@ -52,7 +52,7 @@ export default function BirthdayCountdown({ nextBirthday, nextFiveBirthdays }: B
           <p style={{ color: 'rgba(255,255,255,0.65)' }} className="text-xs uppercase tracking-widest font-semibold mb-2">Today is your birthday</p>
           <h2 className="text-4xl sm:text-5xl font-extrabold font-serif text-white">Happy Birthday!</h2>
           <p style={{ color: 'rgba(255,255,255,0.8)' }} className="text-base mt-2">
-            You're turning <span className="font-extrabold text-white text-xl">{nextBirthday.turningAge}</span> today 🎉
+            You&apos;re turning <span className="font-extrabold text-white text-xl">{nextBirthday.turningAge}</span> today 🎉
           </p>
         </div>
         <button onClick={fireConfetti} type="button"
