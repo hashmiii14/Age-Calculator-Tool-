@@ -38,13 +38,13 @@ export default function AdSlot({
     return (
       <aside
         aria-label={label}
-        className={`w-full my-6 flex flex-col items-center justify-center rounded-2xl border border-dashed border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-900/30 text-slate-400 dark:text-slate-600 text-xs p-4 transition-colors ${className}`}
+        className={`w-full my-6 flex flex-col items-center justify-center rounded-2xl border border-dashed border-slate-800 bg-slate-900/40 text-slate-500 text-xs p-4 transition-colors ${className}`}
         style={{ minHeight }}
       >
-        <span className="font-mono text-[11px] uppercase tracking-wider text-slate-400/80 mb-1">
+        <span className="font-mono text-[11px] uppercase tracking-wider text-slate-500 mb-1">
           {label} (Reserved Slot)
         </span>
-        <span className="text-[10px] text-slate-400/60 text-center">
+        <span className="text-[10px] text-slate-600 text-center">
           AdSense placeholder — configure NEXT_PUBLIC_ADSENSE_CLIENT after site approval.
         </span>
       </aside>
@@ -53,7 +53,7 @@ export default function AdSlot({
 
   return (
     <aside aria-label={label} className={`w-full my-6 text-center overflow-hidden ${className}`}>
-      <span className="block text-[10px] font-mono text-slate-400 dark:text-slate-500 uppercase tracking-wider mb-1">
+      <span className="block text-[10px] font-mono text-slate-500 uppercase tracking-wider mb-1">
         {label}
       </span>
       <ins

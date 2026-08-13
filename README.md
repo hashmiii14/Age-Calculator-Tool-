@@ -39,7 +39,7 @@ AgePulse is a production-ready, highly accurate, privacy-first, SEO-optimized, a
 │   ├── content/               # Educational guide & interactive FAQ accordion
 │   ├── ads/                   # Reserved layout AdSlot component for AdSense
 │   ├── layout/                # Header & Footer with mobile responsive drawer
-│   └── ui/                    # ThemeToggle, Breadcrumbs, PresetButtons
+│   └── ui/                    # CustomDatePicker, Breadcrumbs, PresetButtons
 ├── lib/age/
 │   ├── dateUtils.ts           # Timezone-safe ISO date string parsers & formatters
 │   ├── ageEngine.ts           # Pure deterministic chronological calculation engine

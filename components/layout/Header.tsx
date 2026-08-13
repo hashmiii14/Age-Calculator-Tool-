@@ -4,7 +4,6 @@ import { useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { Calendar, Menu, X, Clock, Info } from 'lucide-react';
-import ThemeToggle from '../ui/ThemeToggle';
 
 export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -17,7 +16,7 @@ export default function Header() {
   ];
 
   return (
-    <header className="sticky top-0 z-40 w-full border-b border-amber-200/60 dark:border-slate-800/80 bg-[#fff9f7]/90 dark:bg-slate-950/90 backdrop-blur-md transition-colors">
+    <header className="sticky top-0 z-40 w-full border-b border-slate-800/80 bg-[#090d16]/90 backdrop-blur-md transition-colors">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           {/* Brand Logo */}
@@ -26,10 +25,10 @@ export default function Header() {
               <Calendar className="w-5 h-5" />
             </div>
             <div className="flex flex-col">
-              <span className="font-bold text-xl tracking-tight text-slate-900 dark:text-white font-sans">
-                Age<span className="text-orange-600 dark:text-orange-400">Pulse</span>
+              <span className="font-bold text-xl tracking-tight text-white font-sans">
+                Age<span className="text-orange-400">Pulse</span>
               </span>
-              <span className="text-[10px] font-semibold text-orange-600/80 dark:text-orange-400/80 uppercase tracking-wider -mt-1">
+              <span className="text-[10px] font-semibold text-orange-400/80 uppercase tracking-wider -mt-1">
                 Precision Calculator
               </span>
             </div>
@@ -46,8 +45,8 @@ export default function Header() {
                   href={link.href}
                   className={`flex items-center space-x-2 px-4 py-2 rounded-xl text-sm font-semibold transition-all ${
                     isActive
-                      ? 'bg-orange-100/80 text-orange-700 dark:bg-orange-950/60 dark:text-orange-400 font-bold'
-                      : 'text-slate-700 hover:text-orange-600 hover:bg-orange-50 dark:text-slate-300 dark:hover:text-white dark:hover:bg-slate-900'
+                      ? 'bg-orange-950/60 text-orange-400 font-bold border border-orange-900/50'
+                      : 'text-slate-300 hover:text-white hover:bg-slate-900'
                   }`}
                 >
                   <Icon className="w-4 h-4" />
@@ -57,13 +56,11 @@ export default function Header() {
             })}
           </nav>
 
-          {/* Controls & Mobile Hamburger */}
+          {/* Mobile Hamburger */}
           <div className="flex items-center space-x-3">
-            <ThemeToggle />
-
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="md:hidden p-2.5 rounded-xl border border-amber-200 dark:border-slate-800 text-slate-700 dark:text-slate-300 hover:bg-orange-50 dark:hover:bg-slate-900 focus:outline-none focus:ring-2 focus:ring-orange-500"
+              className="md:hidden p-2.5 rounded-xl border border-slate-800 text-slate-300 hover:bg-slate-900 focus:outline-none focus:ring-2 focus:ring-orange-500"
               aria-label="Toggle navigation menu"
               aria-expanded={mobileMenuOpen}
             >
@@ -75,7 +72,7 @@ export default function Header() {
 
       {/* Mobile Drawer */}
       {mobileMenuOpen && (
-        <div className="md:hidden border-b border-amber-200 dark:border-slate-800 bg-[#fffaf8] dark:bg-slate-950 px-4 pt-2 pb-4 space-y-1 animate-fadeIn">
+        <div className="md:hidden border-b border-slate-800 bg-[#0f172a] px-4 pt-2 pb-4 space-y-1 animate-fadeIn">
           {navLinks.map((link) => {
             const Icon = link.icon;
             const isActive = pathname === link.href;
@@ -86,11 +83,11 @@ export default function Header() {
                 onClick={() => setMobileMenuOpen(false)}
                 className={`flex items-center space-x-3 px-4 py-3 rounded-xl text-base font-semibold transition-colors ${
                   isActive
-                    ? 'bg-orange-100 text-orange-700 dark:bg-orange-950/60 dark:text-orange-400 font-bold'
-                    : 'text-slate-700 hover:bg-orange-50 dark:text-slate-200 dark:hover:bg-slate-900'
+                    ? 'bg-orange-950/60 text-orange-400 font-bold border border-orange-900/50'
+                    : 'text-slate-200 hover:bg-slate-900'
                 }`}
               >
-                <Icon className="w-5 h-5 text-orange-600 dark:text-orange-400" />
+                <Icon className="w-5 h-5 text-orange-400" />
                 <span>{link.label}</span>
               </Link>
             );

@@ -8,18 +8,25 @@
   :root {
     --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
     --font-serif: 'Playfair Display', Georgia, serif;
+    color-scheme: dark;
   }
 
   html {
     scroll-behavior: smooth;
     font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+    color-scheme: dark;
   }
 
   body {
-    @apply bg-[#fff3f0] text-slate-800 dark:bg-slate-950 dark:text-slate-100 antialiased min-h-screen flex flex-col font-sans transition-colors duration-200;
+    @apply bg-[#090d16] text-slate-100 antialiased min-h-screen flex flex-col font-sans transition-colors duration-200;
     background-image: 
-      radial-gradient(at 0% 0%, rgba(255, 218, 205, 0.4) 0px, transparent 50%),
-      radial-gradient(at 100% 100%, rgba(255, 230, 222, 0.4) 0px, transparent 50%);
+      radial-gradient(at 0% 0%, rgba(30, 27, 75, 0.4) 0px, transparent 50%),
+      radial-gradient(at 100% 100%, rgba(15, 23, 42, 0.6) 0px, transparent 50%);
+  }
+
+  /* Force dark color scheme for native inputs */
+  input, select, textarea {
+    color-scheme: dark;
   }
 }
 
@@ -46,11 +53,8 @@
   background: transparent;
 }
 .custom-scrollbar::-webkit-scrollbar-thumb {
-  background: #cbd5e1;
+  background: #334155;
   border-radius: 9999px;
-}
-.dark .custom-scrollbar::-webkit-scrollbar-thumb {
-  background: #475569;
 }
 
 /* Print Stylesheet */
@@ -65,8 +69,8 @@
   }
 
   body {
-    background: white !important;
-    color: black !important;
+    background: black !important;
+    color: white !important;
     font-size: 12pt;
   }
 
@@ -76,6 +80,6 @@
 
   article, section, div {
     box-shadow: none !important;
-    border-color: #ddd !important;
+    border-color: #334155 !important;
   }
 }

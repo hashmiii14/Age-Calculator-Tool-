@@ -61,14 +61,14 @@ export default function FAQAccordion() {
   return (
     <section className="w-full max-w-4xl mx-auto py-8 space-y-6">
       <div className="text-center space-y-2">
-        <div className="inline-flex items-center space-x-1.5 px-3.5 py-1 rounded-full bg-brand-50 dark:bg-brand-950/60 text-brand-700 dark:text-brand-300 text-xs font-semibold uppercase tracking-wider">
+        <div className="inline-flex items-center space-x-1.5 px-3.5 py-1 rounded-full bg-orange-950/60 border border-orange-900/50 text-orange-400 text-xs font-semibold uppercase tracking-wider">
           <HelpCircle className="w-3.5 h-3.5" />
           <span>Frequently Asked Questions</span>
         </div>
-        <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900 dark:text-white tracking-tight">
+        <h2 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight font-serif">
           Got Questions? We Have Answers
         </h2>
-        <p className="text-slate-600 dark:text-slate-400 text-sm sm:text-base max-w-2xl mx-auto">
+        <p className="text-slate-400 text-sm sm:text-base max-w-2xl mx-auto">
           Everything you need to know about chronological age calculations, leap year logic, and date math.
         </p>
       </div>
@@ -79,19 +79,19 @@ export default function FAQAccordion() {
           return (
             <div
               key={idx}
-              className="bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 rounded-2xl overflow-hidden transition-colors"
+              className="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden transition-colors"
             >
               <button
                 type="button"
                 onClick={() => toggle(idx)}
                 aria-expanded={isOpen}
                 aria-controls={`faq-answer-${idx}`}
-                className="w-full px-6 py-4 text-left flex items-center justify-between text-base font-semibold text-slate-900 dark:text-white hover:text-brand-600 dark:hover:text-brand-400 transition-colors focus:outline-none focus:ring-2 focus:ring-brand-500"
+                className="w-full px-6 py-4 text-left flex items-center justify-between text-base font-semibold text-white hover:text-orange-400 transition-colors focus:outline-none focus:ring-2 focus:ring-orange-500"
               >
                 <span>{faq.question}</span>
                 <ChevronDown
                   className={`w-5 h-5 text-slate-400 transition-transform duration-200 ${
-                    isOpen ? 'transform rotate-180 text-brand-600 dark:text-brand-400' : ''
+                    isOpen ? 'transform rotate-180 text-orange-400' : ''
                   }`}
                 />
               </button>
@@ -99,7 +99,7 @@ export default function FAQAccordion() {
               {isOpen && (
                 <div
                   id={`faq-answer-${idx}`}
-                  className="px-6 pb-5 pt-1 text-slate-600 dark:text-slate-300 text-sm leading-relaxed border-t border-slate-100 dark:border-slate-800/60 animate-fadeIn"
+                  className="px-6 pb-5 pt-1 text-slate-300 text-sm leading-relaxed border-t border-slate-800 animate-fadeIn"
                 >
                   {faq.answer}
                 </div>

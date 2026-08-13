@@ -72,7 +72,7 @@ export default function RootLayout({
   };
 
   return (
-    <html lang="en" className="scroll-smooth">
+    <html lang="en" className="dark scroll-smooth">
       <head>
         <script
           type="application/ld+json"
@@ -83,7 +83,7 @@ export default function RootLayout({
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLdWebApp) }}
         />
       </head>
-      <body className="bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100 min-h-screen flex flex-col font-sans">
+      <body className="bg-[#090d16] text-slate-100 min-h-screen flex flex-col font-sans">
         <Header />
         <main className="flex-grow">{children}</main>
         <Footer />

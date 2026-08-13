@@ -27,30 +27,30 @@ export default function HomePage() {
   };
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 space-y-12">
-      {/* Hero Section styled matching reference design image */}
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 space-y-12 text-slate-200">
+      {/* Hero Section */}
       <section className="text-center max-w-3xl mx-auto space-y-4 pt-2">
-        <div className="inline-flex items-center space-x-2 px-4 py-1.5 rounded-full bg-orange-100/80 dark:bg-orange-950/60 border border-orange-200 dark:border-orange-900/60 text-orange-700 dark:text-orange-300 text-xs font-bold uppercase tracking-wider">
-          <Sparkles className="w-3.5 h-3.5 text-orange-500" />
+        <div className="inline-flex items-center space-x-2 px-4 py-1.5 rounded-full bg-orange-950/60 border border-orange-900/60 text-orange-300 text-xs font-bold uppercase tracking-wider">
+          <Sparkles className="w-3.5 h-3.5 text-orange-400" />
           <span>Free Precision Age Tool</span>
         </div>
 
-        <h1 className="text-4xl sm:text-6xl font-extrabold tracking-tight font-serif text-[#1c2438] dark:text-white">
-          Age <span className="text-orange-600 dark:text-orange-400 font-serif">Calculator</span>
+        <h1 className="text-4xl sm:text-6xl font-extrabold tracking-tight font-serif text-white">
+          Age <span className="text-orange-400 font-serif">Calculator</span>
         </h1>
 
-        <p className="text-base sm:text-lg text-slate-600 dark:text-slate-300 max-w-xl mx-auto font-normal leading-relaxed">
+        <p className="text-base sm:text-lg text-slate-300 max-w-xl mx-auto font-normal leading-relaxed">
           Calculate your exact age in years, months, days, total weeks, hours, and seconds with instant client-side precision.
         </p>
 
-        <div className="flex items-center justify-center space-x-4 text-xs font-semibold text-slate-600 dark:text-slate-400 pt-1">
+        <div className="flex items-center justify-center space-x-4 text-xs font-semibold text-slate-400 pt-1">
           <span className="flex items-center space-x-1">
-            <ShieldCheck className="w-4 h-4 text-emerald-600" />
+            <ShieldCheck className="w-4 h-4 text-emerald-400" />
             <span>100% Private</span>
           </span>
           <span>•</span>
           <span className="flex items-center space-x-1">
-            <CalendarCheck className="w-4 h-4 text-orange-500" />
+            <CalendarCheck className="w-4 h-4 text-orange-400" />
             <span>Leap Year Aware</span>
           </span>
         </div>
@@ -65,14 +65,14 @@ export default function HomePage() {
 
         {/* Empty State vs Results Dashboard */}
         {!result ? (
-          <div className="w-full bg-white/70 dark:bg-slate-900/50 rounded-3xl p-8 border border-dashed border-amber-200/80 dark:border-slate-800 text-center space-y-3">
-            <div className="w-12 h-12 rounded-2xl bg-orange-50 dark:bg-orange-950/60 text-orange-600 dark:text-orange-400 flex items-center justify-center mx-auto">
+          <div className="w-full bg-slate-900/60 rounded-3xl p-8 border border-dashed border-slate-800 text-center space-y-3 shadow-2xl">
+            <div className="w-12 h-12 rounded-2xl bg-orange-950/60 border border-orange-900/50 text-orange-400 flex items-center justify-center mx-auto">
               <Sparkles className="w-6 h-6" />
             </div>
-            <h3 className="text-lg font-bold text-slate-800 dark:text-slate-200">
+            <h3 className="text-lg font-bold text-white">
               Ready to Discover Your Exact Age
             </h3>
-            <p className="text-sm text-slate-500 dark:text-slate-400 max-w-md mx-auto">
+            <p className="text-sm text-slate-400 max-w-md mx-auto">
               Enter your Date of Birth above and click <strong>Calculate</strong> to view your detailed chronological breakdown, next birthday countdown, and lifetime day milestones.
             </p>
           </div>

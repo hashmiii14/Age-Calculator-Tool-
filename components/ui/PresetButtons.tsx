@@ -8,7 +8,6 @@ interface PresetButtonsProps {
 }
 
 export default function PresetButtons({ onSelectDOB }: PresetButtonsProps) {
-  const today = getTodayISODate();
   const currentYear = new Date().getFullYear();
 
   const presets = [
@@ -19,10 +18,10 @@ export default function PresetButtons({ onSelectDOB }: PresetButtonsProps) {
   ];
 
   return (
-    <div className="mt-4 pt-4 border-t border-slate-100 dark:border-slate-800/60">
+    <div className="mt-4 pt-4 border-t border-slate-800">
       <div className="flex items-center space-x-2 mb-2">
-        <Sparkles className="w-3.5 h-3.5 text-brand-500" />
-        <span className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
+        <Sparkles className="w-3.5 h-3.5 text-orange-400" />
+        <span className="text-xs font-semibold text-slate-400 uppercase tracking-wider">
           Quick Presets
         </span>
       </div>
@@ -32,7 +31,7 @@ export default function PresetButtons({ onSelectDOB }: PresetButtonsProps) {
             key={preset.label}
             type="button"
             onClick={() => onSelectDOB(preset.getDOB())}
-            className="px-3 py-1.5 rounded-lg text-xs font-medium bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-brand-50 hover:text-brand-600 dark:hover:bg-brand-950/50 dark:hover:text-brand-400 border border-slate-200/60 dark:border-slate-700/60 transition-colors focus:outline-none focus:ring-2 focus:ring-brand-500"
+            className="px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-800 text-slate-300 hover:bg-orange-950/60 hover:text-orange-400 border border-slate-700 transition-colors focus:outline-none focus:ring-2 focus:ring-orange-500"
           >
             {preset.label}
           </button>

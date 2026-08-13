@@ -43,7 +43,6 @@ export default function ShareCopyButtons({ result }: ShareCopyButtonsProps) {
           url: window.location.href,
         });
       } catch (err) {
-        // User cancelled or share failed, fallback to copy
         if ((err as Error).name !== 'AbortError') {
           handleCopy();
         }
@@ -57,17 +56,17 @@ export default function ShareCopyButtons({ result }: ShareCopyButtonsProps) {
     <div className="flex items-center space-x-3">
       <button
         onClick={handleCopy}
-        className="flex items-center space-x-2 px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800 text-sm font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-brand-500"
+        className="flex items-center space-x-2 px-4 py-2.5 rounded-xl border border-slate-700 bg-slate-800 text-slate-200 hover:bg-slate-700 text-sm font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-orange-500"
         aria-label="Copy result summary to clipboard"
       >
         {copied ? (
           <>
-            <Check className="w-4 h-4 text-emerald-500" />
-            <span className="text-emerald-600 dark:text-emerald-400">Copied!</span>
+            <Check className="w-4 h-4 text-emerald-400" />
+            <span className="text-emerald-400">Copied!</span>
           </>
         ) : (
           <>
-            <Copy className="w-4 h-4 text-slate-500" />
+            <Copy className="w-4 h-4 text-slate-400" />
             <span>Copy Result</span>
           </>
         )}
@@ -75,7 +74,7 @@ export default function ShareCopyButtons({ result }: ShareCopyButtonsProps) {
 
       <button
         onClick={handleShare}
-        className="flex items-center space-x-2 px-4 py-2.5 rounded-xl bg-brand-50 dark:bg-brand-950/60 text-brand-700 dark:text-brand-300 hover:bg-brand-100 dark:hover:bg-brand-900/60 text-sm font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-brand-500"
+        className="flex items-center space-x-2 px-4 py-2.5 rounded-xl bg-orange-950/60 border border-orange-900/60 text-orange-300 hover:bg-orange-900/60 text-sm font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-orange-500"
         aria-label="Share age result"
       >
         <Share2 className="w-4 h-4" />
