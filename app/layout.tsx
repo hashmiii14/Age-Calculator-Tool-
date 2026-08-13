@@ -59,7 +59,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en" className="scroll-smooth">
       <head>
-        {/* Google AdSense */}
+        {/* Google AdSense Account Verification */}
+        <meta name="google-adsense-account" content="ca-pub-7164032171965193" />
+
+        {/* Google AdSense Script */}
         <script
           async
           src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7164032171965193"
