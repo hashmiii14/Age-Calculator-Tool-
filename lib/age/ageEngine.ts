@@ -9,6 +9,9 @@ import {
   toLocalDate,
   formatISODate,
 } from './dateUtils';
+import { getZodiacByDate } from '../data/zodiacData';
+import { MONTH_DATA } from '../data/birthDateData';
+import { getHistoryForDate } from '../data/historyData';
 import {
   ParsedDate,
   AgeResult,
@@ -411,6 +414,9 @@ export function calculateAge(
     targetWeekday: getDayOfWeek(targetDateStr),
     isLeapYearDOB: isLeapYear(dob.year),
     zodiacSign: getZodiacSign(dob.month, dob.day),
+    zodiacProfile: getZodiacByDate(dob.month, dob.day),
+    monthDetails: MONTH_DATA[dob.month] || MONTH_DATA[1],
+    historyRecord: getHistoryForDate(dob.month, dob.day),
     dayOfYear,
     nextBirthday,
     nextFiveBirthdays,

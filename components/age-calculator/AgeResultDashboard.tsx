@@ -1,123 +1,187 @@
 'use client';
 
-import { AgeResult } from '../../lib/age/types';
-import ShareCopyButtons from './ShareCopyButtons';
+import { useState } from 'react';
+import {
+  Sparkles,
+  Calendar,
+  Heart,
+  Clock,
+  Compass,
+  Trophy,
+  Share2,
+  CheckCircle2,
+  ChevronRight
+} from 'lucide-react';
+import { AgeResult, DashboardMode } from '../../lib/age/types';
+import BirthDateDiscoveryCard from '../discovery/BirthDateDiscoveryCard';
+import ZodiacAstrologySection from '../astrology/ZodiacAstrologySection';
 import BirthdayCountdown from './BirthdayCountdown';
-import BirthdayInfoCard from './BirthdayInfoCard';
-import NextFiveBirthdays from './NextFiveBirthdays';
-import NextBigDayCard from './NextBigDayCard';
-import AgeAtAGlance from './AgeAtAGlance';
-import AgeInDifferentUnits from './AgeInDifferentUnits';
-import AgeProgressVisualizer from './AgeProgressVisualizer';
 import AgeMilestoneTimeline from './AgeMilestoneTimeline';
-import QuickAgeFacts from './QuickAgeFacts';
-import CalculationExplainedVisual from '../content/CalculationExplainedVisual';
-import { Calendar, Sparkles } from 'lucide-react';
+import ShareCardGenerator from '../share/ShareCardGenerator';
 
 interface AgeResultDashboardProps {
   result: AgeResult;
 }
 
 export default function AgeResultDashboard({ result }: AgeResultDashboardProps) {
+  const [mode, setMode] = useState<DashboardMode>('detailed');
+  const [showShareModal, setShowShareModal] = useState(false);
+
   return (
-    <section className="w-full space-y-8 animate-fadeIn" aria-live="polite">
-      {/* 1. Primary Hero Result Card */}
-      <div className="w-full bg-gradient-to-br from-orange-600 via-orange-700 to-slate-900 rounded-3xl p-6 sm:p-10 text-white shadow-xl relative overflow-hidden">
-        <div className="absolute -right-10 -bottom-10 w-64 h-64 rounded-full bg-white/5 blur-2xl pointer-events-none" />
-        <div className="absolute right-20 -top-10 w-40 h-40 rounded-full bg-orange-400/10 blur-xl pointer-events-none" />
+    <div className="space-y-8 animate-fadeIn">
+      {/* Dashboard Mode Switcher & Top Action Banner */}
+      <div className="flex flex-col sm:flex-row items-center justify-between gap-4 p-4 rounded-3xl bg-white/90 dark:bg-plum-900/90 border border-blush-200 dark:border-plum-800 shadow-sm">
+        <div className="flex items-center space-x-2">
+          <Sparkles className="w-5 h-5 text-coral-500 animate-sparkle" />
+          <span className="font-extrabold text-sm text-plum-900 dark:text-white font-serif">
+            Your Personal AgePulse Dashboard
+          </span>
+        </div>
 
-        <div className="relative z-10 space-y-6">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-white/15 pb-6">
-            <div>
-              <span className="inline-flex items-center space-x-1.5 px-3 py-1 rounded-full bg-white/10 text-orange-200 text-xs font-bold uppercase tracking-wider backdrop-blur-md">
-                <Sparkles className="w-3.5 h-3.5" />
-                <span>Exact Age Result</span>
-              </span>
-              <h2 className="text-2xl sm:text-3xl font-extrabold tracking-tight mt-2 text-white font-serif">
-                You are
-              </h2>
-            </div>
-            <ShareCopyButtons result={result} />
+        <div className="flex items-center space-x-2">
+          {/* Mode Switcher Buttons */}
+          <div className="flex items-center p-1 rounded-2xl bg-blush-100 dark:bg-plum-950 border border-blush-200 dark:border-plum-800 text-xs font-bold">
+            {(['simple', 'detailed', 'fun'] as DashboardMode[]).map((m) => (
+              <button
+                key={m}
+                type="button"
+                onClick={() => setMode(m)}
+                className={`px-3 py-1.5 rounded-xl capitalize transition-all ${
+                  mode === m
+                    ? 'bg-coral-500 text-white shadow-sm'
+                    : 'text-slate-600 dark:text-slate-400 hover:text-plum-900 dark:hover:text-white'
+                }`}
+              >
+                {m} mode
+              </button>
+            ))}
           </div>
 
-          {/* Large Hero Text */}
-          <div className="py-2">
-            <p className="text-4xl sm:text-6xl font-black tracking-tight text-white leading-tight font-sans">
-              {result.years} <span className="text-orange-200 font-bold text-2xl sm:text-4xl">Years</span>,{' '}
-              {result.months} <span className="text-orange-200 font-bold text-2xl sm:text-4xl">Months</span>,{' '}
-              {result.days} <span className="text-orange-200 font-bold text-2xl sm:text-4xl">Days</span>
-            </p>
-            <p className="text-sm text-orange-100/90 mt-3 flex items-center space-x-2">
-              <Calendar className="w-4 h-4 text-orange-300" />
-              <span>
-                Born {result.formattedDOB} ({result.dobWeekday}) • Age on {result.formattedTargetDate}
-              </span>
-            </p>
-          </div>
-
-          {/* Age Breakdown Cards */}
-          <div className="grid grid-cols-3 gap-3 pt-2">
-            <div className="bg-white/10 backdrop-blur-md border border-white/15 rounded-2xl p-3 sm:p-4 text-center">
-              <span className="text-xs font-bold text-orange-200 uppercase tracking-wider block mb-1">
-                Years
-              </span>
-              <span className="text-2xl sm:text-4xl font-extrabold text-white font-mono">
-                {result.years}
-              </span>
-            </div>
-            <div className="bg-white/10 backdrop-blur-md border border-white/15 rounded-2xl p-3 sm:p-4 text-center">
-              <span className="text-xs font-bold text-orange-200 uppercase tracking-wider block mb-1">
-                Months
-              </span>
-              <span className="text-2xl sm:text-4xl font-extrabold text-white font-mono">
-                {result.months}
-              </span>
-            </div>
-            <div className="bg-white/10 backdrop-blur-md border border-white/15 rounded-2xl p-3 sm:p-4 text-center">
-              <span className="text-xs font-bold text-orange-200 uppercase tracking-wider block mb-1">
-                Days
-              </span>
-              <span className="text-2xl sm:text-4xl font-extrabold text-white font-mono">
-                {result.days}
-              </span>
-            </div>
-          </div>
+          <button
+            onClick={() => setShowShareModal(true)}
+            type="button"
+            className="inline-flex items-center space-x-1.5 px-3.5 py-2 rounded-2xl bg-gradient-to-r from-coral-500 to-blush-500 text-white text-xs font-extrabold shadow-cute hover:shadow-cute-hover transition-all"
+          >
+            <Share2 className="w-3.5 h-3.5" />
+            <span>Share Result</span>
+          </button>
         </div>
       </div>
 
-      {/* 2. Signature Feature: Next Big Day Card */}
-      <NextBigDayCard nextBigDay={result.nextBigDay} />
+      {/* MODE 1: SIMPLE MODE CARDS */}
+      {mode === 'simple' && (
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          <div className="p-6 rounded-3xl bg-white dark:bg-plum-900 border border-blush-100 dark:border-plum-800 shadow-sm text-center space-y-1">
+            <span className="text-xs font-bold text-slate-400 uppercase tracking-widest">Exact Age</span>
+            <div className="text-3xl font-extrabold text-plum-900 dark:text-white font-serif">
+              {result.years}y {result.months}m {result.days}d
+            </div>
+            <p className="text-xs text-coral-500 font-bold">{result.formattedDOB}</p>
+          </div>
 
-      {/* 3. Your Age at a Glance */}
-      <AgeAtAGlance result={result} />
+          <div className="p-6 rounded-3xl bg-white dark:bg-plum-900 border border-blush-100 dark:border-plum-800 shadow-sm text-center space-y-1">
+            <span className="text-xs font-bold text-slate-400 uppercase tracking-widest">Total Days Alive</span>
+            <div className="text-3xl font-extrabold text-coral-500 font-serif">
+              {result.totalDays.toLocaleString()}
+            </div>
+            <p className="text-xs text-slate-400">Total days lived</p>
+          </div>
 
-      {/* 4. Your Current Year Progress */}
-      <AgeProgressVisualizer progress={result.progress} currentYears={result.years} />
+          <div className="p-6 rounded-3xl bg-white dark:bg-plum-900 border border-blush-100 dark:border-plum-800 shadow-sm text-center space-y-1">
+            <span className="text-xs font-bold text-slate-400 uppercase tracking-widest">Next Birthday</span>
+            <div className="text-3xl font-extrabold text-plum-900 dark:text-white font-serif">
+              In {result.nextBirthday.daysRemaining} Days
+            </div>
+            <p className="text-xs text-coral-500 font-bold">Turning {result.nextBirthday.turningAge} years</p>
+          </div>
+        </div>
+      )}
 
-      {/* 5. Signature Feature: Your Next 5 Birthdays */}
-      <NextFiveBirthdays birthdays={result.nextFiveBirthdays} />
+      {/* MODE 2: DETAILED MODE & FUN MODE METRIC CARDS */}
+      {(mode === 'detailed' || mode === 'fun') && (
+        <div className="space-y-8">
+          {/* Main Hero Result Card */}
+          <div className="bg-gradient-to-b from-[#FFF5F8] to-[#FFEBF0] dark:from-[#2A182E] dark:to-[#1E1122] rounded-4xl p-6 sm:p-8 border-2 border-blush-200/80 dark:border-plum-800 shadow-cute text-center relative overflow-hidden">
+            <div className="inline-flex items-center space-x-1.5 px-3.5 py-1 rounded-full bg-blush-100 dark:bg-plum-800 text-coral-600 dark:text-coral-300 text-xs font-extrabold mb-3">
+              <Calendar className="w-3.5 h-3.5" />
+              <span>Born on {result.formattedDOB} ({result.dobWeekday})</span>
+            </div>
 
-      {/* 6. Birthday Details & Countdown */}
-      <BirthdayInfoCard result={result} />
-      <div id="birthday-countdown">
-        <BirthdayCountdown nextBirthday={result.nextBirthday} />
-      </div>
+            <div className="text-4xl sm:text-6xl font-extrabold text-plum-900 dark:text-white font-serif tracking-tight my-2">
+              {result.years} <span className="text-coral-500 text-2xl sm:text-4xl">Years</span>{' '}
+              {result.months} <span className="text-coral-500 text-2xl sm:text-4xl">Months</span>{' '}
+              {result.days} <span className="text-coral-500 text-2xl sm:text-4xl">Days</span>
+            </div>
 
-      {/* 7. Next Age Milestone & Visual Timeline */}
+            <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300 max-w-lg mx-auto font-medium">
+              Calculated precisely as of {result.formattedTargetDate} ({result.targetWeekday}).
+            </p>
+
+            {mode === 'fun' && (
+              <div className="mt-4 p-3 rounded-2xl bg-white/80 dark:bg-plum-900/80 text-xs font-bold text-coral-600 dark:text-coral-300 inline-block animate-bounce-cute">
+                🎉 Fun Fact: You have experienced approximately {Math.floor(result.totalDays * 12.5).toLocaleString()} heartbeats of laughter and rest!
+              </div>
+            )}
+          </div>
+
+          {/* Metric Grid Cards */}
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+            <div className="p-4 sm:p-5 rounded-3xl bg-white dark:bg-plum-900 border border-blush-100 dark:border-plum-800 shadow-sm text-center">
+              <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest block">Days Alive</span>
+              <span className="text-2xl sm:text-3xl font-extrabold text-coral-500 font-serif">
+                {result.totalDays.toLocaleString()}
+              </span>
+              <span className="text-[10px] font-bold text-slate-400 block mt-1">Total Days</span>
+            </div>
+
+            <div className="p-4 sm:p-5 rounded-3xl bg-white dark:bg-plum-900 border border-blush-100 dark:border-plum-800 shadow-sm text-center">
+              <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest block">Total Weeks</span>
+              <span className="text-2xl sm:text-3xl font-extrabold text-plum-900 dark:text-white font-serif">
+                {result.totalWeeks.toLocaleString()}
+              </span>
+              <span className="text-[10px] font-bold text-slate-400 block mt-1">Weeks Lived</span>
+            </div>
+
+            <div className="p-4 sm:p-5 rounded-3xl bg-white dark:bg-plum-900 border border-blush-100 dark:border-plum-800 shadow-sm text-center">
+              <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest block">Total Hours</span>
+              <span className="text-2xl sm:text-3xl font-extrabold text-coral-500 font-serif">
+                {result.totalHours.toLocaleString()}
+              </span>
+              <span className="text-[10px] font-bold text-slate-400 block mt-1">Approx Hours</span>
+            </div>
+
+            <div className="p-4 sm:p-5 rounded-3xl bg-white dark:bg-plum-900 border border-blush-100 dark:border-plum-800 shadow-sm text-center">
+              <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest block">Zodiac Sign</span>
+              <span className="text-2xl sm:text-3xl font-extrabold text-plum-900 dark:text-white font-serif">
+                {result.zodiacProfile.unicodeSymbol} {result.zodiacSign}
+              </span>
+              <span className="text-[10px] font-bold text-coral-500 block mt-1">{result.zodiacProfile.element} Sign</span>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* SECTION: BIRTHDAY EXPERIENCE & COUNTDOWN */}
+      <BirthdayCountdown nextBirthday={result.nextBirthday} nextFiveBirthdays={result.nextFiveBirthdays} />
+
+      {/* SECTION: YOUR BIRTH DATE DISCOVERY */}
+      <BirthDateDiscoveryCard result={result} />
+
+      {/* SECTION: ASTROLOGY DISCOVERY */}
+      <ZodiacAstrologySection userZodiac={result.zodiacProfile} />
+
+      {/* SECTION: MILESTONES TIMELINE */}
       <AgeMilestoneTimeline
-        currentYears={result.years}
-        nextMajorMilestone={result.nextMajorMilestone}
+        milestones={result.milestones}
+        nextBigDay={result.nextBigDay}
         timeline={result.timeline}
+        nextMajorMilestone={result.nextMajorMilestone}
       />
 
-      {/* 8. Quick Age Facts */}
-      <QuickAgeFacts facts={result.quickFacts} />
-
-      {/* 9. Age in Different Units */}
-      <AgeInDifferentUnits result={result} />
-
-      {/* 10. Calculation Explained Visual */}
-      <CalculationExplainedVisual />
-    </section>
+      {/* Share Card Generator Modal Trigger */}
+      {showShareModal && (
+        <ShareCardGenerator result={result} onClose={() => setShowShareModal(false)} />
+      )}
+    </div>
   );
 }

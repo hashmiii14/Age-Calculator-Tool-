@@ -64,21 +64,21 @@ export default function AgeCalculatorForm({
   };
 
   return (
-    <div className="w-full bg-slate-900 rounded-3xl p-6 sm:p-10 border border-slate-800 shadow-2xl text-white transition-colors relative overflow-hidden">
-      {/* Header */}
-      <div className="flex items-center justify-between border-b border-slate-800 pb-6 mb-6">
+    <div id="calculator-form" className="w-full bg-gradient-to-b from-[#FFF5F8] to-[#FFEBF0] dark:from-[#2A182E] dark:to-[#1E1122] rounded-4xl p-6 sm:p-10 border-2 border-blush-200/80 dark:border-plum-800 shadow-cute transition-colors relative overflow-hidden">
+      {/* Top Form Header */}
+      <div className="flex items-center justify-between border-b border-blush-200/80 dark:border-plum-800 pb-5 mb-6">
         <div>
-          <h2 className="text-3xl sm:text-4xl font-extrabold font-serif tracking-tight text-white">
-            Age <span className="text-orange-400 font-serif">Calculator</span>
+          <h2 className="text-3xl sm:text-4xl font-extrabold font-serif tracking-tight text-plum-900 dark:text-white">
+            Age <span className="text-coral-500 font-serif">Calculator</span>
           </h2>
-          <p className="text-xs sm:text-sm text-slate-400 mt-1">
-            Enter your birth date and calculate target date below
+          <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-1">
+            Select your date of birth and target calculation date below
           </p>
         </div>
 
         {/* Emblem */}
-        <div className="hidden sm:flex items-center justify-center w-12 h-12 rounded-2xl bg-orange-950/60 border border-orange-900/50 text-orange-400 font-bold text-xs shadow-inner">
-          <Sparkles className="w-6 h-6 animate-pulse" />
+        <div className="w-12 h-12 rounded-2xl bg-coral-500 text-white flex items-center justify-center shadow-md shadow-coral-500/20">
+          <Sparkles className="w-6 h-6 animate-sparkle" />
         </div>
       </div>
 
@@ -88,10 +88,10 @@ export default function AgeCalculatorForm({
           <div className="space-y-2">
             <label
               htmlFor="dob-picker"
-              className="block text-sm font-bold text-slate-200 flex items-center justify-between"
+              className="block text-xs font-extrabold uppercase tracking-wider text-plum-900 dark:text-slate-200 flex items-center justify-between"
             >
               <span>Date of birth</span>
-              <span className="text-xs text-rose-400 font-medium">* Required</span>
+              <span className="text-[11px] text-coral-500 font-bold">* Required</span>
             </label>
 
             <CustomDatePicker
@@ -106,8 +106,8 @@ export default function AgeCalculatorForm({
             />
 
             {errors.dob && (
-              <p className="text-xs font-semibold text-rose-400 flex items-center space-x-1.5 mt-1.5 animate-fadeIn">
-                <AlertCircle className="w-3.5 h-3.5 flex-shrink-0" />
+              <p className="text-xs font-bold text-coral-600 dark:text-coral-400 flex items-center space-x-1.5 mt-1.5 animate-fadeIn">
+                <AlertCircle className="w-3.5 h-3.5 flex-shrink-0 text-coral-500" />
                 <span>{errors.dob}</span>
               </p>
             )}
@@ -124,13 +124,13 @@ export default function AgeCalculatorForm({
           <div className="space-y-2">
             <label
               htmlFor="target-picker"
-              className="block text-sm font-bold text-slate-200 flex items-center justify-between"
+              className="block text-xs font-extrabold uppercase tracking-wider text-plum-900 dark:text-slate-200 flex items-center justify-between"
             >
               <span>Today&apos;s Date / Age On</span>
               <button
                 type="button"
                 onClick={handleUseTodayTarget}
-                className="text-xs font-bold text-orange-400 hover:underline flex items-center space-x-1 focus:outline-none"
+                className="text-xs font-bold text-coral-500 hover:underline flex items-center space-x-1 focus:outline-none"
               >
                 <RefreshCw className="w-3 h-3" />
                 <span>Use Today</span>
@@ -149,23 +149,23 @@ export default function AgeCalculatorForm({
             />
 
             {errors.targetDate && (
-              <p className="text-xs font-semibold text-rose-400 flex items-center space-x-1.5 mt-1.5 animate-fadeIn">
-                <AlertCircle className="w-3.5 h-3.5 flex-shrink-0" />
+              <p className="text-xs font-bold text-coral-600 dark:text-coral-400 flex items-center space-x-1.5 mt-1.5 animate-fadeIn">
+                <AlertCircle className="w-3.5 h-3.5 flex-shrink-0 text-coral-500" />
                 <span>{errors.targetDate}</span>
               </p>
             )}
 
-            <p className="text-xs text-slate-400 mt-2">
-              Defaults to today. Pick any date to discover your past or future age.
+            <p className="text-xs text-slate-500 dark:text-slate-400 mt-2">
+              Defaults to today. Pick any date to calculate your past or future age.
             </p>
           </div>
         </div>
 
-        {/* Action Buttons */}
+        {/* Action Buttons (Terracotta / Coral Primary & Peach Outline Secondary) */}
         <div className="flex flex-col sm:flex-row items-center gap-3 pt-2">
           <button
             type="submit"
-            className="w-full sm:flex-1 py-4 px-6 rounded-2xl bg-orange-600 hover:bg-orange-700 text-white font-bold text-base shadow-lg shadow-orange-600/25 transition-all flex items-center justify-center space-x-2 focus:outline-none focus:ring-2 focus:ring-orange-500 active:scale-[0.99]"
+            className="w-full sm:flex-1 py-4 px-6 rounded-2xl bg-coral-500 hover:bg-coral-600 text-white font-extrabold text-base shadow-cute hover:shadow-cute-hover transition-all flex items-center justify-center space-x-2 focus:outline-none focus:ring-2 focus:ring-coral-400 active:scale-[0.99]"
           >
             <Calculator className="w-5 h-5" />
             <span>Calculate</span>
@@ -174,7 +174,7 @@ export default function AgeCalculatorForm({
           <button
             type="button"
             onClick={handleReset}
-            className="w-full sm:w-auto py-4 px-8 rounded-2xl bg-slate-800 hover:bg-slate-700 text-orange-400 border border-slate-700 font-bold text-base transition-colors flex items-center justify-center space-x-2 focus:outline-none focus:ring-2 focus:ring-orange-400"
+            className="w-full sm:w-auto py-4 px-8 rounded-2xl bg-blush-100 dark:bg-plum-800 hover:bg-blush-200 dark:hover:bg-plum-700 text-coral-600 dark:text-coral-300 font-extrabold text-base transition-colors flex items-center justify-center space-x-2 focus:outline-none border border-blush-200 dark:border-plum-700"
           >
             <RotateCcw className="w-4 h-4" />
             <span>Reset</span>

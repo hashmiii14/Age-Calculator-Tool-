@@ -1,117 +1,166 @@
-import { Milestone, CheckCircle2, Clock, Flag } from 'lucide-react';
-import { NextMajorMilestone, AgeTimelineNode } from '../../lib/age/types';
+'use client';
+
+import { useState } from 'react';
+import { Trophy, Milestone, CheckCircle2, Clock, Sparkles } from 'lucide-react';
+import { AgeMilestone, NextBigDayMilestone, AgeTimelineNode, NextMajorMilestone } from '../../lib/age/types';
 
 interface AgeMilestoneTimelineProps {
-  currentYears: number;
-  nextMajorMilestone: NextMajorMilestone;
+  milestones?: AgeMilestone[];
+  nextBigDay?: NextBigDayMilestone | null;
   timeline: AgeTimelineNode[];
+  nextMajorMilestone: NextMajorMilestone;
 }
 
 export default function AgeMilestoneTimeline({
-  currentYears,
-  nextMajorMilestone,
+  milestones = [],
+  nextBigDay,
   timeline,
+  nextMajorMilestone,
 }: AgeMilestoneTimelineProps) {
+  const [tab, setTab] = useState<'days' | 'years'>('days');
+
   return (
-    <div className="w-full space-y-6">
-      {/* Next Major Milestone Card */}
-      <div className="bg-slate-900 rounded-3xl p-6 sm:p-8 border border-slate-800 shadow-2xl text-white">
-        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b border-slate-800 pb-4 mb-6">
+    <div id="age-milestones-section" className="w-full space-y-6">
+      {/* Header & Filter Switcher */}
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+        <div className="flex items-center space-x-2">
+          <div className="w-8 h-8 rounded-xl bg-coral-500 text-white flex items-center justify-center font-bold text-xs">
+            🏆
+          </div>
+          <div>
+            <h2 className="text-2xl sm:text-3xl font-extrabold text-plum-900 dark:text-white font-serif tracking-tight">
+              Life & Lifetime Milestones
+            </h2>
+            <p className="text-xs text-slate-500 dark:text-slate-400">
+              Track 10,000 Days Alive & Landmark Birthday Goals
+            </p>
+          </div>
+        </div>
+
+        {/* Tab switcher */}
+        <div className="flex items-center p-1 rounded-2xl bg-white dark:bg-plum-900 border border-blush-200 dark:border-plum-800 text-xs font-bold">
+          <button
+            type="button"
+            onClick={() => setTab('days')}
+            className={`px-3 py-1.5 rounded-xl transition-all ${
+              tab === 'days'
+                ? 'bg-coral-500 text-white shadow-sm'
+                : 'text-slate-600 dark:text-slate-400'
+            }`}
+          >
+            Lifetime Days (1k - 30k)
+          </button>
+          <button
+            type="button"
+            onClick={() => setTab('years')}
+            className={`px-3 py-1.5 rounded-xl transition-all ${
+              tab === 'years'
+                ? 'bg-coral-500 text-white shadow-sm'
+                : 'text-slate-600 dark:text-slate-400'
+            }`}
+          >
+            Landmark Ages (18 - 100)
+          </button>
+        </div>
+      </div>
+
+      {/* Immediate Next Big Day Spotlight Banner */}
+      {nextBigDay && (
+        <div className="p-5 sm:p-6 rounded-3xl bg-gradient-to-r from-coral-500 via-blush-500 to-purple-600 text-white shadow-cute flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
           <div className="flex items-center space-x-3">
-            <div className="w-10 h-10 rounded-2xl bg-orange-950/60 border border-orange-900/50 flex items-center justify-center text-orange-400">
-              <Flag className="w-5 h-5" />
+            <div className="w-12 h-12 rounded-2xl bg-white/20 backdrop-blur-md flex items-center justify-center text-2xl font-bold">
+              ✨
             </div>
             <div>
-              <h3 className="text-xl font-bold text-white">
-                Your Next Major Milestone
+              <span className="text-[10px] uppercase tracking-widest text-white/80 font-extrabold block">
+                Next Major Day Milestone
+              </span>
+              <h3 className="text-xl font-extrabold font-serif">
+                {nextBigDay.milestoneDays.toLocaleString()}th Day Alive
               </h3>
-              <p className="text-xs text-slate-400">
-                Targeting your next major age milestone: {nextMajorMilestone.targetAge} Years Old
+              <p className="text-xs text-white/90 font-medium">
+                {nextBigDay.formattedTargetDate}
               </p>
             </div>
           </div>
 
-          <div className="flex items-center space-x-2 bg-orange-950/60 border border-orange-900/50 px-4 py-2 rounded-xl text-orange-300 text-xs font-bold">
-            <Clock className="w-4 h-4 text-orange-400" />
-            <span>
-              {nextMajorMilestone.yearsRemaining}y {nextMajorMilestone.monthsRemaining}m {nextMajorMilestone.daysRemaining}d remaining
-            </span>
+          <div className="px-4 py-2 rounded-2xl bg-white text-coral-600 font-extrabold text-xs shadow-md">
+            In {nextBigDay.daysRemaining.toLocaleString()} Days
           </div>
         </div>
+      )}
 
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-          <div className="bg-slate-800/60 border border-slate-700/60 rounded-2xl p-4 text-center">
-            <span className="text-xs text-slate-400 uppercase tracking-wider block mb-1">
-              Current Age
-            </span>
-            <p className="text-2xl font-black text-white font-mono">{currentYears} Years</p>
-          </div>
+      {/* TAB 1: LIFETIME DAYS MILESTONES (1,000, 5,000, 10,000, 20,000 days) */}
+      {tab === 'days' && (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+          {milestones.map((m) => (
+            <div
+              key={m.milestoneDays}
+              className={`p-4 rounded-3xl border transition-all ${
+                m.isPassed
+                  ? 'bg-white/80 dark:bg-plum-900/60 border-blush-100 dark:border-plum-800'
+                  : 'bg-gradient-to-br from-white to-blush-50 dark:from-plum-900 dark:to-plum-950 border-coral-300 dark:border-coral-700 shadow-sm'
+              }`}
+            >
+              <div className="flex items-center justify-between">
+                <span className="text-xs font-extrabold text-coral-500 uppercase tracking-wider">
+                  {m.milestoneDays.toLocaleString()} Days
+                </span>
+                {m.isPassed ? (
+                  <span className="inline-flex items-center space-x-1 text-[10px] font-extrabold text-emerald-600 dark:text-emerald-400 bg-emerald-100 dark:bg-emerald-950/60 px-2 py-0.5 rounded-full">
+                    <CheckCircle2 className="w-3 h-3" />
+                    <span>Achieved</span>
+                  </span>
+                ) : (
+                  <span className="inline-flex items-center space-x-1 text-[10px] font-extrabold text-coral-600 dark:text-coral-300 bg-coral-100 dark:bg-plum-800 px-2 py-0.5 rounded-full">
+                    <Clock className="w-3 h-3 text-coral-500" />
+                    <span>In {m.daysRemaining.toLocaleString()}d</span>
+                  </span>
+                )}
+              </div>
 
-          <div className="bg-slate-800/60 border border-slate-700/60 rounded-2xl p-4 text-center">
-            <span className="text-xs text-slate-400 uppercase tracking-wider block mb-1">
-              Next Milestone
-            </span>
-            <p className="text-2xl font-black text-orange-400 font-mono">
-              {nextMajorMilestone.targetAge} Years
-            </p>
-          </div>
+              <div className="text-lg font-extrabold text-plum-900 dark:text-white font-serif mt-2">
+                {m.formattedTargetDate}
+              </div>
 
-          <div className="bg-slate-800/60 border border-slate-700/60 rounded-2xl p-4 text-center">
-            <span className="text-xs text-slate-400 uppercase tracking-wider block mb-1">
-              Milestone Date
-            </span>
-            <p className="text-base font-bold text-white leading-snug mt-1">
-              {nextMajorMilestone.formattedTargetDate}
-            </p>
-          </div>
+              <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5">
+                {m.isPassed ? 'Milestone achieved!' : `Target date for your ${m.milestoneDays.toLocaleString()}th day`}
+              </p>
+            </div>
+          ))}
         </div>
-      </div>
+      )}
 
-      {/* Visual Timeline Bar */}
-      <div className="bg-slate-900 rounded-3xl p-6 sm:p-8 border border-slate-800 shadow-2xl text-white space-y-6">
-        <div className="flex items-center space-x-3 border-b border-slate-800 pb-4">
-          <div className="w-10 h-10 rounded-2xl bg-orange-950/60 border border-orange-900/50 flex items-center justify-center text-orange-400">
-            <Milestone className="w-5 h-5" />
-          </div>
-          <div>
-            <h3 className="text-xl font-bold text-white">
-              Age Milestones Timeline
-            </h3>
-            <p className="text-xs text-slate-400">
-              Chronological progression through key lifetime age milestones
-            </p>
-          </div>
-        </div>
-
-        {/* Timeline Grid */}
-        <div className="relative py-4">
+      {/* TAB 2: LANDMARK AGE MILESTONES (18, 21, 25, 30, 40, 50, 75, 100) */}
+      {tab === 'years' && (
+        <div className="bg-white dark:bg-plum-900 rounded-4xl p-6 border border-blush-200 dark:border-plum-800 shadow-cute space-y-4">
           <div className="grid grid-cols-2 sm:grid-cols-5 lg:grid-cols-10 gap-3">
             {timeline.map((node) => (
               <div
                 key={node.age}
-                className={`p-3.5 rounded-2xl border text-center transition-all flex flex-col items-center justify-between space-y-2 ${
+                className={`p-3 rounded-2xl border text-center transition-all flex flex-col items-center justify-between space-y-1.5 ${
                   node.isNext
-                    ? 'bg-orange-950/80 border-orange-500 shadow-lg shadow-orange-500/20 scale-105'
+                    ? 'bg-coral-500 text-white border-coral-500 shadow-cute scale-105'
                     : node.isReached
-                    ? 'bg-slate-800/80 border-slate-700/80 text-white'
-                    : 'bg-slate-900/50 border-slate-800/80 text-slate-500'
+                    ? 'bg-blush-50 dark:bg-plum-950 text-slate-800 dark:text-slate-200 border-blush-200 dark:border-plum-800'
+                    : 'bg-white dark:bg-plum-900/50 text-slate-400 border-blush-100 dark:border-plum-800'
                 }`}
               >
                 <div className="flex items-center justify-center">
                   {node.isReached ? (
-                    <CheckCircle2 className="w-4 h-4 text-emerald-400" />
+                    <CheckCircle2 className="w-4 h-4 text-emerald-500" />
                   ) : node.isNext ? (
-                    <Clock className="w-4 h-4 text-orange-400 animate-pulse" />
+                    <Sparkles className="w-4 h-4 text-white animate-spin-slow" />
                   ) : (
-                    <span className="w-2 h-2 rounded-full bg-slate-700" />
+                    <span className="w-2 h-2 rounded-full bg-slate-300 dark:bg-slate-700" />
                   )}
                 </div>
 
                 <div>
-                  <span className="text-sm font-black font-mono block">
+                  <span className="text-sm font-extrabold font-serif block">
                     {node.label}
                   </span>
-                  <span className="text-[10px] text-slate-400 block mt-0.5">
+                  <span className={`text-[10px] block ${node.isNext ? 'text-coral-100' : 'text-slate-400'}`}>
                     {node.isReached ? 'Reached' : node.isNext ? 'Next Target' : 'Upcoming'}
                   </span>
                 </div>
@@ -119,7 +168,7 @@ export default function AgeMilestoneTimeline({
             ))}
           </div>
         </div>
-      </div>
+      )}
     </div>
   );
 }

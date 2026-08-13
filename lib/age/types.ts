@@ -1,3 +1,8 @@
+import { ZodiacInfo } from '../data/zodiacData';
+import { MonthInfo } from '../data/birthDateData';
+import { DateHistoryRecord } from '../data/historyData';
+import { PersonalityArchetype } from '../data/personalityQuizData';
+
 export interface ParsedDate {
   year: number;
   month: number; // 1-indexed (1 = Jan, 12 = Dec)
@@ -83,6 +88,9 @@ export interface AgeComparisonResult {
   olderPersonLabel: string;
 }
 
+export type GenderPreference = 'Prefer not to say' | 'Female' | 'Male';
+export type DashboardMode = 'simple' | 'detailed' | 'fun';
+
 export interface AgeResult {
   years: number;
   months: number;
@@ -101,6 +109,9 @@ export interface AgeResult {
   targetWeekday: string;
   isLeapYearDOB: boolean;
   zodiacSign: string;
+  zodiacProfile: ZodiacInfo;
+  monthDetails: MonthInfo;
+  historyRecord: DateHistoryRecord;
   dayOfYear: number;
   nextBirthday: NextBirthdayResult;
   nextFiveBirthdays: UpcomingBirthday[];
@@ -110,6 +121,8 @@ export interface AgeResult {
   nextMajorMilestone: NextMajorMilestone;
   timeline: AgeTimelineNode[];
   quickFacts: QuickFact[];
+  genderPreference?: GenderPreference;
+  personalityArchetype?: PersonalityArchetype;
 }
 
 export interface DateDifferenceResult {

@@ -1,12 +1,13 @@
 import { Metadata } from 'next';
 import HomePage from '../page';
+import { SEO_PAGES } from '../../lib/data/seoData';
 
 export const metadata: Metadata = {
-  title: 'Age Calculator by Date of Birth – Free Exact Age Tool | AgePulse',
-  description:
-    'Calculate your exact age from date of birth in years, months, days, total weeks, and hours. Fast, accurate, and completely private.',
+  title: SEO_PAGES.ageCalculator.title,
+  description: SEO_PAGES.ageCalculator.description,
+  keywords: SEO_PAGES.ageCalculator.keywords,
   alternates: {
-    canonical: '/age-calculator',
+    canonical: SEO_PAGES.ageCalculator.canonical,
   },
 };
 
