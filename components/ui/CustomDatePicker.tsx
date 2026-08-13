@@ -9,9 +9,7 @@ interface CustomDatePickerProps {
   value: string; // YYYY-MM-DD
   onChange: (val: string) => void;
   placeholder?: string;
-  label?: string;
   error?: boolean;
-  required?: boolean;
 }
 
 const MONTH_NAMES = [
@@ -25,13 +23,12 @@ export default function CustomDatePicker({
   id,
   value,
   onChange,
-  placeholder = 'DD - MM - YYYY',
+  placeholder = 'Select date of birth',
   error = false,
 }: CustomDatePickerProps) {
   const [isOpen, setIsOpen] = useState(false);
   const popoverRef = useRef<HTMLDivElement>(null);
 
-  // Parsed current selection or defaults to today
   const parsedValue = parseISODate(value);
   const [viewYear, setViewYear] = useState<number>(
     parsedValue ? parsedValue.year : new Date().getFullYear()
@@ -40,7 +37,6 @@ export default function CustomDatePicker({
     parsedValue ? parsedValue.month : new Date().getMonth() + 1
   );
 
-  // Sync view when value changes
   useEffect(() => {
     const parsed = parseISODate(value);
     if (parsed) {
@@ -49,7 +45,6 @@ export default function CustomDatePicker({
     }
   }, [value]);
 
-  // Click outside to close popover
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
       if (popoverRef.current && !popoverRef.current.contains(e.target as Node)) {
@@ -86,24 +81,21 @@ export default function CustomDatePicker({
     }
   };
 
-  // Generate day grid for current viewMonth/viewYear
   const daysInCurrentMonth = getDaysInMonth(viewYear, viewMonth);
-  const firstDayOfWeek = new Date(viewYear, viewMonth - 1, 1).getDay(); // 0 = Sun
+  const firstDayOfWeek = new Date(viewYear, viewMonth - 1, 1).getDay();
 
-  // Generate Year Options from 1900 to 2040
   const yearOptions: number[] = [];
   for (let y = 2035; y >= 1900; y--) {
     yearOptions.push(y);
   }
 
-  // Format date for display in input
   const displayString = parsedValue
     ? `${parsedValue.day.toString().padStart(2, '0')} - ${parsedValue.month.toString().padStart(2, '0')} - ${parsedValue.year}`
     : '';
 
   return (
     <div className="relative w-full" ref={popoverRef}>
-      {/* Input Box Styled for Dark Mode */}
+      {/* Input Field */}
       <div className="relative flex items-center">
         <input
           id={id}
@@ -112,43 +104,57 @@ export default function CustomDatePicker({
           onClick={() => setIsOpen(!isOpen)}
           value={displayString}
           placeholder={placeholder}
-          className={`w-full px-5 py-4 rounded-2xl border text-white bg-slate-900 text-base font-medium placeholder-slate-500 cursor-pointer focus:outline-none focus:ring-2 focus:ring-orange-500 transition-all ${
-            error
-              ? 'border-rose-500 focus:ring-rose-500'
-              : 'border-slate-800 hover:border-orange-500/50'
-          }`}
+          className="w-full px-4 py-3.5 sm:px-5 sm:py-4 rounded-xl text-base font-medium cursor-pointer transition-all focus:outline-none"
+          style={{
+            backgroundColor: '#1D2133',
+            color: '#F2F4FB',
+            borderColor: error ? '#ef4444' : '#252A3D',
+            borderWidth: '1px',
+            borderStyle: 'solid',
+          }}
         />
 
         <button
           type="button"
           onClick={() => setIsOpen(!isOpen)}
-          className="absolute right-4 p-2 text-slate-400 hover:text-orange-400 focus:outline-none"
+          className="absolute right-3.5 sm:right-4 p-1.5 rounded-lg transition-colors focus:outline-none"
+          style={{ color: '#E85D36' }}
           aria-label="Open calendar picker"
         >
           <CalendarIcon className="w-5 h-5" />
         </button>
       </div>
 
-      {/* Interactive Calendar Popover - Dark Mode Only */}
+      {/* Mobile-optimized Calendar Popover */}
       {isOpen && (
-        <div className="absolute left-0 sm:left-auto right-0 top-full mt-2 z-50 w-full sm:w-88 bg-slate-900 rounded-3xl p-5 border border-slate-800 shadow-2xl animate-fadeIn text-white">
+        <div
+          className="absolute left-1/2 -translate-x-1/2 sm:left-auto sm:right-0 sm:translate-x-0 top-full mt-2 z-50 w-[calc(100vw-2rem)] max-w-[340px] sm:w-[340px] rounded-2xl p-4 sm:p-5 shadow-2xl animate-fade-up"
+          style={{
+            backgroundColor: '#161A26',
+            borderColor: '#252A3D',
+            borderWidth: '1px',
+            borderStyle: 'solid',
+          }}
+        >
           {/* Header Controls: Month & Year Pickers */}
-          <div className="flex items-center justify-between gap-2 mb-4 pb-3 border-b border-slate-800">
+          <div className="flex items-center justify-between gap-1.5 mb-3 pb-3 border-b" style={{ borderColor: '#252A3D' }}>
             <button
               type="button"
               onClick={handlePrevMonth}
-              className="p-2 rounded-xl hover:bg-slate-800 text-slate-300"
+              className="p-1.5 rounded-lg transition-colors"
+              style={{ backgroundColor: '#1D2133', color: '#9AA3C4' }}
               title="Previous Month"
             >
-              <ChevronLeft className="w-5 h-5" />
+              <ChevronLeft className="w-4 h-4" />
             </button>
 
-            <div className="flex items-center space-x-2">
+            <div className="flex items-center space-x-1.5">
               {/* Month Selector */}
               <select
                 value={viewMonth}
                 onChange={(e) => setViewMonth(Number(e.target.value))}
-                className="px-2.5 py-1.5 rounded-xl border border-slate-700 bg-slate-800 text-sm font-bold text-white focus:outline-none focus:ring-2 focus:ring-orange-500 cursor-pointer"
+                className="px-2 py-1 rounded-lg text-xs font-bold focus:outline-none cursor-pointer"
+                style={{ backgroundColor: '#1D2133', color: '#F2F4FB', borderColor: '#252A3D', borderWidth: '1px' }}
               >
                 {MONTH_NAMES.map((name, idx) => (
                   <option key={name} value={idx + 1}>
@@ -157,11 +163,12 @@ export default function CustomDatePicker({
                 ))}
               </select>
 
-              {/* Fast Year Selector Dropdown */}
+              {/* Year Selector */}
               <select
                 value={viewYear}
                 onChange={(e) => setViewYear(Number(e.target.value))}
-                className="px-2.5 py-1.5 rounded-xl border border-slate-700 bg-slate-800 text-sm font-bold text-white focus:outline-none focus:ring-2 focus:ring-orange-500 cursor-pointer"
+                className="px-2 py-1 rounded-lg text-xs font-bold focus:outline-none cursor-pointer"
+                style={{ backgroundColor: '#1D2133', color: '#F2F4FB', borderColor: '#252A3D', borderWidth: '1px' }}
               >
                 {yearOptions.map((y) => (
                   <option key={y} value={y}>
@@ -174,29 +181,30 @@ export default function CustomDatePicker({
             <button
               type="button"
               onClick={handleNextMonth}
-              className="p-2 rounded-xl hover:bg-slate-800 text-slate-300"
+              className="p-1.5 rounded-lg transition-colors"
+              style={{ backgroundColor: '#1D2133', color: '#9AA3C4' }}
               title="Next Month"
             >
-              <ChevronRight className="w-5 h-5" />
+              <ChevronRight className="w-4 h-4" />
             </button>
           </div>
 
-          {/* Quick Year Jump Bar */}
+          {/* Quick Year Jump */}
           <div className="mb-3">
-            <span className="text-[10px] font-semibold text-slate-400 uppercase tracking-wider block mb-1">
+            <span className="text-[10px] font-bold uppercase tracking-wider block mb-1" style={{ color: '#636B8A' }}>
               Quick Year Jump
             </span>
-            <div className="flex items-center gap-1.5 overflow-x-auto pb-1.5 custom-scrollbar">
+            <div className="flex items-center gap-1 overflow-x-auto pb-1.5 custom-scrollbar">
               {QUICK_YEARS.map((y) => (
                 <button
                   key={y}
                   type="button"
                   onClick={() => setViewYear(y)}
-                  className={`px-2 py-1 rounded-lg text-xs font-semibold whitespace-nowrap transition-colors ${
-                    viewYear === y
-                      ? 'bg-orange-600 text-white'
-                      : 'bg-slate-800 text-slate-300 hover:bg-slate-700'
-                  }`}
+                  className="px-2 py-1 rounded-md text-[11px] font-semibold whitespace-nowrap transition-colors"
+                  style={{
+                    backgroundColor: viewYear === y ? '#E85D36' : '#1D2133',
+                    color: viewYear === y ? '#fff' : '#9AA3C4',
+                  }}
                 >
                   {y}
                 </button>
@@ -204,23 +212,21 @@ export default function CustomDatePicker({
             </div>
           </div>
 
-          {/* Weekday Names */}
-          <div className="grid grid-cols-7 gap-1 text-center mb-2">
+          {/* Weekday Headers */}
+          <div className="grid grid-cols-7 gap-1 text-center mb-1">
             {['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'].map((d) => (
-              <span key={d} className="text-xs font-bold text-slate-400 uppercase">
+              <span key={d} className="text-[10px] font-extrabold uppercase" style={{ color: '#636B8A' }}>
                 {d}
               </span>
             ))}
           </div>
 
-          {/* Day Grid */}
+          {/* Days Grid */}
           <div className="grid grid-cols-7 gap-1 text-center">
-            {/* Empty slots for month start weekday offset */}
             {Array.from({ length: firstDayOfWeek }).map((_, idx) => (
-              <span key={`empty-${idx}`} className="h-9 w-9 block" />
+              <span key={`empty-${idx}`} className="h-8 w-8 block" />
             ))}
 
-            {/* Calendar Days */}
             {Array.from({ length: daysInCurrentMonth }).map((_, idx) => {
               const day = idx + 1;
               const isSelected =
@@ -242,13 +248,20 @@ export default function CustomDatePicker({
                   key={day}
                   type="button"
                   onClick={() => handleDaySelect(day)}
-                  className={`h-9 w-9 rounded-xl text-sm font-semibold flex items-center justify-center transition-all focus:outline-none focus:ring-2 focus:ring-orange-500 ${
-                    isSelected
-                      ? 'bg-orange-600 text-white shadow-md shadow-orange-500/30 font-bold'
+                  className="h-8 w-8 rounded-lg text-xs font-semibold flex items-center justify-center transition-all focus:outline-none"
+                  style={{
+                    backgroundColor: isSelected
+                      ? '#E85D36'
                       : isToday
-                      ? 'bg-orange-950/60 text-orange-400 font-bold border border-orange-500'
-                      : 'text-slate-200 hover:bg-slate-800'
-                  }`}
+                      ? 'rgba(232,93,54,0.15)'
+                      : 'transparent',
+                    color: isSelected
+                      ? '#ffffff'
+                      : isToday
+                      ? '#E85D36'
+                      : '#F2F4FB',
+                    border: isToday && !isSelected ? '1px solid #E85D36' : 'none',
+                  }}
                 >
                   {day}
                 </button>
@@ -257,7 +270,7 @@ export default function CustomDatePicker({
           </div>
 
           {/* Footer Today Button */}
-          <div className="mt-4 pt-3 border-t border-slate-800 flex items-center justify-between">
+          <div className="mt-3 pt-2.5 border-t flex items-center justify-between" style={{ borderColor: '#252A3D' }}>
             <button
               type="button"
               onClick={() => {
@@ -265,7 +278,8 @@ export default function CustomDatePicker({
                 onChange(today);
                 setIsOpen(false);
               }}
-              className="text-xs font-bold text-orange-400 hover:underline flex items-center space-x-1"
+              className="text-xs font-bold flex items-center space-x-1"
+              style={{ color: '#E85D36' }}
             >
               <Clock className="w-3.5 h-3.5" />
               <span>Select Today ({getTodayISODate()})</span>
@@ -274,7 +288,8 @@ export default function CustomDatePicker({
             <button
               type="button"
               onClick={() => setIsOpen(false)}
-              className="p-1 rounded-lg text-slate-400 hover:text-slate-200"
+              className="p-1 rounded-md"
+              style={{ color: '#636B8A' }}
             >
               <X className="w-4 h-4" />
             </button>

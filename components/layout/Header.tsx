@@ -21,26 +21,29 @@ export default function Header() {
 
   return (
     <header
-      style={{ backgroundColor: 'rgba(14,16,24,0.92)', borderColor: '#252A3D' }}
-      className="sticky top-0 z-40 w-full border-b backdrop-blur-md"
+      style={{ backgroundColor: 'rgba(14,16,24,0.95)', borderColor: '#252A3D' }}
+      className="sticky top-0 z-50 w-full border-b backdrop-blur-lg"
     >
-      <div className="max-w-[1140px] mx-auto px-5 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-[60px]">
+      <div className="max-w-[1140px] mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex items-center justify-between h-14 sm:h-16">
 
-          {/* Brand Logo */}
-          <Link href="/" className="flex items-center gap-2.5 rounded-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#E85D36]">
+          {/* Brand Logo - ALWAYS visible on mobile, tablet & desktop */}
+          <Link
+            href="/"
+            className="flex items-center gap-2 shrink-0 rounded-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#E85D36]"
+          >
             <div
               style={{ backgroundColor: '#E85D36' }}
-              className="w-8 h-8 rounded-lg flex items-center justify-center text-white font-black text-sm font-sans shadow-md select-none tracking-tighter"
+              className="w-7 h-7 sm:w-8 sm:h-8 rounded-lg flex items-center justify-center text-white font-black text-xs sm:text-sm font-sans shadow-md select-none tracking-tighter shrink-0"
             >
               AP
             </div>
-            <span style={{ color: '#F2F4FB' }} className="font-black text-xl tracking-wider font-sans uppercase">
+            <span style={{ color: '#F2F4FB' }} className="font-black text-base sm:text-lg lg:text-xl tracking-wider font-sans uppercase whitespace-nowrap">
               AGE<span style={{ color: '#E85D36' }}>PULSE</span>
             </span>
           </Link>
 
-          {/* Desktop Nav */}
+          {/* Desktop & Tablet Nav */}
           <nav className="hidden lg:flex items-center gap-1" aria-label="Main navigation">
             {navLinks.map(({ href, label, icon: Icon }) => {
               const active = pathname === href;
@@ -61,21 +64,21 @@ export default function Header() {
             })}
           </nav>
 
-          {/* Right — CTA + Hamburger */}
-          <div className="flex items-center gap-3">
+          {/* Right Controls — CTA + Mobile Toggle */}
+          <div className="flex items-center gap-2 sm:gap-3 shrink-0">
             <Link
               href="/"
               style={{ backgroundColor: '#E85D36', color: '#fff' }}
-              className="hidden sm:inline-flex items-center gap-1.5 px-4 py-2 rounded-lg text-xs font-extrabold shadow hover:bg-[#D04521] transition-colors"
+              className="hidden sm:inline-flex items-center gap-1.5 px-3.5 py-1.5 sm:px-4 sm:py-2 rounded-lg text-xs font-extrabold shadow hover:bg-[#D04521] transition-colors whitespace-nowrap"
             >
               Discover My Age
             </Link>
 
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              style={{ borderColor: '#252A3D', color: '#9AA3C4' }}
-              className="lg:hidden p-2 rounded-lg border hover:bg-[#1D2133] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#E85D36]"
-              aria-label="Toggle navigation menu"
+              style={{ backgroundColor: '#161A26', borderColor: '#252A3D', color: '#9AA3C4' }}
+              className="lg:hidden p-2 rounded-lg border hover:bg-[#1D2133] hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#E85D36] shrink-0"
+              aria-label="Toggle menu"
             >
               {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
             </button>
@@ -83,10 +86,10 @@ export default function Header() {
         </div>
       </div>
 
-      {/* Mobile Drawer */}
+      {/* Mobile & Tablet Drawer */}
       {mobileMenuOpen && (
         <div style={{ backgroundColor: '#0E1018', borderColor: '#252A3D' }} className="lg:hidden border-b animate-fade-up">
-          <div className="max-w-[1140px] mx-auto px-5 py-4 grid grid-cols-2 gap-2">
+          <div className="max-w-[1140px] mx-auto px-4 py-4 grid grid-cols-2 gap-2 sm:gap-3">
             {navLinks.map(({ href, label, icon: Icon }) => {
               const active = pathname === href;
               return (
@@ -98,10 +101,10 @@ export default function Header() {
                     ? { backgroundColor: '#E85D36', color: '#fff', borderColor: '#E85D36' }
                     : { backgroundColor: '#161A26', color: '#9AA3C4', borderColor: '#252A3D' }
                   }
-                  className="flex items-center gap-2.5 px-3.5 py-2.5 rounded-xl text-xs font-bold border transition-colors"
+                  className="flex items-center gap-2.5 px-3.5 py-3 rounded-xl text-xs sm:text-sm font-bold border transition-all"
                 >
                   <Icon className="w-4 h-4 shrink-0" />
-                  {label}
+                  <span className="truncate">{label}</span>
                 </Link>
               );
             })}
