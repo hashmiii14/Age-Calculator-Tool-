@@ -10,44 +10,36 @@ interface FAQItem {
 
 const faqs: FAQItem[] = [
   {
-    question: 'What is my exact age?',
-    answer: 'Your exact age is the exact chronological duration measured in years, months, days, hours, minutes, and seconds from your date of birth to the present moment or target date.',
+    question: 'How many days have I lived?',
+    answer: 'AgePulse calculates your exact total days lived by adding up full calendar years (factoring in 366-day leap years) and adding the exact remaining days between your last birthday and the target date.',
   },
   {
-    question: 'How does this age calculator calculate age?',
+    question: 'What is my 10,000th day milestone?',
+    answer: 'Your 10,000th day occurs approximately when you turn 27 years and 4 months old. AgePulse automatically calculates your 1,000th, 5,000th, 10,000th, 15,000th, 20,000th, 25,000th, and 30,000th day milestone dates and remaining countdown.',
+  },
+  {
+    question: 'Can I compare the ages of two different people?',
+    answer: 'Yes! Use our "Compare Two Ages" tool to calculate the exact difference in years, months, days, and total days between Person A and Person B.',
+  },
+  {
+    question: 'How are my next 5 birthdays calculated?',
+    answer: 'AgePulse projects your exact birthday date, calendar year, day of the week, and turning age for the next 5 upcoming years. For individuals born on February 29 (leap day), non-leap year birthdays automatically fall on March 1st.',
+  },
+  {
+    question: 'What is my next age milestone?',
+    answer: 'AgePulse identifies key lifetime milestone ages (such as 18, 21, 25, 30, 40, 50, 60, 75, 100) and displays your progress on an interactive visual timeline.',
+  },
+  {
+    question: 'How does this age calculator calculate exact age?',
     answer: 'AgePulse uses pure calendar-based chronological calculation logic. It computes completed years, remaining months, and remaining days by adjusting for leap years, 28/29-day Februarys, and 30/31-day months.',
   },
   {
-    question: 'Can I calculate my age on a past date?',
-    answer: 'Yes! Simply change the "Calculate Age On" input field to any past date. For example, you can calculate how old you were on January 1, 2020 or on your graduation day.',
+    question: 'Can I calculate my age on a past or future date?',
+    answer: 'Yes! You can enter any historical date (like your graduation or wedding day) or any future date (like your retirement) in the "Age On" input field.',
   },
   {
-    question: 'Can I calculate my age on a future date?',
-    answer: 'Yes! You can enter any future date in the "Calculate Age On" field to discover how old you will be on a future retirement date, anniversary, or milestone.',
-  },
-  {
-    question: 'How are leap years handled?',
-    answer: 'Leap years (years with 366 days, such as 2000 and 2024) are automatically detected and factored into the day count of February (29 days instead of 28).',
-  },
-  {
-    question: 'How is a February 29 birthday handled in non-leap years?',
-    answer: 'For individuals born on February 29 (leap day), in common non-leap years their legal birthday is recognized on March 1st. AgePulse advances their age on March 1st in non-leap years.',
-  },
-  {
-    question: 'Can I calculate my age in total days?',
-    answer: 'Yes! AgePulse displays your total lifetime duration broken down into total months, total weeks, total days, total hours, total minutes, and total seconds.',
-  },
-  {
-    question: 'Can I calculate the age difference between two dates?',
-    answer: 'Yes! Use our "Date Difference" calculator mode to calculate the exact duration (years, months, days, total days, etc.) between any two arbitrary dates.',
-  },
-  {
-    question: 'Is this age calculator free to use?',
-    answer: 'Yes, AgePulse is 100% free with no registration, software download, or subscriptions required.',
-  },
-  {
-    question: 'Does the calculator store my date of birth?',
-    answer: 'No. All calculations take place 100% locally on your device within your web browser. Your birth date is never sent to any server or stored remotely.',
+    question: 'Is my birth date data private and secure?',
+    answer: 'Yes, 100%. All calculations happen locally inside your web browser. Your birth date is never sent to any remote server or stored externally.',
   },
 ];
 
@@ -69,7 +61,7 @@ export default function FAQAccordion() {
           Got Questions? We Have Answers
         </h2>
         <p className="text-slate-400 text-sm sm:text-base max-w-2xl mx-auto">
-          Everything you need to know about chronological age calculations, leap year logic, and date math.
+          Everything you need to know about age milestones, day counts, age comparison, and leap year calculations.
         </p>
       </div>
 

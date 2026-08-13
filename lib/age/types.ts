@@ -13,12 +13,27 @@ export interface NextBirthdayResult {
   isToday: boolean;
 }
 
+export interface UpcomingBirthday {
+  year: number;
+  dateStr: string;
+  formattedDate: string;
+  weekday: string;
+  turningAge: number;
+}
+
 export interface AgeMilestone {
   milestoneDays: number;
   targetDateStr: string; // YYYY-MM-DD
   formattedTargetDate: string;
   daysRemaining: number;
   isPassed: boolean;
+}
+
+export interface NextBigDayMilestone {
+  milestoneDays: number;
+  targetDateStr: string;
+  formattedTargetDate: string;
+  daysRemaining: number;
 }
 
 export interface AgeProgress {
@@ -54,6 +69,20 @@ export interface QuickFact {
   subtitle: string;
 }
 
+export interface AgeComparisonResult {
+  personAYears: number;
+  personAMonths: number;
+  personADays: number;
+  personBYears: number;
+  personBMonths: number;
+  personBDays: number;
+  yearsDiff: number;
+  monthsDiff: number;
+  daysDiff: number;
+  totalDaysDiff: number;
+  olderPersonLabel: string;
+}
+
 export interface AgeResult {
   years: number;
   months: number;
@@ -74,7 +103,9 @@ export interface AgeResult {
   zodiacSign: string;
   dayOfYear: number;
   nextBirthday: NextBirthdayResult;
+  nextFiveBirthdays: UpcomingBirthday[];
   milestones: AgeMilestone[];
+  nextBigDay: NextBigDayMilestone | null;
   progress: AgeProgress;
   nextMajorMilestone: NextMajorMilestone;
   timeline: AgeTimelineNode[];

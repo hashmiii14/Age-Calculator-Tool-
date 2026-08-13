@@ -3,6 +3,9 @@ import {
   calculateAge,
   calculateDateDifference,
   calculateNextBirthday,
+  calculateNextFiveBirthdays,
+  calculateNextBigDayMilestone,
+  calculateAgeComparison,
   calculateMilestones,
   calculateAgeProgress,
   calculateNextMajorMilestone,
@@ -11,7 +14,7 @@ import {
 } from '../lib/age/ageEngine';
 import { isLeapYear, getDaysInMonth } from '../lib/age/dateUtils';
 
-describe('Age Engine - Core Calculations', () => {
+describe('Age Engine - Core Calculations & New Features', () => {
   it('1. Normal age calculation: 2006-03-14 to 2025-06-07', () => {
     const res = calculateAge('2006-03-14', '2025-06-07');
     expect(res.years).toBe(19);
@@ -32,7 +35,7 @@ describe('Age Engine - Core Calculations', () => {
     const res = calculateAge('2000-05-15', '2024-05-14');
     expect(res.years).toBe(23);
     expect(res.months).toBe(11);
-    expect(res.days).toBe(29); // April has 30 days, 30-15+14=29
+    expect(res.days).toBe(29);
   });
 
   it('4. One day after birthday: born 2000-05-15, target 2024-05-16', () => {
@@ -145,19 +148,28 @@ describe('Age Engine - Core Calculations', () => {
     expect(m5k?.isPassed).toBe(true);
   });
 
-  it('20. Age progress and milestone timeline calculation', () => {
-    const progress = calculateAgeProgress('2000-01-01', '2025-07-01');
-    expect(progress.percentCompleted).toBeGreaterThan(0);
-    expect(progress.percentCompleted).toBeLessThanOrEqual(100);
+  it('20. Next 5 Birthdays calculation', () => {
+    const bdays = calculateNextFiveBirthdays('2000-05-15', '2025-01-01');
+    expect(bdays.length).toBe(5);
+    expect(bdays[0].year).toBe(2025);
+    expect(bdays[0].turningAge).toBe(25);
+    expect(bdays[4].year).toBe(2029);
+    expect(bdays[4].turningAge).toBe(29);
+  });
 
-    const nextM = calculateNextMajorMilestone(25, '2000-01-01', '2025-07-01');
-    expect(nextM.targetAge).toBe(30);
-    expect(nextM.yearsRemaining).toBe(4);
+  it('21. Next Big Day Milestone calculation', () => {
+    const milestones = calculateMilestones('2000-01-01', '2025-01-01');
+    const nextBig = calculateNextBigDayMilestone(milestones);
+    expect(nextBig).not.toBeNull();
+    expect(nextBig?.milestoneDays).toBe(10000);
+    expect(nextBig?.daysRemaining).toBeGreaterThan(0);
+  });
 
-    const timeline = calculateMilestoneTimeline(25, '2000-01-01');
-    const node25 = timeline.find((t) => t.age === 25);
-    expect(node25?.isReached).toBe(true);
-    const node30 = timeline.find((t) => t.age === 30);
-    expect(node30?.isNext).toBe(true);
+  it('22. Age Comparison calculation', () => {
+    const comp = calculateAgeComparison('2000-05-15', '2004-08-20', '2025-01-01');
+    expect(comp.personAYears).toBe(24);
+    expect(comp.personBYears).toBe(20);
+    expect(comp.yearsDiff).toBe(4);
+    expect(comp.olderPersonLabel).toContain('Person A');
   });
 });

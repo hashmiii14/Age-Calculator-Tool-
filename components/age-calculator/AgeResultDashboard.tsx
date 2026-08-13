@@ -4,6 +4,8 @@ import { AgeResult } from '../../lib/age/types';
 import ShareCopyButtons from './ShareCopyButtons';
 import BirthdayCountdown from './BirthdayCountdown';
 import BirthdayInfoCard from './BirthdayInfoCard';
+import NextFiveBirthdays from './NextFiveBirthdays';
+import NextBigDayCard from './NextBigDayCard';
 import AgeAtAGlance from './AgeAtAGlance';
 import AgeInDifferentUnits from './AgeInDifferentUnits';
 import AgeProgressVisualizer from './AgeProgressVisualizer';
@@ -83,32 +85,38 @@ export default function AgeResultDashboard({ result }: AgeResultDashboardProps) 
         </div>
       </div>
 
-      {/* 2. Your Age at a Glance */}
+      {/* 2. Signature Feature: Next Big Day Card */}
+      <NextBigDayCard nextBigDay={result.nextBigDay} />
+
+      {/* 3. Your Age at a Glance */}
       <AgeAtAGlance result={result} />
 
-      {/* 3. Your Age Progress */}
+      {/* 4. Your Current Year Progress */}
       <AgeProgressVisualizer progress={result.progress} currentYears={result.years} />
 
-      {/* 4. Birthday Details & Countdown */}
+      {/* 5. Signature Feature: Your Next 5 Birthdays */}
+      <NextFiveBirthdays birthdays={result.nextFiveBirthdays} />
+
+      {/* 6. Birthday Details & Countdown */}
       <BirthdayInfoCard result={result} />
       <div id="birthday-countdown">
         <BirthdayCountdown nextBirthday={result.nextBirthday} />
       </div>
 
-      {/* 5. Next Age Milestone & Visual Timeline */}
+      {/* 7. Next Age Milestone & Visual Timeline */}
       <AgeMilestoneTimeline
         currentYears={result.years}
         nextMajorMilestone={result.nextMajorMilestone}
         timeline={result.timeline}
       />
 
-      {/* 6. Quick Age Facts */}
+      {/* 8. Quick Age Facts */}
       <QuickAgeFacts facts={result.quickFacts} />
 
-      {/* 7. Age in Different Units */}
+      {/* 9. Age in Different Units */}
       <AgeInDifferentUnits result={result} />
 
-      {/* 8. Calculation Explained Visual */}
+      {/* 10. Calculation Explained Visual */}
       <CalculationExplainedVisual />
     </section>
   );

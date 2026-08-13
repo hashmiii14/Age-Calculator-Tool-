@@ -14,12 +14,15 @@ import {
   AgeResult,
   DateDifferenceResult,
   NextBirthdayResult,
+  UpcomingBirthday,
   ValidationErrors,
   AgeMilestone,
+  NextBigDayMilestone,
   AgeProgress,
   NextMajorMilestone,
   AgeTimelineNode,
   QuickFact,
+  AgeComparisonResult,
 } from './types';
 
 /**
@@ -65,6 +68,66 @@ export function getDayOfYear(dob: ParsedDate): number {
 }
 
 /**
+ * Calculates next 5 upcoming birthdays relative to target date.
+ */
+export function calculateNextFiveBirthdays(
+  dobStr: string,
+  targetDateStr: string
+): UpcomingBirthday[] {
+  const dob = parseISODate(dobStr);
+  const target = parseISODate(targetDateStr);
+  if (!dob || !target) return [];
+
+  const results: UpcomingBirthday[] = [];
+  let currentStartYear = target.year;
+
+  const getBdayParsed = (y: number): ParsedDate => {
+    if (dob.month === 2 && dob.day === 29 && !isLeapYear(y)) {
+      return { year: y, month: 3, day: 1 };
+    }
+    return { year: y, month: dob.month, day: dob.day };
+  };
+
+  const bdayThisYear = getBdayParsed(currentStartYear);
+  if (toLocalDate(bdayThisYear).getTime() < toLocalDate(target).getTime()) {
+    currentStartYear += 1;
+  }
+
+  for (let i = 0; i < 5; i++) {
+    const y = currentStartYear + i;
+    const bdayParsed = getBdayParsed(y);
+    const dateStr = formatISODate(bdayParsed);
+
+    results.push({
+      year: y,
+      dateStr,
+      formattedDate: formatDateLong(dateStr),
+      weekday: getDayOfWeek(dateStr),
+      turningAge: y - dob.year,
+    });
+  }
+
+  return results;
+}
+
+/**
+ * Finds the immediate next day milestone (e.g. 1k, 5k, 10k, 15k, 20k, 25k, 30k days).
+ */
+export function calculateNextBigDayMilestone(
+  milestones: AgeMilestone[]
+): NextBigDayMilestone | null {
+  const upcoming = milestones.find((m) => !m.isPassed);
+  if (!upcoming) return null;
+
+  return {
+    milestoneDays: upcoming.milestoneDays,
+    targetDateStr: upcoming.targetDateStr,
+    formattedTargetDate: upcoming.formattedTargetDate,
+    daysRemaining: upcoming.daysRemaining,
+  };
+}
+
+/**
  * Calculates exact age progression percentage between last birthday and next birthday.
  */
 export function calculateAgeProgress(
@@ -74,7 +137,6 @@ export function calculateAgeProgress(
   const dob = parseISODate(dobStr)!;
   const target = parseISODate(targetDateStr)!;
 
-  // Determine last birthday date
   let lastBdayYear = target.year;
   const getBdayDate = (y: number): ParsedDate => {
     if (dob.month === 2 && dob.day === 29 && !isLeapYear(y)) {
@@ -137,7 +199,6 @@ export function calculateNextMajorMilestone(
   const milestoneParsed: ParsedDate = { year: mYear, month: mMonth, day: mDay };
   const formattedTargetDate = formatDateLong(formatISODate(milestoneParsed));
 
-  // Compute duration from target date to milestone
   let yearsRem = milestoneParsed.year - target.year;
   let monthsRem = milestoneParsed.month - target.month;
   let daysRem = milestoneParsed.day - target.day;
@@ -287,7 +348,9 @@ export function calculateAge(
 
   const dayOfYear = getDayOfYear(dob);
   const nextBirthday = calculateNextBirthday(dobStr, targetDateStr);
+  const nextFiveBirthdays = calculateNextFiveBirthdays(dobStr, targetDateStr);
   const milestones = calculateMilestones(dobStr, targetDateStr);
+  const nextBigDay = calculateNextBigDayMilestone(milestones);
   const progress = calculateAgeProgress(dobStr, targetDateStr);
   const nextMajorMilestone = calculateNextMajorMilestone(years, dobStr, targetDateStr);
   const timeline = calculateMilestoneTimeline(years, dobStr);
@@ -321,6 +384,15 @@ export function calculateAge(
     },
   ];
 
+  if (nextBigDay) {
+    quickFacts.push({
+      id: 'next-big-day-fact',
+      title: `Next Big Day (${nextBigDay.milestoneDays.toLocaleString()}th Day)`,
+      value: nextBigDay.formattedTargetDate,
+      subtitle: `In ${nextBigDay.daysRemaining.toLocaleString()} days`,
+    });
+  }
+
   return {
     years,
     months,
@@ -341,11 +413,49 @@ export function calculateAge(
     zodiacSign: getZodiacSign(dob.month, dob.day),
     dayOfYear,
     nextBirthday,
+    nextFiveBirthdays,
     milestones,
+    nextBigDay,
     progress,
     nextMajorMilestone,
     timeline,
     quickFacts,
+  };
+}
+
+/**
+ * Calculates duration/difference between Person A and Person B.
+ */
+export function calculateAgeComparison(
+  dobAStr: string,
+  dobBStr: string,
+  targetDateStr: string
+): AgeComparisonResult {
+  const ageA = calculateAge(dobAStr, targetDateStr);
+  const ageB = calculateAge(dobBStr, targetDateStr);
+
+  const dobADate = toLocalDate(parseISODate(dobAStr)!);
+  const dobBDate = toLocalDate(parseISODate(dobBStr)!);
+
+  const earlierStr = dobADate.getTime() <= dobBDate.getTime() ? dobAStr : dobBStr;
+  const laterStr = dobADate.getTime() <= dobBDate.getTime() ? dobBStr : dobAStr;
+
+  const diff = calculateDateDifference(earlierStr, laterStr);
+
+  const olderPersonLabel = ageA.totalDays > ageB.totalDays ? 'Person A is older' : ageB.totalDays > ageA.totalDays ? 'Person B is older' : 'Both are the exact same age';
+
+  return {
+    personAYears: ageA.years,
+    personAMonths: ageA.months,
+    personADays: ageA.days,
+    personBYears: ageB.years,
+    personBMonths: ageB.months,
+    personBDays: ageB.days,
+    yearsDiff: diff.years,
+    monthsDiff: diff.months,
+    daysDiff: diff.days,
+    totalDaysDiff: diff.totalDays,
+    olderPersonLabel,
   };
 }
 
