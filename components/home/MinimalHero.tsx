@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { ArrowRight, ShieldCheck } from 'lucide-react';
+import { ArrowRight, Lock } from 'lucide-react';
 import CustomDatePicker from '../ui/CustomDatePicker';
 
 interface MinimalHeroProps {
@@ -23,71 +23,97 @@ export default function MinimalHero({ onCalculate }: MinimalHeroProps) {
   };
 
   return (
-    <section id="dob-input-section" className="py-14 sm:py-20 max-w-2xl mx-auto animate-fade-up">
-      <div className="space-y-8 text-center">
+    <section id="dob-input-section" className="min-h-[82vh] flex flex-col items-center justify-center py-12 sm:py-20 relative overflow-hidden">
 
-        {/* Overline badge */}
-        <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider"
-          style={{ backgroundColor: 'rgba(232,93,54,0.1)', color: '#F87B4E', border: '1px solid rgba(232,93,54,0.2)' }}>
-          Free Personal Date Intelligence
-        </div>
+      {/* Ambient glow — subtle, not loud */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0 flex items-center justify-center"
+      >
+        <div
+          className="w-[600px] h-[600px] rounded-full blur-[140px] opacity-[0.06]"
+          style={{ background: 'radial-gradient(circle, #E85D36 0%, transparent 70%)' }}
+        />
+      </div>
 
-        {/* Headline */}
-        <h1 style={{ color: '#F2F4FB' }} className="text-4xl sm:text-5xl lg:text-6xl font-extrabold font-serif tracking-tight leading-[1.15]">
-          What does your{' '}
-          <span style={{ color: '#E85D36' }}>date</span>{' '}
-          say about you?
-        </h1>
+      <div className="relative z-10 w-full max-w-xl mx-auto space-y-10 text-center">
 
-        <p style={{ color: '#9AA3C4' }} className="text-base sm:text-lg leading-relaxed max-w-md mx-auto">
-          Enter your date of birth to calculate your exact age, upcoming birthday, milestones, and date story.
+        {/* Top eyebrow — NOT a "badge", just small quiet text */}
+        <p style={{ color: '#636B8A' }} className="text-xs tracking-[0.2em] uppercase font-semibold">
+          Free · No account · Runs locally
         </p>
 
-        {/* Input Card */}
-        <form onSubmit={handleSubmit}>
-          <div className="rounded-2xl p-2 space-y-2"
-            style={{ backgroundColor: '#161A26', border: '1px solid #252A3D' }}>
-            <p style={{ color: '#636B8A' }} className="text-[11px] font-bold uppercase tracking-widest px-2 pt-1 text-left">
-              Date of Birth
-            </p>
-            <CustomDatePicker
-              id="hero-dob"
-              value={dob}
-              onChange={setDob}
-              placeholder="DD – MM – YYYY"
-            />
-            <button
-              type="submit"
-              disabled={!dob}
-              className="w-full py-3.5 px-6 rounded-xl text-white font-extrabold text-sm flex items-center justify-center gap-2 transition-all"
-              style={{ backgroundColor: dob ? '#E85D36' : '#2A3050', cursor: dob ? 'pointer' : 'not-allowed' }}
-            >
-              Discover My Age
-              <ArrowRight className="w-4 h-4" />
-            </button>
-          </div>
+        {/* Headline — let the typography do the talking */}
+        <div className="space-y-4">
+          <h1
+            className="text-[2.75rem] sm:text-[3.5rem] lg:text-[4.25rem] font-extrabold font-serif leading-[1.1] tracking-tight"
+            style={{ color: '#F2F4FB' }}
+          >
+            How old are you,{' '}
+            <em className="not-italic" style={{ color: '#E85D36' }}>exactly?</em>
+          </h1>
+          <p style={{ color: '#9AA3C4' }} className="text-base sm:text-lg leading-relaxed">
+            Enter your date of birth. Get your precise age, next birthday, milestones, and more — instantly.
+          </p>
+        </div>
+
+        {/* Primary Input — clean, no extra labels */}
+        <form onSubmit={handleSubmit} className="space-y-3">
+          <CustomDatePicker
+            id="hero-dob"
+            value={dob}
+            onChange={setDob}
+            placeholder="Select your date of birth"
+          />
+
+          <button
+            type="submit"
+            disabled={!dob}
+            className="w-full flex items-center justify-center gap-2.5 py-4 rounded-xl font-bold text-sm tracking-wide transition-all duration-150"
+            style={{
+              backgroundColor: dob ? '#E85D36' : '#1D2133',
+              color: dob ? '#fff' : '#636B8A',
+              cursor: dob ? 'pointer' : 'default',
+              border: dob ? 'none' : '1px solid #252A3D',
+            }}
+          >
+            Calculate My Age
+            <ArrowRight className="w-4 h-4" style={{ opacity: dob ? 1 : 0.4 }} />
+          </button>
         </form>
 
-        {/* Example pills */}
-        <div className="flex flex-wrap items-center justify-center gap-2 pt-1">
-          <span style={{ color: '#636B8A' }} className="text-xs">Try an example:</span>
+        {/* Quick examples */}
+        <div className="flex flex-wrap items-center justify-center gap-2">
+          <span style={{ color: '#636B8A' }} className="text-xs">Quick pick:</span>
           {EXAMPLES.map(({ label, date }) => (
             <button
               key={date}
               type="button"
               onClick={() => onCalculate(date)}
-              style={{ backgroundColor: '#1D2133', color: '#9AA3C4', borderColor: '#252A3D' }}
-              className="px-3 py-1.5 rounded-full text-xs font-bold border hover:border-[#E85D36] hover:text-[#E85D36] transition-colors"
+              className="px-3 py-1 rounded-lg text-xs font-semibold transition-colors"
+              style={{
+                backgroundColor: '#161A26',
+                color: '#9AA3C4',
+                border: '1px solid #252A3D',
+              }}
+              onMouseEnter={e => {
+                (e.currentTarget as HTMLButtonElement).style.color = '#E85D36';
+                (e.currentTarget as HTMLButtonElement).style.borderColor = 'rgba(232,93,54,0.4)';
+              }}
+              onMouseLeave={e => {
+                (e.currentTarget as HTMLButtonElement).style.color = '#9AA3C4';
+                (e.currentTarget as HTMLButtonElement).style.borderColor = '#252A3D';
+              }}
             >
               {label}
             </button>
           ))}
         </div>
 
-        {/* Privacy note */}
-        <div className="flex items-center justify-center gap-1.5 text-xs" style={{ color: '#636B8A' }}>
-          <ShieldCheck className="w-4 h-4" style={{ color: '#22c55e' }} />
-          Your date is calculated locally in your browser — never sent to any server.
+        {/* Privacy — small, honest, not overdone */}
+        <div className="flex items-center justify-center gap-1.5" style={{ color: '#636B8A' }}>
+          <Lock className="w-3 h-3" />
+          <span className="text-xs">Your date never leaves your browser.</span>
         </div>
       </div>
     </section>

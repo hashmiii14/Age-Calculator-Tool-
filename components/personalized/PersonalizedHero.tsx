@@ -1,6 +1,6 @@
 'use client';
 
-import { RotateCcw, Heart } from 'lucide-react';
+import { RotateCcw } from 'lucide-react';
 import { PersonalProfile } from '../../lib/age/types';
 
 interface PersonalizedHeroProps {
@@ -9,69 +9,81 @@ interface PersonalizedHeroProps {
 }
 
 export default function PersonalizedHero({ profile, onClearDate }: PersonalizedHeroProps) {
-  return (
-    <section className="animate-fade-up">
-      <div className="rounded-2xl p-6 sm:p-8 lg:p-10 space-y-6"
-        style={{ backgroundColor: '#161A26', border: '1px solid #252A3D' }}>
+  const { years, months, days, dobWeekday, formattedDOB, totalDays, totalWeeks, nextBirthday } = profile;
 
-        {/* Top bar */}
-        <div className="flex items-center justify-between pb-5 border-b border-[#252A3D] text-xs">
-          <div className="flex items-center gap-2 font-extrabold uppercase tracking-widest" style={{ color: '#E85D36' }}>
-            <span className="w-2 h-2 rounded-full animate-pulse-slow" style={{ backgroundColor: '#E85D36' }} />
-            Your AgePulse
+  return (
+    <section className="animate-fade-up relative overflow-hidden rounded-2xl" style={{ backgroundColor: '#0f1520' }}>
+
+      {/* Decorative left border accent */}
+      <div className="absolute left-0 top-0 bottom-0 w-1 rounded-l-2xl" style={{ background: 'linear-gradient(180deg, #E85D36 0%, rgba(232,93,54,0.1) 100%)' }} />
+
+      <div className="px-6 sm:px-10 lg:px-14 py-10 sm:py-14">
+
+        {/* Top utility bar */}
+        <div className="flex items-center justify-between mb-10">
+          <div className="flex items-center gap-2" style={{ color: '#636B8A' }}>
+            <span className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: '#22c55e' }} />
+            <span className="text-xs tracking-widest uppercase font-semibold">Your AgePulse</span>
           </div>
           <button
             onClick={onClearDate}
-            style={{ backgroundColor: '#1D2133', color: '#9AA3C4', borderColor: '#252A3D' }}
-            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg font-bold border hover:text-white hover:border-[#E85D36] transition-colors"
+            className="flex items-center gap-1.5 text-xs font-semibold transition-colors px-3 py-1.5 rounded-lg"
+            style={{ color: '#636B8A', backgroundColor: 'rgba(255,255,255,0.04)', border: '1px solid #252A3D' }}
+            onMouseEnter={e => (e.currentTarget.style.color = '#E85D36')}
+            onMouseLeave={e => (e.currentTarget.style.color = '#636B8A')}
           >
             <RotateCcw className="w-3.5 h-3.5" />
-            Clear My Date
+            Clear
           </button>
         </div>
 
-        {/* Primary Age Display */}
-        <div className="text-center space-y-3">
-          <div style={{ color: '#F2F4FB' }} className="text-4xl sm:text-5xl lg:text-6xl font-extrabold font-serif tracking-tight leading-tight">
-            {profile.years}
-            <span style={{ color: '#E85D36' }}> yrs</span>
-            {' · '}
-            {profile.months}
-            <span style={{ color: '#E85D36' }}> mo</span>
-            {' · '}
-            {profile.days}
-            <span style={{ color: '#E85D36' }}> d</span>
-          </div>
+        {/* Born line — small, honest */}
+        <p style={{ color: '#636B8A' }} className="text-sm font-semibold tracking-wide mb-3">
+          Born {dobWeekday}, {formattedDOB}
+        </p>
 
-          <p style={{ color: '#9AA3C4' }} className="text-sm sm:text-base font-semibold">
-            Born {profile.dobWeekday}, {profile.formattedDOB}
-          </p>
+        {/* Giant Age Number — the star of the show */}
+        <div className="flex flex-wrap items-baseline gap-x-3 gap-y-2 mb-6">
+          <span className="font-serif font-extrabold tracking-tight" style={{ fontSize: 'clamp(3.5rem, 10vw, 6rem)', lineHeight: 1, color: '#F2F4FB' }}>
+            {years}
+          </span>
+          <span className="text-xl sm:text-2xl font-semibold" style={{ color: '#636B8A' }}>years</span>
 
-          {/* Birthday indicator */}
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-xs font-bold"
-            style={{ backgroundColor: 'rgba(232,93,54,0.1)', color: '#F87B4E', border: '1px solid rgba(232,93,54,0.2)' }}>
-            <Heart className="w-4 h-4 fill-current" />
-            {profile.nextBirthday.isToday
-              ? `Happy Birthday! 🎉 Turning ${profile.nextBirthday.turningAge}`
-              : `Next birthday in ${profile.nextBirthday.daysRemaining} days — Turning ${profile.nextBirthday.turningAge}`
-            }
-          </div>
+          <span className="font-serif font-extrabold tracking-tight" style={{ fontSize: 'clamp(2rem, 6vw, 3.5rem)', lineHeight: 1, color: '#E85D36' }}>
+            {months}
+          </span>
+          <span className="text-lg font-semibold" style={{ color: '#636B8A' }}>months</span>
+
+          <span className="font-serif font-extrabold tracking-tight" style={{ fontSize: 'clamp(2rem, 6vw, 3.5rem)', lineHeight: 1, color: '#E85D36' }}>
+            {days}
+          </span>
+          <span className="text-lg font-semibold" style={{ color: '#636B8A' }}>days</span>
         </div>
 
-        {/* Secondary stats row */}
-        <div className="pt-4 border-t border-[#252A3D] grid grid-cols-3 gap-4 text-center">
+        {/* Birthday indicator — one clean line */}
+        {!nextBirthday.isToday && (
+          <p style={{ color: '#9AA3C4' }} className="text-sm">
+            Turning <strong style={{ color: '#F2F4FB' }}>{nextBirthday.turningAge}</strong> in{' '}
+            <strong style={{ color: '#E85D36' }}>{nextBirthday.daysRemaining}</strong> days — {nextBirthday.formattedDate}
+          </p>
+        )}
+        {nextBirthday.isToday && (
+          <p style={{ color: '#E85D36' }} className="text-sm font-bold">🎉 Happy Birthday! You're turning {nextBirthday.turningAge} today!</p>
+        )}
+
+        {/* Subtle divider + secondary stats */}
+        <div className="mt-8 pt-6 border-t border-[#1D2133] flex flex-wrap gap-8">
           {[
-            { label: 'Total Days',  value: profile.totalDays.toLocaleString()  },
-            { label: 'Total Weeks', value: profile.totalWeeks.toLocaleString() },
-            { label: 'Hours Lived', value: profile.totalHours.toLocaleString() },
-          ].map(({ label, value }) => (
-            <div key={label} className="space-y-1">
-              <div style={{ color: '#F2F4FB' }} className="text-lg sm:text-xl font-extrabold font-serif">{value}</div>
-              <div style={{ color: '#636B8A' }} className="text-[11px] font-semibold uppercase tracking-wider">{label}</div>
+            { value: totalDays.toLocaleString(), label: 'days alive' },
+            { value: totalWeeks.toLocaleString(), label: 'weeks' },
+            { value: profile.totalHours.toLocaleString(), label: 'hours' },
+          ].map(({ value, label }) => (
+            <div key={label}>
+              <p style={{ color: '#F2F4FB' }} className="text-xl sm:text-2xl font-extrabold font-serif">{value}</p>
+              <p style={{ color: '#636B8A' }} className="text-xs font-medium mt-0.5">{label}</p>
             </div>
           ))}
         </div>
-
       </div>
     </section>
   );

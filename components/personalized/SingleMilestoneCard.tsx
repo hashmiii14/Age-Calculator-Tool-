@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { Trophy, Clock, ArrowRight } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 import { SingleMilestone } from '../../lib/age/types';
 
 interface SingleMilestoneCardProps {
@@ -10,48 +10,48 @@ interface SingleMilestoneCardProps {
 
 export default function SingleMilestoneCard({ milestone }: SingleMilestoneCardProps) {
   return (
-    <div className="rounded-2xl p-6 space-y-4"
-      style={{ backgroundColor: '#161A26', border: '1px solid #252A3D' }}>
+    <div
+      className="rounded-2xl overflow-hidden"
+      style={{ backgroundColor: '#161A26', border: '1px solid #252A3D' }}
+    >
+      {/* Thin top accent strip */}
+      <div className="h-[3px]" style={{ background: 'linear-gradient(90deg, #E85D36 0%, rgba(232,93,54,0.2) 100%)' }} />
 
-      {/* Header */}
-      <div className="flex items-start justify-between gap-3">
-        <div className="flex items-center gap-3">
-          <div className="w-9 h-9 rounded-xl flex items-center justify-center shrink-0"
-            style={{ backgroundColor: 'rgba(232,93,54,0.12)', color: '#E85D36' }}>
-            <Trophy className="w-4 h-4" />
-          </div>
-          <div>
-            <span className="section-label">Your Next Milestone</span>
-            <h3 style={{ color: '#F2F4FB' }} className="text-xl font-extrabold font-serif leading-tight">
-              {milestone.title}
-            </h3>
-          </div>
-        </div>
-        <span className="shrink-0 px-3 py-1 rounded-full text-xs font-bold"
-          style={{ backgroundColor: 'rgba(232,93,54,0.1)', color: '#F87B4E', border: '1px solid rgba(232,93,54,0.2)' }}>
-          {milestone.badgeLabel}
-        </span>
-      </div>
+      <div className="px-6 py-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-5">
 
-      {/* Info row */}
-      <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 rounded-xl p-4"
-        style={{ backgroundColor: '#1D2133' }}>
-        <div className="flex-1">
-          <p style={{ color: '#636B8A' }} className="text-[11px] font-bold uppercase tracking-wider mb-1">Target Date</p>
-          <p style={{ color: '#F2F4FB' }} className="font-extrabold text-base">{milestone.targetDateFormatted}</p>
+        {/* Left info */}
+        <div className="space-y-1 min-w-0">
+          <p style={{ color: '#636B8A' }} className="text-xs font-semibold uppercase tracking-widest">
+            Next Milestone
+          </p>
+          <h3 style={{ color: '#F2F4FB' }} className="text-xl sm:text-2xl font-extrabold font-serif leading-snug">
+            {milestone.title}
+          </h3>
+          <p style={{ color: '#9AA3C4' }} className="text-sm">
+            {milestone.targetDateFormatted}
+          </p>
         </div>
-        <div className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl font-bold text-sm"
-          style={{ backgroundColor: 'rgba(232,93,54,0.12)', color: '#F87B4E', border: '1px solid rgba(232,93,54,0.2)' }}>
-          <Clock className="w-4 h-4" />
-          In {milestone.daysRemaining.toLocaleString()} days
+
+        {/* Right countdown — visually prominent */}
+        <div className="shrink-0 text-center sm:text-right">
+          <p className="text-4xl sm:text-5xl font-extrabold font-serif tabular-nums" style={{ color: '#E85D36' }}>
+            {milestone.daysRemaining.toLocaleString()}
+          </p>
+          <p style={{ color: '#636B8A' }} className="text-xs font-semibold mt-1 uppercase tracking-wider">
+            days remaining
+          </p>
         </div>
       </div>
 
-      {/* Link */}
-      <div className="flex justify-end">
-        <Link href="/age-milestones"
-          className="inline-flex items-center gap-1 text-xs font-bold hover:underline"
-          style={{ color: '#E85D36' }}>
+      {/* Footer link */}
+      <div className="px-6 pb-4">
+        <Link
+          href="/age-milestones"
+          className="inline-flex items-center gap-1 text-xs font-semibold transition-colors"
+          style={{ color: '#636B8A' }}
+          onMouseEnter={e => (e.currentTarget.style.color = '#E85D36')}
+          onMouseLeave={e => (e.currentTarget.style.color = '#636B8A')}
+        >
           View all milestones <ArrowRight className="w-3.5 h-3.5" />
         </Link>
       </div>

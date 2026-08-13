@@ -23,9 +23,9 @@ export default function Footer() {
           {/* Brand column */}
           <div className="lg:col-span-2 space-y-4">
             <Link href="/" className="inline-flex items-center gap-2.5">
-              <div style={{ backgroundColor: '#E85D36' }} className="w-8 h-8 rounded-lg flex items-center justify-center text-white font-extrabold text-sm font-serif">A</div>
-              <span style={{ color: '#F2F4FB' }} className="font-extrabold text-lg font-serif">
-                Age<span style={{ color: '#E85D36' }}>Pulse</span>
+              <div style={{ backgroundColor: '#E85D36' }} className="w-8 h-8 rounded-lg flex items-center justify-center text-white font-black text-sm font-sans tracking-tighter">AP</div>
+              <span style={{ color: '#F2F4FB' }} className="font-black text-xl tracking-wider font-sans uppercase">
+                AGE<span style={{ color: '#E85D36' }}>PULSE</span>
               </span>
             </Link>
             <p style={{ color: '#636B8A' }} className="text-sm leading-relaxed max-w-sm">

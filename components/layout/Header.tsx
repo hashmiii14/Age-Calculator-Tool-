@@ -31,12 +31,12 @@ export default function Header() {
           <Link href="/" className="flex items-center gap-2.5 rounded-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#E85D36]">
             <div
               style={{ backgroundColor: '#E85D36' }}
-              className="w-8 h-8 rounded-lg flex items-center justify-center text-white font-extrabold text-sm font-serif shadow-md select-none"
+              className="w-8 h-8 rounded-lg flex items-center justify-center text-white font-black text-sm font-sans shadow-md select-none tracking-tighter"
             >
-              A
+              AP
             </div>
-            <span style={{ color: '#F2F4FB' }} className="font-extrabold text-lg tracking-tight font-serif hidden xs:block sm:block">
-              Age<span style={{ color: '#E85D36' }}>Pulse</span>
+            <span style={{ color: '#F2F4FB' }} className="font-black text-xl tracking-wider font-sans uppercase">
+              AGE<span style={{ color: '#E85D36' }}>PULSE</span>
             </span>
           </Link>
 

@@ -8,23 +8,23 @@ interface ContextualExploreProps {
   profile: PersonalProfile;
 }
 
-const tools = [
+const TOOLS = [
   {
-    title: 'Calculate Age On Any Date',
-    description: 'Find exactly how old you were or will be on any past or future date.',
     href: '/age-calculator',
+    label: 'Age On Any Date',
+    desc: 'How old were you or will you be on a specific date?',
     icon: Clock,
   },
   {
-    title: 'Compare Ages',
-    description: 'Calculate the exact age difference between two people.',
     href: '/age-comparison',
+    label: 'Compare Ages',
+    desc: 'Find the exact age difference between you and someone else.',
     icon: Users,
   },
   {
-    title: 'Date Difference',
-    description: 'Find the precise duration in years, months, and days between any two dates.',
     href: '/date-difference',
+    label: 'Date Difference',
+    desc: 'Exact duration between any two calendar dates.',
     icon: Calendar,
   },
 ];
@@ -32,36 +32,28 @@ const tools = [
 export default function ContextualExplore({ profile }: ContextualExploreProps) {
   return (
     <div className="space-y-4">
-      <div>
-        <span className="section-label">Related Tools</span>
-        <h3 style={{ color: '#F2F4FB' }} className="text-xl font-extrabold font-serif">
-          Explore More With Your Date
-        </h3>
+      <div className="flex items-baseline gap-3">
+        <h3 style={{ color: '#F2F4FB' }} className="text-lg font-extrabold font-serif">More Tools</h3>
+        <span style={{ color: '#636B8A' }} className="text-xs font-medium">Related to your date</span>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        {tools.map(({ title, description, href, icon: Icon }) => (
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+        {TOOLS.map(({ href, label, desc, icon: Icon }) => (
           <Link
             key={href}
             href={href}
-            style={{ backgroundColor: '#161A26', borderColor: '#252A3D' }}
-            className="group rounded-2xl p-5 border flex flex-col justify-between gap-4 hover:border-[#E85D36] transition-colors"
+            className="group flex flex-col gap-3 p-5 rounded-xl transition-colors"
+            style={{ backgroundColor: '#161A26', border: '1px solid #252A3D' }}
+            onMouseEnter={e => (e.currentTarget.style.borderColor = 'rgba(232,93,54,0.4)')}
+            onMouseLeave={e => (e.currentTarget.style.borderColor = '#252A3D')}
           >
-            <div className="space-y-2.5">
-              <div className="w-9 h-9 rounded-xl flex items-center justify-center"
-                style={{ backgroundColor: '#1D2133', color: '#E85D36' }}>
-                <Icon className="w-4 h-4" />
-              </div>
-              <h4 style={{ color: '#F2F4FB' }} className="font-extrabold font-serif text-base leading-snug group-hover:text-[#E85D36] transition-colors">
-                {title}
-              </h4>
-              <p style={{ color: '#636B8A' }} className="text-xs leading-relaxed">{description}</p>
+            <Icon className="w-5 h-5" style={{ color: '#E85D36' }} />
+            <div className="flex-1 space-y-1">
+              <p style={{ color: '#F2F4FB' }} className="text-sm font-bold leading-snug">{label}</p>
+              <p style={{ color: '#636B8A' }} className="text-xs leading-relaxed">{desc}</p>
             </div>
-
-            <div className="flex items-center gap-1 text-xs font-bold pt-3 border-t border-[#252A3D]"
-              style={{ color: '#E85D36' }}>
-              Use with your date
-              <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
+            <div className="flex items-center gap-1 text-xs font-semibold" style={{ color: '#E85D36' }}>
+              Open <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" />
             </div>
           </Link>
         ))}
