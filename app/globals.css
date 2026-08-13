@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;0,700;0,800;0,900;1,700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;0,700;0,800;1,700&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -21,21 +21,9 @@
   }
 
   body {
-    @apply bg-[#FFF0F4] text-slate-800 antialiased min-h-screen flex flex-col font-sans transition-colors duration-300 dark:bg-[#1C121E] dark:text-slate-100;
-    background-image: 
-      radial-gradient(at 10% 10%, rgba(255, 209, 220, 0.6) 0px, transparent 50%),
-      radial-gradient(at 90% 90%, rgba(255, 228, 214, 0.6) 0px, transparent 50%),
-      radial-gradient(at 50% 50%, rgba(255, 240, 245, 0.8) 0px, transparent 60%);
+    @apply bg-[#FAFAFA] text-slate-800 antialiased min-h-screen flex flex-col font-sans transition-colors duration-200 dark:bg-[#121214] dark:text-slate-100;
   }
 
-  .dark body {
-    background-image: 
-      radial-gradient(at 10% 10%, rgba(61, 31, 69, 0.7) 0px, transparent 50%),
-      radial-gradient(at 90% 90%, rgba(45, 27, 45, 0.8) 0px, transparent 50%),
-      radial-gradient(at 50% 50%, rgba(28, 18, 30, 0.9) 0px, transparent 60%);
-  }
-
-  /* Input color schemes */
   input, select, textarea {
     color-scheme: light;
   }
@@ -48,7 +36,7 @@
 @keyframes fadeIn {
   from {
     opacity: 0;
-    transform: translateY(8px);
+    transform: translateY(6px);
   }
   to {
     opacity: 1;
@@ -57,37 +45,23 @@
 }
 
 .animate-fadeIn {
-  animation: fadeIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  animation: fadeIn 0.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
 /* Custom Scrollbar */
 .custom-scrollbar::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
+  width: 5px;
+  height: 5px;
 }
 .custom-scrollbar::-webkit-scrollbar-track {
   background: transparent;
 }
 .custom-scrollbar::-webkit-scrollbar-thumb {
-  background: #f472b6;
+  background: #cbd5e1;
   border-radius: 9999px;
 }
 .dark .custom-scrollbar::-webkit-scrollbar-thumb {
-  background: #9e57c4;
-}
-
-/* Glass Card styles */
-.glass-card {
-  @apply bg-white/80 backdrop-blur-md border border-blush-100 shadow-cute dark:bg-plum-900/70 dark:border-plum-800;
-}
-
-.glass-card-hover {
-  @apply transition-all duration-300 hover:shadow-cute-hover hover:-translate-y-1;
-}
-
-/* Cute pill badges */
-.badge-cute {
-  @apply inline-flex items-center space-x-1.5 px-3.5 py-1 rounded-full bg-blush-100 text-blush-700 text-xs font-bold tracking-wide border border-blush-200 dark:bg-plum-800 dark:text-blush-300 dark:border-plum-800;
+  background: #334155;
 }
 
 /* Print Stylesheet */
@@ -105,14 +79,5 @@
     background: white !important;
     color: black !important;
     font-size: 12pt;
-  }
-
-  .print-only {
-    display: block !important;
-  }
-
-  article, section, div {
-    box-shadow: none !important;
-    border-color: #e2e8f0 !important;
   }
 }

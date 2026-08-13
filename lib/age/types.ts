@@ -41,6 +41,16 @@ export interface NextBigDayMilestone {
   daysRemaining: number;
 }
 
+export interface SingleMilestone {
+  title: string;
+  subtitle: string;
+  targetDateFormatted: string;
+  targetDateStr: string;
+  daysRemaining: number;
+  badgeLabel: string;
+  type: 'numeric_days' | 'landmark_age';
+}
+
 export interface AgeProgress {
   lastBirthdayStr: string;
   nextBirthdayStr: string;
@@ -91,7 +101,50 @@ export interface AgeComparisonResult {
 export type GenderPreference = 'Prefer not to say' | 'Female' | 'Male';
 export type DashboardMode = 'simple' | 'detailed' | 'fun';
 
+export interface PersonalProfile {
+  dobStr: string;
+  formattedDOB: string;
+  dobWeekday: string;
+  dayOfYear: number;
+  targetDateStr: string;
+  formattedTargetDate: string;
+
+  // Exact Age
+  years: number;
+  months: number;
+  days: number;
+  totalDays: number;
+  totalWeeks: number;
+  totalHours: number;
+  totalMinutes: number;
+  totalSeconds: number;
+
+  // Primary Features
+  nextBirthday: NextBirthdayResult;
+  nextFiveBirthdays: UpcomingBirthday[];
+  nextSingleMilestone: SingleMilestone;
+  dateDetails: {
+    birthstone: string;
+    birthstoneColor: string;
+    birthstoneSymbolism: string;
+    birthFlower: string;
+    birthFlowerMeaning: string;
+    seasonNorthern: string;
+    seasonSouthern: string;
+    monthName: string;
+    monthFunFact: string;
+    weekdayLore: string;
+  };
+  dateDiscoveries: DateHistoryRecord;
+  zodiac: ZodiacInfo;
+
+  // Optional extensions
+  genderPreference?: GenderPreference;
+  personalityArchetype?: PersonalityArchetype;
+}
+
 export interface AgeResult {
+  // Core age result
   years: number;
   months: number;
   days: number;
@@ -107,12 +160,14 @@ export interface AgeResult {
   formattedTargetDate: string;
   dobWeekday: string;
   targetWeekday: string;
+  dayOfYear: number;
   isLeapYearDOB: boolean;
+
+  // Extended attributes
   zodiacSign: string;
   zodiacProfile: ZodiacInfo;
   monthDetails: MonthInfo;
   historyRecord: DateHistoryRecord;
-  dayOfYear: number;
   nextBirthday: NextBirthdayResult;
   nextFiveBirthdays: UpcomingBirthday[];
   milestones: AgeMilestone[];
