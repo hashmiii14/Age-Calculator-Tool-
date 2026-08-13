@@ -14,7 +14,7 @@ export default function ContactPage() {
     e.preventDefault();
     const subject = encodeURIComponent(`AgePulse Inquiry from ${name}`);
     const body = encodeURIComponent(`Name: ${name}\nEmail: ${email}\n\nMessage:\n${message}`);
-    window.location.href = `mailto:support@agepulse.com?subject=${subject}&body=${body}`;
+    window.location.href = `mailto:mdhashmi955@gmail.com?subject=${subject}&body=${body}`;
     setSubmitted(true);
   };
 
@@ -27,7 +27,7 @@ export default function ContactPage() {
           Contact AgePulse
         </h1>
         <p className="text-slate-300 text-sm sm:text-base">
-          Have feedback, bug reports, or feature suggestions? Send us a message below.
+          Have feedback, bug reports, or feature suggestions? Send us a message below or email us directly at <strong className="text-[#E85D36] font-mono">mdhashmi955@gmail.com</strong>.
         </p>
       </section>
 
@@ -39,7 +39,7 @@ export default function ContactPage() {
             </div>
             <h3 className="text-xl font-bold text-white">Opening Email Client</h3>
             <p className="text-sm text-slate-300">
-              Your message draft has been generated in your default email application. You can also email us directly at <strong>support@agepulse.com</strong>.
+              Your message draft has been generated in your default email application. You can also email us directly at <strong className="text-[#E85D36] font-mono">mdhashmi955@gmail.com</strong>.
             </p>
           </div>
         ) : (

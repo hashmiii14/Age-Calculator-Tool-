@@ -45,7 +45,7 @@ export default function PrivacyPolicyPage() {
 
         <h2 className="text-xl font-bold text-white">5. Contact Us</h2>
         <p>
-          If you have any questions or concerns regarding this Privacy Policy, please contact us at <strong>support@agepulse.com</strong>.
+          If you have any questions or concerns regarding this Privacy Policy, please contact us at <strong className="text-[#E85D36] font-mono">mdhashmi955@gmail.com</strong>.
         </p>
       </section>
     </div>

@@ -11,6 +11,9 @@ import ContextualExplore from '../components/personalized/ContextualExplore';
 import BirthdayCountdown from '../components/age-calculator/BirthdayCountdown';
 import FAQAccordion from '../components/content/FAQAccordion';
 import DateToolsGrid from '../components/tools/DateToolsGrid';
+import AboutUsSection from '../components/content/AboutUsSection';
+import PrivacyPolicySection from '../components/content/PrivacyPolicySection';
+import ContactSection from '../components/content/ContactSection';
 import { createPersonalProfile } from '../lib/age/profileEngine';
 import { PersonalProfile } from '../lib/age/types';
 
@@ -66,7 +69,7 @@ export default function HomePage() {
 
       {/* ━━━━━ STATE A — DISCOVERY ━━━━━ */}
       {!profile ? (
-        <div className="space-y-14 animate-fade-up">
+        <div className="space-y-12 animate-fade-up">
 
           {/* Dominant Hero */}
           <MinimalHero onCalculate={handleCalculate} />
@@ -84,6 +87,15 @@ export default function HomePage() {
           {/* AdSense — mid-content */}
           <AdSlot />
 
+          {/* About Us Section */}
+          <AboutUsSection />
+
+          {/* Privacy Policy Section */}
+          <PrivacyPolicySection />
+
+          {/* Contact Section (gmail mdhashmi955@gmail.com) */}
+          <ContactSection />
+
           {/* FAQ */}
           <FAQAccordion />
 
@@ -93,7 +105,7 @@ export default function HomePage() {
 
       ) : (
         /* ━━━━━ STATE B — PERSONALIZED ━━━━━ */
-        <div className="space-y-5 animate-fade-up">
+        <div className="space-y-6 animate-fade-up">
 
           {/* 1. Personalized Hero */}
           <PersonalizedHero profile={profile} onClearDate={handleClearDate} />
@@ -125,8 +137,17 @@ export default function HomePage() {
           {/* 7. Contextual Tools */}
           <ContextualExplore profile={profile} />
 
-          {/* AdSense — before FAQ */}
+          {/* AdSense — before About/Privacy/Contact */}
           <AdSlot />
+
+          {/* About Us Section */}
+          <AboutUsSection />
+
+          {/* Privacy Policy Section */}
+          <PrivacyPolicySection />
+
+          {/* Contact Section (gmail mdhashmi955@gmail.com) */}
+          <ContactSection />
 
           {/* FAQ */}
           <div className="pt-4">
