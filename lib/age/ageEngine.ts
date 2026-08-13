@@ -15,6 +15,7 @@ import {
   DateDifferenceResult,
   NextBirthdayResult,
   ValidationErrors,
+  AgeMilestone,
 } from './types';
 
 /**
@@ -49,6 +50,43 @@ export function validateAgeInputs(
 }
 
 /**
+ * Calculates lifetime day milestones (1k, 5k, 10k, 15k, 20k, 25k, 30k days lived).
+ */
+export function calculateMilestones(
+  dobStr: string,
+  targetDateStr: string
+): AgeMilestone[] {
+  const dob = parseISODate(dobStr);
+  const target = parseISODate(targetDateStr);
+  if (!dob || !target) return [];
+
+  const dobDate = toLocalDate(dob);
+  const targetDate = toLocalDate(target);
+
+  const targets = [1000, 5000, 10000, 15000, 20000, 25000, 30000];
+
+  return targets.map((mDays) => {
+    // Add mDays to birth date
+    const mDate = new Date(dobDate.getTime() + mDays * 24 * 60 * 60 * 1000);
+    const y = mDate.getFullYear();
+    const m = (mDate.getMonth() + 1).toString().padStart(2, '0');
+    const d = mDate.getDate().toString().padStart(2, '0');
+    const dateStr = `${y}-${m}-${d}`;
+
+    const diffDays = Math.round((mDate.getTime() - targetDate.getTime()) / (1000 * 60 * 60 * 24));
+    const isPassed = diffDays <= 0;
+
+    return {
+      milestoneDays: mDays,
+      targetDateStr: dateStr,
+      formattedTargetDate: formatDateLong(dateStr),
+      daysRemaining: isPassed ? 0 : diffDays,
+      isPassed,
+    };
+  });
+}
+
+/**
  * Calculates exact chronological age (Years, Months, Days) and total breakdown.
  */
 export function calculateAge(
@@ -70,7 +108,6 @@ export function calculateAge(
   // Handle day overflow/underflow
   if (days < 0) {
     months -= 1;
-    // Determine previous month relative to target
     let prevMonth = target.month - 1;
     let prevYear = target.year;
     if (prevMonth === 0) {
@@ -96,6 +133,7 @@ export function calculateAge(
   const totalSeconds = totalMinutes * 60;
 
   const nextBirthday = calculateNextBirthday(dobStr, targetDateStr);
+  const milestones = calculateMilestones(dobStr, targetDateStr);
 
   return {
     years,
@@ -116,6 +154,7 @@ export function calculateAge(
     isLeapYearDOB: isLeapYear(dob.year),
     zodiacSign: getZodiacSign(dob.month, dob.day),
     nextBirthday,
+    milestones,
   };
 }
 

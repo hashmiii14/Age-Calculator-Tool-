@@ -3,6 +3,7 @@ import {
   calculateAge,
   calculateDateDifference,
   calculateNextBirthday,
+  calculateMilestones,
   validateAgeInputs,
 } from '../lib/age/ageEngine';
 import { isLeapYear, getDaysInMonth } from '../lib/age/dateUtils';
@@ -138,5 +139,18 @@ describe('Age Engine - Core Calculations', () => {
     const bdayFeb29In2025 = calculateNextBirthday('2000-02-29', '2025-01-01');
     expect(bdayFeb29In2025.dateStr).toBe('2025-03-01');
     expect(bdayFeb29In2025.turningAge).toBe(25);
+  });
+
+  it('19. Lifetime day milestone calculations', () => {
+    const milestones = calculateMilestones('2000-01-01', '2025-01-01');
+    expect(milestones.length).toBe(7);
+    const m5k = milestones.find((m) => m.milestoneDays === 5000);
+    expect(m5k).toBeDefined();
+    expect(m5k?.isPassed).toBe(true);
+
+    const m10k = milestones.find((m) => m.milestoneDays === 10000);
+    expect(m10k).toBeDefined();
+    expect(m10k?.isPassed).toBe(false);
+    expect(m10k?.daysRemaining).toBeGreaterThan(0);
   });
 });

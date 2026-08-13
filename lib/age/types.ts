@@ -13,6 +13,14 @@ export interface NextBirthdayResult {
   isToday: boolean;
 }
 
+export interface AgeMilestone {
+  milestoneDays: number;
+  targetDateStr: string; // YYYY-MM-DD
+  formattedTargetDate: string;
+  daysRemaining: number;
+  isPassed: boolean;
+}
+
 export interface AgeResult {
   years: number;
   months: number;
@@ -32,6 +40,7 @@ export interface AgeResult {
   isLeapYearDOB: boolean;
   zodiacSign: string;
   nextBirthday: NextBirthdayResult;
+  milestones: AgeMilestone[];
 }
 
 export interface DateDifferenceResult {

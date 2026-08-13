@@ -4,6 +4,7 @@ import { AgeResult } from '../../lib/age/types';
 import ShareCopyButtons from './ShareCopyButtons';
 import BirthdayCountdown from './BirthdayCountdown';
 import BirthdayInfoCard from './BirthdayInfoCard';
+import AgeMilestonesCard from './AgeMilestonesCard';
 import { Calendar, Clock, Sparkles, Layers, Info } from 'lucide-react';
 
 interface AgeResultDashboardProps {
@@ -13,20 +14,20 @@ interface AgeResultDashboardProps {
 export default function AgeResultDashboard({ result }: AgeResultDashboardProps) {
   return (
     <section className="w-full space-y-8 animate-fadeIn" aria-live="polite">
-      {/* Primary Hero Result Card */}
-      <div className="w-full bg-gradient-to-br from-brand-600 via-brand-700 to-slate-900 rounded-3xl p-6 sm:p-10 text-white shadow-xl relative overflow-hidden">
-        {/* Background decorative SVG subtle shapes */}
+      {/* Primary Hero Result Card matching warm reference theme */}
+      <div className="w-full bg-gradient-to-br from-orange-600 via-orange-700 to-slate-900 rounded-3xl p-6 sm:p-10 text-white shadow-xl relative overflow-hidden">
+        {/* Background decorative SVG shapes */}
         <div className="absolute -right-10 -bottom-10 w-64 h-64 rounded-full bg-white/5 blur-2xl pointer-events-none" />
-        <div className="absolute right-20 -top-10 w-40 h-40 rounded-full bg-brand-400/10 blur-xl pointer-events-none" />
+        <div className="absolute right-20 -top-10 w-40 h-40 rounded-full bg-orange-400/10 blur-xl pointer-events-none" />
 
         <div className="relative z-10 space-y-6">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-white/10 pb-6">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-white/15 pb-6">
             <div>
-              <span className="inline-flex items-center space-x-1.5 px-3 py-1 rounded-full bg-white/10 text-brand-200 text-xs font-semibold uppercase tracking-wider backdrop-blur-md">
+              <span className="inline-flex items-center space-x-1.5 px-3 py-1 rounded-full bg-white/10 text-orange-200 text-xs font-bold uppercase tracking-wider backdrop-blur-md">
                 <Sparkles className="w-3.5 h-3.5" />
                 <span>Exact Age Result</span>
               </span>
-              <h2 className="text-2xl sm:text-3xl font-extrabold tracking-tight mt-2 text-white">
+              <h2 className="text-2xl sm:text-3xl font-extrabold tracking-tight mt-2 text-white font-serif">
                 You are
               </h2>
             </div>
@@ -36,12 +37,12 @@ export default function AgeResultDashboard({ result }: AgeResultDashboardProps) 
           {/* Large Hero Text */}
           <div className="py-2">
             <p className="text-4xl sm:text-6xl font-black tracking-tight text-white leading-tight font-sans">
-              {result.years} <span className="text-brand-200 font-bold text-2xl sm:text-4xl">Years</span>,{' '}
-              {result.months} <span className="text-brand-200 font-bold text-2xl sm:text-4xl">Months</span>,{' '}
-              {result.days} <span className="text-brand-200 font-bold text-2xl sm:text-4xl">Days</span>
+              {result.years} <span className="text-orange-200 font-bold text-2xl sm:text-4xl">Years</span>,{' '}
+              {result.months} <span className="text-orange-200 font-bold text-2xl sm:text-4xl">Months</span>,{' '}
+              {result.days} <span className="text-orange-200 font-bold text-2xl sm:text-4xl">Days</span>
             </p>
-            <p className="text-sm text-brand-100/90 mt-3 flex items-center space-x-2">
-              <Calendar className="w-4 h-4 text-brand-300" />
+            <p className="text-sm text-orange-100/90 mt-3 flex items-center space-x-2">
+              <Calendar className="w-4 h-4 text-orange-300" />
               <span>
                 Born {result.formattedDOB} • Calculated for {result.formattedTargetDate}
               </span>
@@ -51,7 +52,7 @@ export default function AgeResultDashboard({ result }: AgeResultDashboardProps) 
           {/* Age Breakdown Visual Cards (Years | Months | Days) */}
           <div className="grid grid-cols-3 gap-3 pt-2">
             <div className="bg-white/10 backdrop-blur-md border border-white/15 rounded-2xl p-3 sm:p-4 text-center">
-              <span className="text-xs font-semibold text-brand-200 uppercase tracking-wider block mb-1">
+              <span className="text-xs font-bold text-orange-200 uppercase tracking-wider block mb-1">
                 Years
               </span>
               <span className="text-2xl sm:text-4xl font-extrabold text-white font-mono">
@@ -59,7 +60,7 @@ export default function AgeResultDashboard({ result }: AgeResultDashboardProps) 
               </span>
             </div>
             <div className="bg-white/10 backdrop-blur-md border border-white/15 rounded-2xl p-3 sm:p-4 text-center">
-              <span className="text-xs font-semibold text-brand-200 uppercase tracking-wider block mb-1">
+              <span className="text-xs font-bold text-orange-200 uppercase tracking-wider block mb-1">
                 Months
               </span>
               <span className="text-2xl sm:text-4xl font-extrabold text-white font-mono">
@@ -67,7 +68,7 @@ export default function AgeResultDashboard({ result }: AgeResultDashboardProps) 
               </span>
             </div>
             <div className="bg-white/10 backdrop-blur-md border border-white/15 rounded-2xl p-3 sm:p-4 text-center">
-              <span className="text-xs font-semibold text-brand-200 uppercase tracking-wider block mb-1">
+              <span className="text-xs font-bold text-orange-200 uppercase tracking-wider block mb-1">
                 Days
               </span>
               <span className="text-2xl sm:text-4xl font-extrabold text-white font-mono">
@@ -84,15 +85,18 @@ export default function AgeResultDashboard({ result }: AgeResultDashboardProps) 
         <BirthdayCountdown nextBirthday={result.nextBirthday} />
       </div>
 
+      {/* Lifetime Day Milestones */}
+      <AgeMilestonesCard milestones={result.milestones} totalDays={result.totalDays} />
+
       {/* Total Units Detailed Metrics Grid */}
-      <div className="w-full bg-white dark:bg-slate-900 rounded-3xl p-6 sm:p-8 border border-slate-200/80 dark:border-slate-800 shadow-card dark:shadow-none transition-colors">
+      <div className="w-full bg-white dark:bg-slate-900 rounded-3xl p-6 sm:p-8 border border-amber-200/80 dark:border-slate-800 shadow-card dark:shadow-none transition-colors">
         <div className="flex items-center space-x-3 mb-6 pb-4 border-b border-slate-100 dark:border-slate-800">
-          <div className="w-10 h-10 rounded-2xl bg-brand-50 dark:bg-brand-950/60 flex items-center justify-center text-brand-600 dark:text-brand-400">
+          <div className="w-10 h-10 rounded-2xl bg-orange-50 dark:bg-orange-950/60 flex items-center justify-center text-orange-600 dark:text-orange-400">
             <Layers className="w-5 h-5" />
           </div>
           <div>
             <h3 className="text-xl font-bold text-slate-900 dark:text-white">
-              Total Age Breakdown
+              Total Lifetime Breakdown
             </h3>
             <p className="text-xs text-slate-500 dark:text-slate-400">
               Alternative units representation of total elapsed lifetime duration
@@ -135,9 +139,9 @@ export default function AgeResultDashboard({ result }: AgeResultDashboardProps) 
           ].map((item, idx) => (
             <div
               key={idx}
-              className="bg-slate-50 dark:bg-slate-800/50 border border-slate-200/60 dark:border-slate-700/60 rounded-2xl p-5"
+              className="bg-amber-50/40 dark:bg-slate-800/50 border border-amber-200/60 dark:border-slate-700/60 rounded-2xl p-5"
             >
-              <span className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider block mb-1">
+              <span className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider block mb-1">
                 {item.title}
               </span>
               <p className="text-xl sm:text-2xl font-extrabold text-slate-900 dark:text-white font-mono">
@@ -152,7 +156,7 @@ export default function AgeResultDashboard({ result }: AgeResultDashboardProps) 
         </div>
 
         <div className="mt-6 pt-4 border-t border-slate-100 dark:border-slate-800/80 flex items-start space-x-2 text-xs text-slate-500 dark:text-slate-400">
-          <Info className="w-4 h-4 text-brand-500 flex-shrink-0 mt-0.5" />
+          <Info className="w-4 h-4 text-orange-500 flex-shrink-0 mt-0.5" />
           <p>
             <strong>Note on Time Precision:</strong> Hours, minutes, and seconds are calculated using standard calendar date boundaries starting at 00:00:00 local time on your birth date to 00:00:00 on the target date.
           </p>
