@@ -75,11 +75,11 @@ export default function RootLayout({
   return (
     <html lang="en" className="dark scroll-smooth">
       <head>
-        <Script
+        {/* Google AdSense Publisher Script */}
+        <script
           async
           src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7164032171965193"
           crossOrigin="anonymous"
-          strategy="afterInteractive"
         />
         <script
           type="application/ld+json"
