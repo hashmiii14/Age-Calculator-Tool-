@@ -1,136 +1,71 @@
 'use client';
 
 import Link from 'next/link';
-import {
-  Clock,
-  Calendar,
-  Heart,
-  Compass,
-  Sparkles,
-  Trophy,
-  History,
-  Users,
-  Grid,
-  ArrowRight
-} from 'lucide-react';
+import { Clock, Calendar, Heart, Compass, Sparkles, Trophy, History, Users, ArrowRight } from 'lucide-react';
 
-export interface ToolItem {
-  href: string;
-  title: string;
-  description: string;
-  iconName: string;
-  tag: string;
-}
+const ICON_MAP: Record<string, React.FC<{ className?: string }>> = {
+  Clock, Calendar, Heart, Compass, Sparkles, Trophy, History, Users,
+};
 
-export const DATE_TOOLS_LIST: ToolItem[] = [
-  {
-    href: "/age-calculator",
-    title: "Exact Age Calculator",
-    description: "Calculate years, months, days, total weeks, hours, and seconds with instant client-side precision.",
-    iconName: "Clock",
-    tag: "Core Utility"
-  },
-  {
-    href: "/birthday-countdown",
-    title: "Birthday Countdown",
-    description: "Live ticking countdown timer to your next birthday with turning age, weekday, and celebration.",
-    iconName: "Heart",
-    tag: "Popular"
-  },
-  {
-    href: "/zodiac-sign",
-    title: "Western Zodiac Sign Calculator",
-    description: "Discover your Western sun sign, element, modality, personality traits, and compatible signs.",
-    iconName: "Compass",
-    tag: "Astrology"
-  },
-  {
-    href: "/birth-date",
-    title: "Birth Date Discovery Profile",
-    description: "Uncover your birthstone, birth flower, season profile, weekday lore, and calendar position.",
-    iconName: "Sparkles",
-    tag: "Discovery"
-  },
-  {
-    href: "/age-milestones",
-    title: "Age & Day Milestone Tracker",
-    description: "Track your 1,000th, 5,000th, 10,000th day alive and landmark birthday ages.",
-    iconName: "Trophy",
-    tag: "Tracker"
-  },
-  {
-    href: "/date-difference",
-    title: "Date Difference Calculator",
-    description: "Find the exact duration in years, months, days, and total hours between any two dates.",
-    iconName: "Calendar",
-    tag: "Calculator"
-  },
-  {
-    href: "/on-this-date",
-    title: "What Happened On This Date?",
-    description: "Explore historical events, scientific breakthroughs, and famous birthdays recorded on any date.",
-    iconName: "History",
-    tag: "History"
-  },
-  {
-    href: "/age-comparison",
-    title: "Age Difference & Comparison",
-    description: "Compare two dates of birth to calculate exact age difference, who is older, and days apart.",
-    iconName: "Users",
-    tag: "Comparison"
-  }
+const TOOLS = [
+  { href: '/age-calculator',     title: 'Exact Age Calculator',        description: 'Years, months, days, total weeks, hours, and seconds.',          icon: 'Clock',    tag: 'Core Tool'    },
+  { href: '/birthday-countdown', title: 'Birthday Countdown',           description: 'Live countdown to your next birthday with turning age.',          icon: 'Heart',    tag: 'Popular'      },
+  { href: '/zodiac-sign',        title: 'Western Zodiac Sign',          description: 'Sun sign, element, modality, traits, and compatible signs.',      icon: 'Compass',  tag: 'Astrology'    },
+  { href: '/birth-date',         title: 'Birth Date Profile',           description: 'Birthstone, birth flower, season, weekday lore.',                 icon: 'Sparkles', tag: 'Discovery'    },
+  { href: '/age-milestones',     title: 'Age & Day Milestone Tracker',  description: '1,000th, 5,000th, 10,000th day alive and landmark ages.',         icon: 'Trophy',   tag: 'Tracker'      },
+  { href: '/date-difference',    title: 'Date Difference Calculator',   description: 'Exact duration in years, months, days between any two dates.',    icon: 'Calendar', tag: 'Calculator'   },
+  { href: '/on-this-date',       title: 'On This Date',                 description: 'Historical events and famous birthdays for any date.',            icon: 'History',  tag: 'History'      },
+  { href: '/age-comparison',     title: 'Age Comparison',               description: 'Compare two birth dates — exact age gap and who is older.',       icon: 'Users',    tag: 'Comparison'   },
 ];
 
 export default function DateToolsGrid() {
   return (
-    <div id="date-tools-hub" className="space-y-6">
-      {/* Header */}
-      <div className="flex items-center space-x-2">
-        <div className="w-8 h-8 rounded-xl bg-coral-500 text-white flex items-center justify-center font-bold text-xs">
-          🛠️
-        </div>
-        <div>
-          <h2 className="text-2xl sm:text-3xl font-extrabold text-plum-900 dark:text-white font-serif tracking-tight">
-            Date & Birthday Tools Hub
-          </h2>
-          <p className="text-xs text-slate-500 dark:text-slate-400">
-            Free client-side date, age, birthday, and astrology tools
-          </p>
-        </div>
+    <div className="space-y-5">
+      <div>
+        <span className="section-label">Date & Age Calculators</span>
+        <h2 style={{ color: '#F2F4FB' }} className="text-2xl sm:text-3xl font-extrabold font-serif tracking-tight">
+          All Tools
+        </h2>
+        <p style={{ color: '#636B8A' }} className="text-sm mt-1">Free, client-side date, age, birthday, and astrology calculators.</p>
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        {DATE_TOOLS_LIST.map((tool) => (
-          <Link
-            key={tool.href}
-            href={tool.href}
-            className="group p-5 rounded-3xl bg-white dark:bg-plum-900 border border-blush-200 dark:border-plum-800 shadow-sm hover:shadow-cute transition-all hover:-translate-y-1 flex flex-col justify-between space-y-4"
-          >
-            <div className="space-y-2">
-              <div className="flex items-center justify-between">
-                <div className="w-9 h-9 rounded-2xl bg-blush-100 dark:bg-plum-800 text-coral-500 flex items-center justify-center font-bold">
-                  <Sparkles className="w-4 h-4" />
+        {TOOLS.map(({ href, title, description, icon, tag }) => {
+          const Icon = ICON_MAP[icon] || Sparkles;
+          return (
+            <Link
+              key={href}
+              href={href}
+              style={{ backgroundColor: '#161A26', borderColor: '#252A3D' }}
+              className="group rounded-2xl p-5 border flex flex-col justify-between gap-4 hover:border-[#E85D36] transition-colors"
+            >
+              <div className="space-y-2.5">
+                <div className="flex items-center justify-between">
+                  <div className="w-9 h-9 rounded-xl flex items-center justify-center"
+                    style={{ backgroundColor: '#1D2133', color: '#E85D36' }}>
+                    <Icon className="w-4 h-4" />
+                  </div>
+                  <span className="text-[10px] font-bold px-2 py-0.5 rounded-full"
+                    style={{ backgroundColor: 'rgba(232,93,54,0.08)', color: '#F87B4E', border: '1px solid rgba(232,93,54,0.15)' }}>
+                    {tag}
+                  </span>
                 </div>
-                <span className="px-2.5 py-0.5 rounded-full bg-blush-50 dark:bg-plum-950 text-[10px] font-extrabold text-coral-600 dark:text-coral-300 border border-blush-100 dark:border-plum-800">
-                  {tool.tag}
-                </span>
+
+                <h3 style={{ color: '#F2F4FB' }} className="font-extrabold font-serif text-sm leading-snug group-hover:text-[#E85D36] transition-colors">
+                  {title}
+                </h3>
+
+                <p style={{ color: '#636B8A' }} className="text-xs leading-relaxed line-clamp-2">{description}</p>
               </div>
 
-              <h3 className="font-serif font-extrabold text-base text-plum-900 dark:text-white group-hover:text-coral-500 transition-colors">
-                {tool.title}
-              </h3>
-
-              <p className="text-xs text-slate-500 dark:text-slate-400 line-clamp-2 leading-relaxed">
-                {tool.description}
-              </p>
-            </div>
-
-            <div className="flex items-center space-x-1 text-xs font-extrabold text-coral-500 pt-2 border-t border-blush-100 dark:border-plum-800/60">
-              <span>Open Tool</span>
-              <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
-            </div>
-          </Link>
-        ))}
+              <div className="flex items-center gap-1 text-xs font-bold pt-3 border-t border-[#252A3D]"
+                style={{ color: '#E85D36' }}>
+                Open Tool
+                <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
+              </div>
+            </Link>
+          );
+        })}
       </div>
     </div>
   );

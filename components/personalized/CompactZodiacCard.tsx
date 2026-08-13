@@ -1,7 +1,7 @@
 'use client';
 
-import { Compass, Sparkles, ArrowRight } from 'lucide-react';
 import Link from 'next/link';
+import { ArrowRight } from 'lucide-react';
 import { ZodiacInfo } from '../../lib/data/zodiacData';
 
 interface CompactZodiacCardProps {
@@ -10,47 +10,51 @@ interface CompactZodiacCardProps {
 
 export default function CompactZodiacCard({ zodiac }: CompactZodiacCardProps) {
   return (
-    <div className="p-6 rounded-3xl bg-white dark:bg-[#1A1A1E] border border-slate-200 dark:border-zinc-800 shadow-subtle space-y-4">
-      <div className="flex items-center justify-between">
-        <div className="flex items-center space-x-3">
-          <div className="w-12 h-12 rounded-2xl bg-coral-50 dark:bg-coral-950/40 text-coral-500 text-2xl flex items-center justify-center font-bold">
+    <div className="rounded-2xl p-6 space-y-4"
+      style={{ backgroundColor: '#161A26', border: '1px solid #252A3D' }}>
+
+      <div className="flex items-start justify-between gap-3">
+        <div className="flex items-start gap-3">
+          {/* Zodiac symbol */}
+          <div className="w-12 h-12 rounded-2xl flex items-center justify-center text-2xl shrink-0 font-bold"
+            style={{ backgroundColor: 'rgba(232,93,54,0.1)', border: '1px solid rgba(232,93,54,0.2)' }}>
             {zodiac.unicodeSymbol}
           </div>
           <div>
-            <div className="flex items-center space-x-2">
-              <h3 className="text-xl font-extrabold text-slate-900 dark:text-white font-serif">
+            <span className="section-label">Your Zodiac Sign</span>
+            <div className="flex items-center gap-2 flex-wrap">
+              <h3 style={{ color: '#F2F4FB' }} className="text-xl font-extrabold font-serif leading-tight">
                 {zodiac.name}
               </h3>
-              <span className="px-2.5 py-0.5 rounded-full bg-slate-100 dark:bg-zinc-800 text-slate-600 dark:text-slate-300 text-[10px] font-extrabold">
+              <span className="text-[10px] font-bold px-2.5 py-0.5 rounded-full"
+                style={{ backgroundColor: '#1D2133', color: '#9AA3C4', border: '1px solid #252A3D' }}>
                 {zodiac.dateRange}
               </span>
             </div>
-            <p className="text-xs text-slate-400 font-bold mt-0.5">
-              {zodiac.element} Element • {zodiac.modality} Modality
+            <p style={{ color: '#636B8A' }} className="text-xs mt-0.5 font-semibold">
+              {zodiac.element} Element · {zodiac.modality} Modality
             </p>
           </div>
         </div>
 
-        <span className="text-[10px] font-extrabold text-purple-600 dark:text-purple-300 bg-purple-50 dark:bg-purple-950/60 px-2.5 py-1 rounded-full border border-purple-200/60 dark:border-purple-800/60">
-          Astrology Profile
+        <span className="shrink-0 text-[10px] font-bold px-2.5 py-1 rounded-full"
+          style={{ backgroundColor: 'rgba(139,92,246,0.1)', color: '#a78bfa', border: '1px solid rgba(139,92,246,0.2)' }}>
+          Entertainment Only
         </span>
       </div>
 
-      <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed font-normal">
-        {zodiac.name} is traditionally associated with {zodiac.personalityThemes.toLowerCase()}
+      <p style={{ color: '#9AA3C4' }} className="text-sm leading-relaxed">
+        {zodiac.name} is traditionally associated with {zodiac.personalityThemes.toLowerCase()}.
       </p>
 
-      <div className="flex items-center justify-between pt-2 border-t border-slate-100 dark:border-zinc-800 text-xs">
-        <span className="text-[10px] text-slate-400 font-medium">
-          Provided strictly for general interest & fun entertainment.
+      <div className="flex items-center justify-between pt-2 border-t border-[#252A3D] text-xs">
+        <span style={{ color: '#636B8A' }}>
+          Astrology content is for general interest only.
         </span>
-
-        <Link
-          href="/zodiac-sign"
-          className="inline-flex items-center space-x-1 text-xs font-extrabold text-coral-500 hover:underline"
-        >
-          <span>Explore 12 Zodiac signs</span>
-          <ArrowRight className="w-3.5 h-3.5" />
+        <Link href="/zodiac-sign"
+          className="inline-flex items-center gap-1 font-bold hover:underline"
+          style={{ color: '#E85D36' }}>
+          Explore all 12 signs <ArrowRight className="w-3.5 h-3.5" />
         </Link>
       </div>
     </div>

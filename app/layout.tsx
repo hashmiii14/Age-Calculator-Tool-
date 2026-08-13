@@ -1,5 +1,4 @@
 import type { Metadata } from 'next';
-import Script from 'next/script';
 import Header from '../components/layout/Header';
 import Footer from '../components/layout/Footer';
 import './globals.css';
@@ -21,15 +20,12 @@ export const metadata: Metadata = {
   authors: [{ name: 'AgePulse' }],
   creator: 'AgePulse',
   publisher: 'AgePulse',
-  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'https://agepulse.vercel.app'),
-  alternates: {
-    canonical: '/',
-  },
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'https://agepulse.site'),
+  alternates: { canonical: '/' },
   openGraph: {
     title: 'Age Calculator – Calculate Your Exact Age | AgePulse',
-    description:
-      'Calculate your exact chronological age in years, months, days, and total hours lived. Fast, accurate, 100% private.',
-    url: 'https://agepulse.vercel.app',
+    description: 'Calculate your exact chronological age in years, months, days, and total hours. Fast, accurate, and 100% private.',
+    url: 'https://agepulse.site',
     siteName: 'AgePulse',
     locale: 'en_US',
     type: 'website',
@@ -37,26 +33,18 @@ export const metadata: Metadata = {
   twitter: {
     card: 'summary_large_image',
     title: 'Age Calculator – Calculate Your Exact Age | AgePulse',
-    description:
-      'Calculate your exact age in years, months, days and total hours. 100% free & private client-side calculator.',
+    description: 'Calculate your exact age in years, months, days and total hours. Free & private client-side calculator.',
   },
-  robots: {
-    index: true,
-    follow: true,
-  },
+  robots: { index: true, follow: true },
 };
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   const jsonLdWebSite = {
     '@context': 'https://schema.org',
     '@type': 'WebSite',
     name: 'AgePulse',
-    url: process.env.NEXT_PUBLIC_SITE_URL || 'https://agepulse.vercel.app',
-    description: 'Free precision age calculator and date difference tool.',
+    url: 'https://agepulse.site',
+    description: 'Free precision age calculator and personal date intelligence platform.',
   };
 
   const jsonLdWebApp = {
@@ -65,17 +53,13 @@ export default function RootLayout({
     name: 'AgePulse Age Calculator',
     operatingSystem: 'All',
     applicationCategory: 'UtilityApplication',
-    offers: {
-      '@type': 'Offer',
-      price: '0',
-      priceCurrency: 'USD',
-    },
+    offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
   };
 
   return (
-    <html lang="en" className="dark scroll-smooth">
+    <html lang="en" className="scroll-smooth">
       <head>
-        {/* Google AdSense Publisher Script */}
+        {/* Google AdSense */}
         <script
           async
           src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7164032171965193"
@@ -90,7 +74,7 @@ export default function RootLayout({
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLdWebApp) }}
         />
       </head>
-      <body className="bg-[#090d16] text-slate-100 min-h-screen flex flex-col font-sans">
+      <body>
         <Header />
         <main className="flex-grow">{children}</main>
         <Footer />

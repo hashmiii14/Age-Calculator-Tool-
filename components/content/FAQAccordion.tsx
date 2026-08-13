@@ -3,97 +3,59 @@
 import { useState } from 'react';
 import { ChevronDown, HelpCircle } from 'lucide-react';
 
-interface FAQItem {
-  question: string;
-  answer: string;
-}
-
-const faqs: FAQItem[] = [
-  {
-    question: 'How many days have I lived?',
-    answer: 'AgePulse calculates your exact total days lived by adding up full calendar years (factoring in 366-day leap years) and adding the exact remaining days between your last birthday and the target date.',
-  },
-  {
-    question: 'What is my 10,000th day milestone?',
-    answer: 'Your 10,000th day occurs approximately when you turn 27 years and 4 months old. AgePulse automatically calculates your 1,000th, 5,000th, 10,000th, 15,000th, 20,000th, 25,000th, and 30,000th day milestone dates and remaining countdown.',
-  },
-  {
-    question: 'Can I compare the ages of two different people?',
-    answer: 'Yes! Use our "Compare Two Ages" tool to calculate the exact difference in years, months, days, and total days between Person A and Person B.',
-  },
-  {
-    question: 'How are my next 5 birthdays calculated?',
-    answer: 'AgePulse projects your exact birthday date, calendar year, day of the week, and turning age for the next 5 upcoming years. For individuals born on February 29 (leap day), non-leap year birthdays automatically fall on March 1st.',
-  },
-  {
-    question: 'What is my next age milestone?',
-    answer: 'AgePulse identifies key lifetime milestone ages (such as 18, 21, 25, 30, 40, 50, 60, 75, 100) and displays your progress on an interactive visual timeline.',
-  },
-  {
-    question: 'How does this age calculator calculate exact age?',
-    answer: 'AgePulse uses pure calendar-based chronological calculation logic. It computes completed years, remaining months, and remaining days by adjusting for leap years, 28/29-day Februarys, and 30/31-day months.',
-  },
-  {
-    question: 'Can I calculate my age on a past or future date?',
-    answer: 'Yes! You can enter any historical date (like your graduation or wedding day) or any future date (like your retirement) in the "Age On" input field.',
-  },
-  {
-    question: 'Is my birth date data private and secure?',
-    answer: 'Yes, 100%. All calculations happen locally inside your web browser. Your birth date is never sent to any remote server or stored externally.',
-  },
+const FAQS = [
+  { q: 'How many days have I lived?', a: 'AgePulse counts your exact total days by adding completed calendar years (accounting for 366-day leap years) plus the remaining days since your last birthday.' },
+  { q: 'What is my 10,000th day alive?', a: 'The 10,000th day falls around age 27 years and 4 months. AgePulse automatically calculates your 1,000, 5,000, 10,000, 15,000, 20,000, 25,000, and 30,000 day milestone dates and countdowns.' },
+  { q: 'How does exact age calculation work?', a: 'AgePulse uses proper calendar arithmetic — completed years, then remaining months, then remaining days — correctly handling leap years, February 29 birthdays, and different month lengths.' },
+  { q: 'Can I calculate my age on a future or past date?', a: 'Yes. Enter any historical or future date in the Age Calculator to see your exact age at that moment.' },
+  { q: 'How are upcoming birthdays calculated?', a: 'AgePulse shows the exact date, day of the week, and turning age for your next 5 birthdays. February 29 birthdays fall on March 1 in non-leap years.' },
+  { q: 'Is my birth date private?', a: 'Yes. All calculations run entirely inside your browser. Your birth date is never transmitted to any server or stored externally.' },
+  { q: 'Can I compare two ages?', a: 'Yes — use the Age Comparison tool to find the exact age difference in years, months, days, and total days between any two birth dates.' },
+  { q: 'What is my next age milestone?', a: 'AgePulse finds your next meaningful upcoming milestone — either a landmark birthday (like 21, 30, 40, 50) or a numeric day milestone (like 10,000 days alive), whichever is sooner.' },
 ];
 
 export default function FAQAccordion() {
-  const [openIndex, setOpenIndex] = useState<number | null>(0);
-
-  const toggle = (index: number) => {
-    setOpenIndex(openIndex === index ? null : index);
-  };
+  const [open, setOpen] = useState<number | null>(0);
 
   return (
-    <section className="w-full max-w-4xl mx-auto py-8 space-y-6">
+    <section className="w-full space-y-6">
       <div className="text-center space-y-2">
-        <div className="inline-flex items-center space-x-1.5 px-3.5 py-1 rounded-full bg-orange-950/60 border border-orange-900/50 text-orange-400 text-xs font-semibold uppercase tracking-wider">
+        <div className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-bold"
+          style={{ backgroundColor: 'rgba(232,93,54,0.08)', color: '#F87B4E', border: '1px solid rgba(232,93,54,0.15)' }}>
           <HelpCircle className="w-3.5 h-3.5" />
-          <span>Frequently Asked Questions</span>
+          Frequently Asked Questions
         </div>
-        <h2 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight font-serif">
-          Got Questions? We Have Answers
+        <h2 style={{ color: '#F2F4FB' }} className="text-3xl sm:text-4xl font-extrabold font-serif tracking-tight">
+          Got Questions?
         </h2>
-        <p className="text-slate-400 text-sm sm:text-base max-w-2xl mx-auto">
-          Everything you need to know about age milestones, day counts, age comparison, and leap year calculations.
+        <p style={{ color: '#9AA3C4' }} className="text-sm max-w-xl mx-auto leading-relaxed">
+          Everything you need to know about age calculations, milestones, and date tools.
         </p>
       </div>
 
-      <div className="space-y-3 pt-4">
-        {faqs.map((faq, idx) => {
-          const isOpen = openIndex === idx;
+      <div className="space-y-2.5">
+        {FAQS.map(({ q, a }, idx) => {
+          const isOpen = open === idx;
           return (
-            <div
-              key={idx}
-              className="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden transition-colors"
-            >
+            <div key={idx} style={{ backgroundColor: '#161A26', borderColor: '#252A3D' }}
+              className="border rounded-2xl overflow-hidden">
               <button
                 type="button"
-                onClick={() => toggle(idx)}
+                onClick={() => setOpen(isOpen ? null : idx)}
                 aria-expanded={isOpen}
-                aria-controls={`faq-answer-${idx}`}
-                className="w-full px-6 py-4 text-left flex items-center justify-between text-base font-semibold text-white hover:text-orange-400 transition-colors focus:outline-none focus:ring-2 focus:ring-orange-500"
+                className="w-full px-5 py-4 text-left flex items-center justify-between gap-3 font-semibold text-sm transition-colors focus-visible:outline-none"
+                style={{ color: isOpen ? '#E85D36' : '#F2F4FB' }}
               >
-                <span>{faq.question}</span>
+                {q}
                 <ChevronDown
-                  className={`w-5 h-5 text-slate-400 transition-transform duration-200 ${
-                    isOpen ? 'transform rotate-180 text-orange-400' : ''
-                  }`}
+                  className={`w-4 h-4 shrink-0 transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`}
+                  style={{ color: isOpen ? '#E85D36' : '#636B8A' }}
                 />
               </button>
-
               {isOpen && (
-                <div
-                  id={`faq-answer-${idx}`}
-                  className="px-6 pb-5 pt-1 text-slate-300 text-sm leading-relaxed border-t border-slate-800 animate-fadeIn"
-                >
-                  {faq.answer}
+                <div style={{ color: '#9AA3C4', borderColor: '#252A3D' }}
+                  className="px-5 pb-4 pt-1 text-sm leading-relaxed border-t animate-fade-up">
+                  {a}
                 </div>
               )}
             </div>

@@ -14,96 +14,129 @@ import DateToolsGrid from '../components/tools/DateToolsGrid';
 import { createPersonalProfile } from '../lib/age/profileEngine';
 import { PersonalProfile } from '../lib/age/types';
 
+/* ---- AdSense slot placeholder ---- */
+function AdSlot({ className = '' }: { className?: string }) {
+  return (
+    <div
+      className={`ad-slot rounded-xl flex items-center justify-center ${className}`}
+      style={{ backgroundColor: '#161A26', border: '1px dashed #252A3D', minHeight: 90 }}
+      aria-hidden="true"
+    >
+      <span style={{ color: '#636B8A' }} className="text-xs font-medium select-none">
+        Advertisement
+      </span>
+    </div>
+  );
+}
+
 export default function HomePage() {
-  const [dob, setDob] = useState<string>('');
   const [profile, setProfile] = useState<PersonalProfile | null>(null);
+  const [error, setError] = useState('');
 
   useEffect(() => {
-    const savedDOB = localStorage.getItem('agepulse_dob');
-    if (savedDOB) {
+    const saved = localStorage.getItem('agepulse_dob');
+    if (saved) {
       try {
-        const p = createPersonalProfile(savedDOB);
-        setDob(savedDOB);
-        setProfile(p);
-      } catch (err) {
-        console.error('Error loading saved DOB:', err);
+        setProfile(createPersonalProfile(saved));
+      } catch {
+        localStorage.removeItem('agepulse_dob');
       }
     }
   }, []);
 
-  const handleCalculate = (enteredDOB: string) => {
+  const handleCalculate = (dob: string) => {
     try {
-      const p = createPersonalProfile(enteredDOB);
-      setDob(enteredDOB);
+      setError('');
+      const p = createPersonalProfile(dob);
       setProfile(p);
-      localStorage.setItem('agepulse_dob', enteredDOB);
-    } catch (err) {
-      console.error('Calculation error:', err);
+      localStorage.setItem('agepulse_dob', dob);
+    } catch {
+      setError('Could not calculate age. Please check your date and try again.');
     }
   };
 
   const handleClearDate = () => {
     localStorage.removeItem('agepulse_dob');
-    setDob('');
     setProfile(null);
+    setError('');
   };
 
   return (
-    <div className="max-w-content mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-10 space-y-12 text-slate-800 dark:text-slate-100">
-      
-      {/* STATE A — DISCOVERY (BEFORE DOB) */}
+    <div className="max-w-[1140px] mx-auto px-5 sm:px-6 lg:px-8 py-6 sm:py-10 space-y-6">
+
+      {/* ━━━━━ STATE A — DISCOVERY ━━━━━ */}
       {!profile ? (
-        <div className="space-y-16 animate-fadeIn">
-          {/* Dominant Minimal Hero */}
+        <div className="space-y-14 animate-fade-up">
+
+          {/* Dominant Hero */}
           <MinimalHero onCalculate={handleCalculate} />
+          {error && (
+            <p style={{ color: '#f87171', backgroundColor: 'rgba(239,68,68,0.08)', borderColor: 'rgba(239,68,68,0.2)' }}
+              className="text-sm rounded-xl border px-4 py-3 text-center">{error}</p>
+          )}
 
-          {/* Clean Quick Tools Hub */}
-          <section className="max-w-4xl mx-auto space-y-4">
-            <div className="text-center space-y-1">
-              <h2 className="text-xl font-serif font-extrabold text-slate-900 dark:text-white">
-                Date & Age Calculators
-              </h2>
-              <p className="text-xs text-slate-500 dark:text-slate-400">
-                Independent client-side utilities for quick calculations
-              </p>
-            </div>
-            <DateToolsGrid />
-          </section>
+          {/* AdSense — after hero */}
+          <AdSlot />
 
-          {/* Clean FAQ */}
-          <section className="max-w-3xl mx-auto">
-            <FAQAccordion />
-          </section>
+          {/* Tools Grid */}
+          <DateToolsGrid />
+
+          {/* AdSense — mid-content */}
+          <AdSlot />
+
+          {/* FAQ */}
+          <FAQAccordion />
+
+          {/* AdSense — before footer */}
+          <AdSlot />
         </div>
+
       ) : (
-        /* STATE B — PERSONALIZED DASHBOARD (AFTER DOB) */
-        <div className="space-y-8 animate-fadeIn">
-          {/* Personalized Hero Header */}
+        /* ━━━━━ STATE B — PERSONALIZED ━━━━━ */
+        <div className="space-y-5 animate-fade-up">
+
+          {/* 1. Personalized Hero */}
           <PersonalizedHero profile={profile} onClearDate={handleClearDate} />
 
-          {/* Single Next Milestone */}
+          {/* 2. Next Milestone */}
           <SingleMilestoneCard milestone={profile.nextSingleMilestone} />
 
-          {/* Birthday Countdown */}
+          {/* 3. Birthday Countdown */}
           <BirthdayCountdown
             nextBirthday={profile.nextBirthday}
             nextFiveBirthdays={profile.nextFiveBirthdays}
           />
 
-          {/* Your Date Overview */}
+          {/* AdSense — between content sections */}
+          <AdSlot />
+
+          {/* 4. Your Date */}
           <PersonalizedDateCard profile={profile} />
 
-          {/* Date Discoveries */}
+          {/* 5. Date Discoveries */}
           <DateDiscoveriesCard discoveries={profile.dateDiscoveries} />
 
-          {/* Compact Zodiac */}
+          {/* AdSense — mid page */}
+          <AdSlot />
+
+          {/* 6. Zodiac */}
           <CompactZodiacCard zodiac={profile.zodiac} />
 
-          {/* Contextual Explore */}
+          {/* 7. Contextual Tools */}
           <ContextualExplore profile={profile} />
+
+          {/* AdSense — before FAQ */}
+          <AdSlot />
+
+          {/* FAQ */}
+          <div className="pt-4">
+            <FAQAccordion />
+          </div>
+
+          {/* AdSense — bottom */}
+          <AdSlot />
         </div>
       )}
-
     </div>
   );
 }

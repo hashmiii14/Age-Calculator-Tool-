@@ -1,7 +1,7 @@
 'use client';
 
-import { Trophy, Calendar, Clock, ArrowRight } from 'lucide-react';
 import Link from 'next/link';
+import { Trophy, Clock, ArrowRight } from 'lucide-react';
 import { SingleMilestone } from '../../lib/age/types';
 
 interface SingleMilestoneCardProps {
@@ -10,48 +10,49 @@ interface SingleMilestoneCardProps {
 
 export default function SingleMilestoneCard({ milestone }: SingleMilestoneCardProps) {
   return (
-    <div className="p-6 rounded-3xl bg-white dark:bg-[#1A1A1E] border border-slate-200 dark:border-zinc-800 shadow-subtle space-y-4">
-      <div className="flex items-center justify-between">
-        <div className="flex items-center space-x-2.5">
-          <div className="w-8 h-8 rounded-xl bg-coral-50 dark:bg-coral-950/40 text-coral-500 flex items-center justify-center font-bold">
+    <div className="rounded-2xl p-6 space-y-4"
+      style={{ backgroundColor: '#161A26', border: '1px solid #252A3D' }}>
+
+      {/* Header */}
+      <div className="flex items-start justify-between gap-3">
+        <div className="flex items-center gap-3">
+          <div className="w-9 h-9 rounded-xl flex items-center justify-center shrink-0"
+            style={{ backgroundColor: 'rgba(232,93,54,0.12)', color: '#E85D36' }}>
             <Trophy className="w-4 h-4" />
           </div>
           <div>
-            <span className="text-[10px] font-extrabold uppercase tracking-wider text-slate-400 block">
-              Your Next Milestone
-            </span>
-            <h3 className="text-xl font-extrabold text-slate-900 dark:text-white font-serif">
+            <span className="section-label">Your Next Milestone</span>
+            <h3 style={{ color: '#F2F4FB' }} className="text-xl font-extrabold font-serif leading-tight">
               {milestone.title}
             </h3>
           </div>
         </div>
-
-        <span className="px-3 py-1 rounded-full bg-coral-50 dark:bg-coral-950/60 text-coral-600 dark:text-coral-400 text-xs font-extrabold border border-coral-200/60 dark:border-coral-900/60">
+        <span className="shrink-0 px-3 py-1 rounded-full text-xs font-bold"
+          style={{ backgroundColor: 'rgba(232,93,54,0.1)', color: '#F87B4E', border: '1px solid rgba(232,93,54,0.2)' }}>
           {milestone.badgeLabel}
         </span>
       </div>
 
-      <div className="p-4 rounded-2xl bg-slate-50 dark:bg-zinc-900/80 border border-slate-100 dark:border-zinc-800/80 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-xs">
-        <div>
-          <span className="text-slate-500 dark:text-slate-400 font-medium block">Target Date</span>
-          <span className="font-extrabold text-slate-900 dark:text-white text-sm">
-            {milestone.targetDateFormatted}
-          </span>
+      {/* Info row */}
+      <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 rounded-xl p-4"
+        style={{ backgroundColor: '#1D2133' }}>
+        <div className="flex-1">
+          <p style={{ color: '#636B8A' }} className="text-[11px] font-bold uppercase tracking-wider mb-1">Target Date</p>
+          <p style={{ color: '#F2F4FB' }} className="font-extrabold text-base">{milestone.targetDateFormatted}</p>
         </div>
-
-        <div className="flex items-center space-x-2 text-coral-600 dark:text-coral-400 font-extrabold bg-white dark:bg-zinc-800 px-3.5 py-2 rounded-xl border border-slate-200/60 dark:border-zinc-700">
-          <Clock className="w-4 h-4 text-coral-500" />
-          <span>In {milestone.daysRemaining.toLocaleString()} Days</span>
+        <div className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl font-bold text-sm"
+          style={{ backgroundColor: 'rgba(232,93,54,0.12)', color: '#F87B4E', border: '1px solid rgba(232,93,54,0.2)' }}>
+          <Clock className="w-4 h-4" />
+          In {milestone.daysRemaining.toLocaleString()} days
         </div>
       </div>
 
-      <div className="flex justify-end pt-1">
-        <Link
-          href="/age-milestones"
-          className="inline-flex items-center space-x-1 text-xs font-extrabold text-coral-500 hover:underline"
-        >
-          <span>View all age & day milestones</span>
-          <ArrowRight className="w-3.5 h-3.5" />
+      {/* Link */}
+      <div className="flex justify-end">
+        <Link href="/age-milestones"
+          className="inline-flex items-center gap-1 text-xs font-bold hover:underline"
+          style={{ color: '#E85D36' }}>
+          View all milestones <ArrowRight className="w-3.5 h-3.5" />
         </Link>
       </div>
     </div>
