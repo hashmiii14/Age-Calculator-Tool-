@@ -1,7 +1,14 @@
-import type { Metadata } from 'next';
+import type { Metadata, Viewport } from 'next';
 import Header from '../components/layout/Header';
 import Footer from '../components/layout/Footer';
 import './globals.css';
+
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 5,
+  themeColor: '#0E1018',
+};
 
 export const metadata: Metadata = {
   title: 'Age Calculator – Calculate Your Exact Age | AgePulse',
@@ -77,9 +84,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLdWebApp) }}
         />
       </head>
-      <body>
+      <body className="overflow-x-hidden w-full max-w-full">
         <Header />
-        <main className="flex-grow">{children}</main>
+        <main className="flex-grow w-full max-w-full overflow-x-hidden">{children}</main>
         <Footer />
       </body>
     </html>

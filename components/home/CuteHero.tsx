@@ -65,12 +65,12 @@ export default function CuteHero() {
             </div>
 
             {/* Privacy Badges */}
-            <div className="flex items-center justify-center lg:justify-start space-x-6 text-xs font-bold text-slate-500 dark:text-slate-400 pt-1">
+            <div className="flex flex-wrap items-center justify-center lg:justify-start gap-x-4 gap-y-2 text-xs font-bold text-slate-500 dark:text-slate-400 pt-1">
               <span className="flex items-center space-x-1.5">
                 <ShieldCheck className="w-4 h-4 text-emerald-500" />
                 <span>100% Private Client Calculations</span>
               </span>
-              <span>•</span>
+              <span className="hidden sm:inline">•</span>
               <span className="flex items-center space-x-1.5">
                 <Calendar className="w-4 h-4 text-coral-500" />
                 <span>Leap Year & Feb 29 Aware</span>

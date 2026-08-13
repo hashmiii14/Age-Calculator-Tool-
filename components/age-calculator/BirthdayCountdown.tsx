@@ -88,7 +88,7 @@ export default function BirthdayCountdown({ nextBirthday, nextFiveBirthdays }: B
       </div>
 
       {/* Countdown numbers — the main event */}
-      <div className="px-6 py-8 grid grid-cols-4 gap-3 sm:gap-5 text-center">
+      <div className="px-4 sm:px-6 py-6 sm:py-8 grid grid-cols-4 gap-1.5 sm:gap-5 text-center">
         {[
           { label: 'Days',    value: timeLeft.days    },
           { label: 'Hours',   value: timeLeft.hours   },
@@ -96,7 +96,7 @@ export default function BirthdayCountdown({ nextBirthday, nextFiveBirthdays }: B
           { label: 'Sec',     value: timeLeft.seconds },
         ].map(({ label, value }) => (
           <div key={label} className="space-y-1">
-            <p className="text-3xl sm:text-5xl font-extrabold font-mono tabular-nums tracking-tight"
+            <p className="text-2xl sm:text-5xl font-extrabold font-mono tabular-nums tracking-tight"
               style={{ color: '#F2F4FB' }}>
               {pad(value)}
             </p>
@@ -109,7 +109,7 @@ export default function BirthdayCountdown({ nextBirthday, nextFiveBirthdays }: B
       </div>
 
       {/* Progress bar */}
-      <div className="px-6 pb-5 space-y-1.5">
+      <div className="px-4 sm:px-6 pb-5 space-y-1.5">
         <div className="flex justify-between text-xs font-medium" style={{ color: '#636B8A' }}>
           <span>Year progress</span><span>{progress.toFixed(0)}%</span>
         </div>
@@ -120,15 +120,15 @@ export default function BirthdayCountdown({ nextBirthday, nextFiveBirthdays }: B
 
       {/* Next 5 Birthdays */}
       {nextFiveBirthdays && nextFiveBirthdays.length > 0 && (
-        <div className="border-t border-[#1D2133] px-6 py-5 space-y-3">
+        <div className="border-t border-[#1D2133] px-4 sm:px-6 py-5 space-y-3">
           <p style={{ color: '#636B8A' }} className="text-[11px] uppercase tracking-widest font-semibold">Next 5 birthdays</p>
-          <div className="grid grid-cols-5 gap-2 text-center">
+          <div className="grid grid-cols-2 sm:grid-cols-5 gap-2 text-center">
             {nextFiveBirthdays.map((b) => (
-              <div key={b.year} className="rounded-xl py-3 px-1"
+              <div key={b.year} className="rounded-xl py-2.5 sm:py-3 px-2 sm:px-1"
                 style={{ backgroundColor: '#1D2133', border: '1px solid #252A3D' }}>
                 <span style={{ color: '#E85D36' }} className="font-extrabold text-sm block">{b.year}</span>
-                <span style={{ color: '#9AA3C4' }} className="text-[10px] block mt-0.5">{b.weekday.slice(0,3)}</span>
-                <span style={{ color: '#636B8A' }} className="text-[10px] block">Age {b.turningAge}</span>
+                <span style={{ color: '#9AA3C4' }} className="text-[11px] sm:text-[10px] block mt-0.5">{b.weekday.slice(0,3)}</span>
+                <span style={{ color: '#636B8A' }} className="text-[11px] sm:text-[10px] block">Age {b.turningAge}</span>
               </div>
             ))}
           </div>

@@ -47,22 +47,22 @@ export default function ZodiacAstrologySection({ userZodiac }: ZodiacAstrologySe
       </div>
 
       {/* Main Selected Zodiac Spotlight Card */}
-      <div className="p-6 sm:p-8 rounded-4xl bg-gradient-to-br from-white to-blush-50 dark:from-plum-900 dark:to-plum-950 border border-blush-200 dark:border-plum-800 shadow-cute space-y-6">
+      <div className="p-5 sm:p-8 rounded-4xl bg-gradient-to-br from-white to-blush-50 dark:from-plum-900 dark:to-plum-950 border border-blush-200 dark:border-plum-800 shadow-cute space-y-6">
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pb-6 border-b border-blush-200 dark:border-plum-800">
-          <div className="flex items-center space-x-4">
-            <div className="w-16 h-16 rounded-3xl bg-gradient-to-tr from-coral-500 via-blush-500 to-purple-500 text-white text-3xl flex items-center justify-center shadow-lg shadow-coral-500/20">
+          <div className="flex items-center space-x-3 sm:space-x-4">
+            <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-3xl bg-gradient-to-tr from-coral-500 via-blush-500 to-purple-500 text-white text-2xl sm:text-3xl flex items-center justify-center shadow-lg shadow-coral-500/20 shrink-0">
               {selectedZodiac.unicodeSymbol}
             </div>
             <div>
-              <div className="flex items-center space-x-2">
-                <h3 className="text-3xl font-extrabold text-plum-900 dark:text-white font-serif">
+              <div className="flex flex-wrap items-center gap-2">
+                <h3 className="text-2xl sm:text-3xl font-extrabold text-plum-900 dark:text-white font-serif">
                   {selectedZodiac.name}
                 </h3>
-                <span className={`px-3 py-1 rounded-full text-xs font-extrabold ${selectedZodiac.badgeBg}`}>
+                <span className={`px-2.5 py-0.5 sm:px-3 sm:py-1 rounded-full text-[11px] sm:text-xs font-extrabold ${selectedZodiac.badgeBg}`}>
                   {selectedZodiac.dateRange}
                 </span>
               </div>
-              <p className="text-xs font-bold text-slate-500 dark:text-slate-400 mt-1 flex items-center space-x-2">
+              <p className="text-[11px] sm:text-xs font-bold text-slate-500 dark:text-slate-400 mt-1 flex flex-wrap items-center gap-x-2 gap-y-1">
                 <span className="flex items-center space-x-1">
                   {getElementIcon(selectedZodiac.element)}
                   <span>{selectedZodiac.element} Element</span>
@@ -76,13 +76,13 @@ export default function ZodiacAstrologySection({ userZodiac }: ZodiacAstrologySe
           </div>
 
           {userZodiac && userZodiac.name === selectedZodiac.name && (
-            <div className="px-3.5 py-1.5 rounded-full bg-coral-500 text-white text-xs font-extrabold shadow-sm animate-pulse">
+            <div className="px-3 py-1 sm:px-3.5 sm:py-1.5 rounded-full bg-coral-500 text-white text-xs font-extrabold shadow-sm animate-pulse shrink-0">
               Your Birth Sign 🌟
             </div>
           )}
         </div>
 
-        <p className="text-sm text-slate-700 dark:text-slate-200 font-medium leading-relaxed">
+        <p className="text-xs sm:text-sm text-slate-700 dark:text-slate-200 font-medium leading-relaxed">
           {selectedZodiac.summary}
         </p>
 
@@ -142,11 +142,11 @@ export default function ZodiacAstrologySection({ userZodiac }: ZodiacAstrologySe
 
       {/* 12 Zodiac Signs Grid */}
       <div className="space-y-3">
-        <h3 className="text-sm font-extrabold text-plum-900 dark:text-white uppercase tracking-wider font-sans">
+        <h3 className="text-xs sm:text-sm font-extrabold text-plum-900 dark:text-white uppercase tracking-wider font-sans">
           Explore All 12 Zodiac Sun Signs
         </h3>
 
-        <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-6 gap-3">
+        <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-6 gap-2.5 sm:gap-3">
           {Object.values(ZODIAC_SIGNS).map((z) => {
             const isSelected = selectedZodiac.name === z.name;
             const isUserSign = userZodiac?.name === z.name;
@@ -155,20 +155,20 @@ export default function ZodiacAstrologySection({ userZodiac }: ZodiacAstrologySe
                 key={z.name}
                 type="button"
                 onClick={() => setSelectedZodiac(z)}
-                className={`p-3.5 rounded-3xl text-left transition-all border ${
+                className={`p-2.5 sm:p-3.5 rounded-3xl text-left transition-all border ${
                   isSelected
                     ? 'bg-coral-500 text-white border-coral-500 shadow-cute scale-105'
                     : 'bg-white dark:bg-plum-900 text-slate-800 dark:text-slate-200 border-blush-100 dark:border-plum-800 hover:border-coral-300'
                 }`}
               >
                 <div className="flex items-center justify-between">
-                  <span className="text-2xl font-bold">{z.unicodeSymbol}</span>
+                  <span className="text-xl sm:text-2xl font-bold">{z.unicodeSymbol}</span>
                   {isUserSign && (
                     <span className="w-2 h-2 rounded-full bg-amber-400 animate-ping"></span>
                   )}
                 </div>
-                <div className="font-extrabold text-sm mt-1">{z.name}</div>
-                <div className={`text-[10px] ${isSelected ? 'text-coral-100' : 'text-slate-400'}`}>
+                <div className="font-extrabold text-xs sm:text-sm mt-1 truncate">{z.name}</div>
+                <div className={`text-[10px] truncate ${isSelected ? 'text-coral-100' : 'text-slate-400'}`}>
                   {z.dateRange}
                 </div>
               </button>

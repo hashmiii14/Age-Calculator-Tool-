@@ -66,7 +66,7 @@ export default function DiscoverMeWizard() {
       <div className="bg-gradient-to-b from-white to-blush-50 dark:from-plum-900 dark:to-plum-950 rounded-4xl p-6 sm:p-10 border border-blush-200 dark:border-plum-800 shadow-cute relative">
 
         {/* Wizard Step Navigation Indicator */}
-        <div className="flex items-center justify-between mb-8 pb-6 border-b border-blush-100 dark:border-plum-800 max-w-lg mx-auto">
+        <div className="flex items-center justify-between mb-8 pb-6 border-b border-blush-100 dark:border-plum-800 max-w-lg mx-auto gap-1 sm:gap-4 px-1 sm:px-0">
           {[
             { s: 1, label: '1. Date', icon: Calendar },
             { s: 2, label: '2. Style', icon: User },
@@ -79,17 +79,17 @@ export default function DiscoverMeWizard() {
             return (
               <div key={item.s} className="flex flex-col items-center space-y-1">
                 <div
-                  className={`w-9 h-9 rounded-full flex items-center justify-center text-xs font-bold transition-all ${
+                  className={`w-7 h-7 sm:w-9 sm:h-9 rounded-full flex items-center justify-center text-[10px] sm:text-xs font-bold transition-all ${
                     isActive
-                      ? 'bg-coral-500 text-white ring-4 ring-coral-100 dark:ring-coral-950/60 scale-110'
+                      ? 'bg-coral-500 text-white ring-2 sm:ring-4 ring-coral-100 dark:ring-coral-950/60 scale-105 sm:scale-110'
                       : isDone
                       ? 'bg-emerald-500 text-white'
                       : 'bg-blush-100 dark:bg-plum-800 text-slate-400'
                   }`}
                 >
-                  {isDone ? <CheckCircle2 className="w-4 h-4" /> : <Icon className="w-4 h-4" />}
+                  {isDone ? <CheckCircle2 className="w-3.5 h-3.5 sm:w-4 sm:h-4" /> : <Icon className="w-3.5 h-3.5 sm:w-4 sm:h-4" />}
                 </div>
-                <span className={`text-[11px] font-bold ${isActive ? 'text-coral-500' : 'text-slate-400'}`}>
+                <span className={`text-[10px] sm:text-[11px] font-bold truncate max-w-[65px] sm:max-w-none text-center ${isActive ? 'text-coral-500' : 'text-slate-400'}`}>
                   {item.label}
                 </span>
               </div>

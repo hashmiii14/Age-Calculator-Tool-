@@ -248,7 +248,7 @@ export default function CustomDatePicker({
                   key={day}
                   type="button"
                   onClick={() => handleDaySelect(day)}
-                  className="h-8 w-8 rounded-lg text-xs font-semibold flex items-center justify-center transition-all focus:outline-none"
+                  className="h-8 w-full max-w-[32px] mx-auto rounded-lg text-xs font-semibold flex items-center justify-center transition-all focus:outline-none"
                   style={{
                     backgroundColor: isSelected
                       ? '#E85D36'

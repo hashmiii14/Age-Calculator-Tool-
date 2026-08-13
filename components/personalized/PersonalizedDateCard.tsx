@@ -20,22 +20,22 @@ export default function PersonalizedDateCard({ profile }: PersonalizedDateCardPr
         </h3>
       </div>
 
-      {/* Stats row — simple horizontal list, not cards-within-cards */}
-      <div className="grid grid-cols-2 sm:grid-cols-4 divide-x divide-y sm:divide-y-0 divide-[#1D2133]">
+      {/* Stats row — clean responsive grid */}
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-y-4 p-4 sm:p-5">
         {[
           { label: 'Day of Week',  value: profile.dobWeekday,  detail: d.weekdayLore       },
           { label: 'Season',       value: d.seasonNorthern,    detail: `${d.monthName}`     },
           { label: 'Birthstone',   value: d.birthstone,        detail: d.birthstoneColor    },
           { label: 'Birth Flower', value: d.birthFlower,       detail: d.birthFlowerMeaning },
         ].map(({ label, value, detail }) => (
-          <div key={label} className="px-5 py-5 space-y-0.5">
-            <p style={{ color: '#636B8A' }} className="text-[11px] uppercase tracking-widest font-semibold">
+          <div key={label} className="px-2.5 sm:px-4 py-2 space-y-0.5 border-l border-[#1D2133] first:border-l-0 sm:border-l sm:first:border-l-0">
+            <p style={{ color: '#636B8A' }} className="text-[10px] sm:text-[11px] uppercase tracking-widest font-semibold truncate">
               {label}
             </p>
-            <p style={{ color: '#F2F4FB' }} className="text-base font-extrabold font-serif leading-snug">
+            <p style={{ color: '#F2F4FB' }} className="text-sm sm:text-base font-extrabold font-serif leading-snug truncate">
               {value}
             </p>
-            <p style={{ color: '#9AA3C4' }} className="text-xs leading-snug line-clamp-2">
+            <p style={{ color: '#9AA3C4' }} className="text-[11px] sm:text-xs leading-snug line-clamp-2">
               {detail}
             </p>
           </div>

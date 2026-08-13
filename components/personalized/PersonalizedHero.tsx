@@ -72,7 +72,7 @@ export default function PersonalizedHero({ profile, onClearDate }: PersonalizedH
         )}
 
         {/* Subtle divider + secondary stats */}
-        <div className="mt-8 pt-6 border-t border-[#1D2133] flex flex-wrap gap-8">
+        <div className="mt-8 pt-6 border-t border-[#1D2133] flex flex-wrap gap-4 sm:gap-8">
           {[
             { value: totalDays.toLocaleString(), label: 'days alive' },
             { value: totalWeeks.toLocaleString(), label: 'weeks' },

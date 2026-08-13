@@ -27,33 +27,33 @@ export default function DateToolsGrid() {
         <span style={{ color: '#636B8A' }} className="text-sm">Free · Client-side · No account needed</span>
       </div>
 
-      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2.5 sm:gap-3">
         {TOOLS.map(({ href, title, icon, tag }) => {
           const Icon = ICON_MAP[icon] || Sparkles;
           return (
             <Link
               key={href}
               href={href}
-              className="group flex flex-col gap-4 p-4 sm:p-5 rounded-xl transition-colors"
+              className="group flex flex-col justify-between gap-3 p-3.5 sm:p-5 rounded-xl transition-colors"
               style={{ backgroundColor: '#161A26', border: '1px solid #252A3D' }}
               onMouseEnter={e => { (e.currentTarget as HTMLElement).style.borderColor = 'rgba(232,93,54,0.4)'; }}
               onMouseLeave={e => { (e.currentTarget as HTMLElement).style.borderColor = '#252A3D'; }}
             >
               {/* Top row: icon + tag */}
               <div className="flex items-center justify-between">
-                <div className="w-8 h-8 rounded-lg flex items-center justify-center" style={{ backgroundColor: '#1D2133' }}>
-                  <Icon className="w-4 h-4" style={{ color: '#E85D36' }} />
+                <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-lg flex items-center justify-center shrink-0" style={{ backgroundColor: '#1D2133' }}>
+                  <Icon className="w-3.5 h-3.5 sm:w-4 sm:h-4" style={{ color: '#E85D36' }} />
                 </div>
                 <span style={{ color: '#636B8A' }} className="text-[10px] font-semibold">{tag}</span>
               </div>
 
               {/* Title */}
-              <p style={{ color: '#F2F4FB' }} className="text-sm font-bold leading-snug group-hover:text-[#E85D36] transition-colors">
+              <p style={{ color: '#F2F4FB' }} className="text-xs sm:text-sm font-bold leading-snug group-hover:text-[#E85D36] transition-colors">
                 {title}
               </p>
 
               {/* Arrow */}
-              <div className="flex items-center gap-1 text-xs font-medium" style={{ color: '#636B8A' }}>
+              <div className="flex items-center gap-1 text-[11px] sm:text-xs font-medium" style={{ color: '#636B8A' }}>
                 Open <ArrowRight className="w-3 h-3 group-hover:translate-x-0.5 transition-transform" />
               </div>
             </Link>
