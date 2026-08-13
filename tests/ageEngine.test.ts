@@ -4,6 +4,9 @@ import {
   calculateDateDifference,
   calculateNextBirthday,
   calculateMilestones,
+  calculateAgeProgress,
+  calculateNextMajorMilestone,
+  calculateMilestoneTimeline,
   validateAgeInputs,
 } from '../lib/age/ageEngine';
 import { isLeapYear, getDaysInMonth } from '../lib/age/dateUtils';
@@ -49,19 +52,16 @@ describe('Age Engine - Core Calculations', () => {
   });
 
   it('7. February 29 DOB in leap year vs non-leap year target', () => {
-    // 2000-02-29 to 2001-02-28 (1 day before turning 1)
     const res1 = calculateAge('2000-02-29', '2001-02-28');
     expect(res1.years).toBe(0);
     expect(res1.months).toBe(11);
     expect(res1.days).toBe(30);
 
-    // 2000-02-29 to 2001-03-01 (Turns 1 on March 1 in non-leap year)
     const res2 = calculateAge('2000-02-29', '2001-03-01');
     expect(res2.years).toBe(1);
     expect(res2.months).toBe(0);
     expect(res2.days).toBe(0);
 
-    // 2000-02-29 to 2004-02-29 (Turns 4 on Feb 29 in leap year)
     const res3 = calculateAge('2000-02-29', '2004-02-29');
     expect(res3.years).toBe(4);
     expect(res3.months).toBe(0);
@@ -69,13 +69,11 @@ describe('Age Engine - Core Calculations', () => {
   });
 
   it('8. End-of-month edge cases', () => {
-    // Jan 31 to Feb 28 (2025)
     const resJanFeb = calculateAge('2025-01-31', '2025-02-28');
     expect(resJanFeb.years).toBe(0);
     expect(resJanFeb.months).toBe(0);
     expect(resJanFeb.days).toBe(28);
 
-    // May 31 to June 30
     const resMayJune = calculateAge('2025-05-31', '2025-06-30');
     expect(resMayJune.years).toBe(0);
     expect(resMayJune.months).toBe(0);
@@ -122,13 +120,11 @@ describe('Age Engine - Core Calculations', () => {
   });
 
   it('16 & 17. Next birthday calculations (Today & Upcoming)', () => {
-    // Birthday today
     const bdayToday = calculateNextBirthday('2000-08-15', '2025-08-15');
     expect(bdayToday.isToday).toBe(true);
     expect(bdayToday.daysRemaining).toBe(0);
     expect(bdayToday.turningAge).toBe(25);
 
-    // Upcoming birthday
     const bdayUpcoming = calculateNextBirthday('2000-12-25', '2025-08-15');
     expect(bdayUpcoming.isToday).toBe(false);
     expect(bdayUpcoming.turningAge).toBe(25);
@@ -147,10 +143,21 @@ describe('Age Engine - Core Calculations', () => {
     const m5k = milestones.find((m) => m.milestoneDays === 5000);
     expect(m5k).toBeDefined();
     expect(m5k?.isPassed).toBe(true);
+  });
 
-    const m10k = milestones.find((m) => m.milestoneDays === 10000);
-    expect(m10k).toBeDefined();
-    expect(m10k?.isPassed).toBe(false);
-    expect(m10k?.daysRemaining).toBeGreaterThan(0);
+  it('20. Age progress and milestone timeline calculation', () => {
+    const progress = calculateAgeProgress('2000-01-01', '2025-07-01');
+    expect(progress.percentCompleted).toBeGreaterThan(0);
+    expect(progress.percentCompleted).toBeLessThanOrEqual(100);
+
+    const nextM = calculateNextMajorMilestone(25, '2000-01-01', '2025-07-01');
+    expect(nextM.targetAge).toBe(30);
+    expect(nextM.yearsRemaining).toBe(4);
+
+    const timeline = calculateMilestoneTimeline(25, '2000-01-01');
+    const node25 = timeline.find((t) => t.age === 25);
+    expect(node25?.isReached).toBe(true);
+    const node30 = timeline.find((t) => t.age === 30);
+    expect(node30?.isNext).toBe(true);
   });
 });

@@ -6,7 +6,6 @@ import AgeCalculatorForm from '../components/age-calculator/AgeCalculatorForm';
 import AgeResultDashboard from '../components/age-calculator/AgeResultDashboard';
 import AgeCalculatorGuide from '../components/content/AgeCalculatorGuide';
 import FAQAccordion from '../components/content/FAQAccordion';
-import AdSlot from '../components/ads/AdSlot';
 import { calculateAge } from '../lib/age/ageEngine';
 import { AgeResult } from '../lib/age/types';
 
@@ -56,9 +55,6 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Ad Slot Top */}
-      <AdSlot slot="1000000001" label="Top Banner Advertisement" minHeight="90px" />
-
       {/* Main Interactive Calculator Area */}
       <section className="max-w-4xl mx-auto space-y-8">
         <AgeCalculatorForm onCalculate={handleCalculate} onReset={handleReset} />
@@ -73,7 +69,7 @@ export default function HomePage() {
               Ready to Discover Your Exact Age
             </h3>
             <p className="text-sm text-slate-400 max-w-md mx-auto">
-              Enter your Date of Birth above and click <strong>Calculate</strong> to view your detailed chronological breakdown, next birthday countdown, and lifetime day milestones.
+              Enter your Date of Birth above and click <strong>Calculate</strong> to view your detailed chronological breakdown, next birthday countdown, age milestones, and lifetime facts.
             </p>
           </div>
         ) : (
@@ -81,17 +77,11 @@ export default function HomePage() {
         )}
       </section>
 
-      {/* Ad Slot In Content */}
-      <AdSlot slot="1000000002" label="In-Content Advertisement" minHeight="250px" />
-
       {/* Educational Guide */}
       <AgeCalculatorGuide />
 
       {/* FAQ Section */}
       <FAQAccordion />
-
-      {/* Ad Slot Bottom */}
-      <AdSlot slot="1000000003" label="Bottom Banner Advertisement" minHeight="90px" />
     </div>
   );
 }

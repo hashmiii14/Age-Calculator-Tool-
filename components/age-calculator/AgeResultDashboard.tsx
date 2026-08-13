@@ -4,8 +4,13 @@ import { AgeResult } from '../../lib/age/types';
 import ShareCopyButtons from './ShareCopyButtons';
 import BirthdayCountdown from './BirthdayCountdown';
 import BirthdayInfoCard from './BirthdayInfoCard';
-import AgeMilestonesCard from './AgeMilestonesCard';
-import { Calendar, Clock, Sparkles, Layers, Info } from 'lucide-react';
+import AgeAtAGlance from './AgeAtAGlance';
+import AgeInDifferentUnits from './AgeInDifferentUnits';
+import AgeProgressVisualizer from './AgeProgressVisualizer';
+import AgeMilestoneTimeline from './AgeMilestoneTimeline';
+import QuickAgeFacts from './QuickAgeFacts';
+import CalculationExplainedVisual from '../content/CalculationExplainedVisual';
+import { Calendar, Sparkles } from 'lucide-react';
 
 interface AgeResultDashboardProps {
   result: AgeResult;
@@ -14,9 +19,8 @@ interface AgeResultDashboardProps {
 export default function AgeResultDashboard({ result }: AgeResultDashboardProps) {
   return (
     <section className="w-full space-y-8 animate-fadeIn" aria-live="polite">
-      {/* Primary Hero Result Card matching warm reference theme */}
+      {/* 1. Primary Hero Result Card */}
       <div className="w-full bg-gradient-to-br from-orange-600 via-orange-700 to-slate-900 rounded-3xl p-6 sm:p-10 text-white shadow-xl relative overflow-hidden">
-        {/* Background decorative SVG shapes */}
         <div className="absolute -right-10 -bottom-10 w-64 h-64 rounded-full bg-white/5 blur-2xl pointer-events-none" />
         <div className="absolute right-20 -top-10 w-40 h-40 rounded-full bg-orange-400/10 blur-xl pointer-events-none" />
 
@@ -44,12 +48,12 @@ export default function AgeResultDashboard({ result }: AgeResultDashboardProps) 
             <p className="text-sm text-orange-100/90 mt-3 flex items-center space-x-2">
               <Calendar className="w-4 h-4 text-orange-300" />
               <span>
-                Born {result.formattedDOB} • Calculated for {result.formattedTargetDate}
+                Born {result.formattedDOB} ({result.dobWeekday}) • Age on {result.formattedTargetDate}
               </span>
             </p>
           </div>
 
-          {/* Age Breakdown Visual Cards (Years | Months | Days) */}
+          {/* Age Breakdown Cards */}
           <div className="grid grid-cols-3 gap-3 pt-2">
             <div className="bg-white/10 backdrop-blur-md border border-white/15 rounded-2xl p-3 sm:p-4 text-center">
               <span className="text-xs font-bold text-orange-200 uppercase tracking-wider block mb-1">
@@ -79,89 +83,33 @@ export default function AgeResultDashboard({ result }: AgeResultDashboardProps) 
         </div>
       </div>
 
-      {/* Birthday Info Card & Countdown */}
+      {/* 2. Your Age at a Glance */}
+      <AgeAtAGlance result={result} />
+
+      {/* 3. Your Age Progress */}
+      <AgeProgressVisualizer progress={result.progress} currentYears={result.years} />
+
+      {/* 4. Birthday Details & Countdown */}
       <BirthdayInfoCard result={result} />
       <div id="birthday-countdown">
         <BirthdayCountdown nextBirthday={result.nextBirthday} />
       </div>
 
-      {/* Lifetime Day Milestones */}
-      <AgeMilestonesCard milestones={result.milestones} totalDays={result.totalDays} />
+      {/* 5. Next Age Milestone & Visual Timeline */}
+      <AgeMilestoneTimeline
+        currentYears={result.years}
+        nextMajorMilestone={result.nextMajorMilestone}
+        timeline={result.timeline}
+      />
 
-      {/* Total Units Detailed Metrics Grid */}
-      <div className="w-full bg-white dark:bg-slate-900 rounded-3xl p-6 sm:p-8 border border-amber-200/80 dark:border-slate-800 shadow-card dark:shadow-none transition-colors">
-        <div className="flex items-center space-x-3 mb-6 pb-4 border-b border-slate-100 dark:border-slate-800">
-          <div className="w-10 h-10 rounded-2xl bg-orange-50 dark:bg-orange-950/60 flex items-center justify-center text-orange-600 dark:text-orange-400">
-            <Layers className="w-5 h-5" />
-          </div>
-          <div>
-            <h3 className="text-xl font-bold text-slate-900 dark:text-white">
-              Total Lifetime Breakdown
-            </h3>
-            <p className="text-xs text-slate-500 dark:text-slate-400">
-              Alternative units representation of total elapsed lifetime duration
-            </p>
-          </div>
-        </div>
+      {/* 6. Quick Age Facts */}
+      <QuickAgeFacts facts={result.quickFacts} />
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-          {[
-            {
-              title: 'Total Months',
-              value: `${result.totalMonths.toLocaleString()} months`,
-              subtext: `${result.years} years + ${result.months} months`,
-            },
-            {
-              title: 'Total Weeks',
-              value: `${result.totalWeeks.toLocaleString()} weeks`,
-              subtext: `${(result.totalDays % 7)} days remaining`,
-            },
-            {
-              title: 'Total Days',
-              value: `${result.totalDays.toLocaleString()} days`,
-              subtext: 'Complete 24-hour days lived',
-            },
-            {
-              title: 'Total Hours',
-              value: `${result.totalHours.toLocaleString()} hours`,
-              subtext: 'Date-duration calculation (midnight 00:00)',
-            },
-            {
-              title: 'Total Minutes',
-              value: `${result.totalMinutes.toLocaleString()} minutes`,
-              subtext: 'Date-duration calculation',
-            },
-            {
-              title: 'Total Seconds',
-              value: `${result.totalSeconds.toLocaleString()} seconds`,
-              subtext: 'Date-duration calculation',
-            },
-          ].map((item, idx) => (
-            <div
-              key={idx}
-              className="bg-amber-50/40 dark:bg-slate-800/50 border border-amber-200/60 dark:border-slate-700/60 rounded-2xl p-5"
-            >
-              <span className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider block mb-1">
-                {item.title}
-              </span>
-              <p className="text-xl sm:text-2xl font-extrabold text-slate-900 dark:text-white font-mono">
-                {item.value}
-              </p>
-              <p className="text-xs text-slate-500 dark:text-slate-400 mt-1 flex items-center space-x-1">
-                <Clock className="w-3 h-3 text-slate-400 flex-shrink-0" />
-                <span>{item.subtext}</span>
-              </p>
-            </div>
-          ))}
-        </div>
+      {/* 7. Age in Different Units */}
+      <AgeInDifferentUnits result={result} />
 
-        <div className="mt-6 pt-4 border-t border-slate-100 dark:border-slate-800/80 flex items-start space-x-2 text-xs text-slate-500 dark:text-slate-400">
-          <Info className="w-4 h-4 text-orange-500 flex-shrink-0 mt-0.5" />
-          <p>
-            <strong>Note on Time Precision:</strong> Hours, minutes, and seconds are calculated using standard calendar date boundaries starting at 00:00:00 local time on your birth date to 00:00:00 on the target date.
-          </p>
-        </div>
-      </div>
+      {/* 8. Calculation Explained Visual */}
+      <CalculationExplainedVisual />
     </section>
   );
 }

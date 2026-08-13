@@ -1,7 +1,6 @@
 import { Metadata } from 'next';
 import Breadcrumbs from '../../components/ui/Breadcrumbs';
 import DateDifferenceCalculator from '../../components/age-calculator/DateDifferenceCalculator';
-import AdSlot from '../../components/ads/AdSlot';
 import { Clock } from 'lucide-react';
 
 export const metadata: Metadata = {
@@ -33,8 +32,6 @@ export default function DateDifferencePage() {
           Calculate the exact time span between any two dates in years, months, days, total weeks, and hours.
         </p>
       </section>
-
-      <AdSlot slot="1000000004" label="Top Banner" minHeight="90px" />
 
       <section className="max-w-4xl mx-auto">
         <DateDifferenceCalculator />
@@ -68,8 +65,6 @@ export default function DateDifferencePage() {
           </div>
         </div>
       </article>
-
-      <AdSlot slot="1000000005" label="Bottom Banner" minHeight="90px" />
     </div>
   );
 }

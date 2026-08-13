@@ -21,6 +21,39 @@ export interface AgeMilestone {
   isPassed: boolean;
 }
 
+export interface AgeProgress {
+  lastBirthdayStr: string;
+  nextBirthdayStr: string;
+  percentCompleted: number; // e.g. 35.4
+  daysElapsed: number;
+  daysTotalInYear: number;
+  daysRemaining: number;
+}
+
+export interface NextMajorMilestone {
+  targetAge: number;
+  formattedTargetDate: string;
+  yearsRemaining: number;
+  monthsRemaining: number;
+  daysRemaining: number;
+  totalDaysRemaining: number;
+}
+
+export interface AgeTimelineNode {
+  age: number;
+  label: string;
+  isReached: boolean;
+  isNext: boolean;
+  formattedDate: string;
+}
+
+export interface QuickFact {
+  id: string;
+  title: string;
+  value: string;
+  subtitle: string;
+}
+
 export interface AgeResult {
   years: number;
   months: number;
@@ -39,8 +72,13 @@ export interface AgeResult {
   targetWeekday: string;
   isLeapYearDOB: boolean;
   zodiacSign: string;
+  dayOfYear: number;
   nextBirthday: NextBirthdayResult;
   milestones: AgeMilestone[];
+  progress: AgeProgress;
+  nextMajorMilestone: NextMajorMilestone;
+  timeline: AgeTimelineNode[];
+  quickFacts: QuickFact[];
 }
 
 export interface DateDifferenceResult {

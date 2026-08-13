@@ -16,6 +16,10 @@ import {
   NextBirthdayResult,
   ValidationErrors,
   AgeMilestone,
+  AgeProgress,
+  NextMajorMilestone,
+  AgeTimelineNode,
+  QuickFact,
 } from './types';
 
 /**
@@ -50,6 +54,156 @@ export function validateAgeInputs(
 }
 
 /**
+ * Calculates day of the year (1 - 366).
+ */
+export function getDayOfYear(dob: ParsedDate): number {
+  let days = dob.day;
+  for (let m = 1; m < dob.month; m++) {
+    days += getDaysInMonth(dob.year, m);
+  }
+  return days;
+}
+
+/**
+ * Calculates exact age progression percentage between last birthday and next birthday.
+ */
+export function calculateAgeProgress(
+  dobStr: string,
+  targetDateStr: string
+): AgeProgress {
+  const dob = parseISODate(dobStr)!;
+  const target = parseISODate(targetDateStr)!;
+
+  // Determine last birthday date
+  let lastBdayYear = target.year;
+  const getBdayDate = (y: number): ParsedDate => {
+    if (dob.month === 2 && dob.day === 29 && !isLeapYear(y)) {
+      return { year: y, month: 3, day: 1 };
+    }
+    return { year: y, month: dob.month, day: dob.day };
+  };
+
+  let lastBday = getBdayDate(lastBdayYear);
+  if (toLocalDate(lastBday).getTime() > toLocalDate(target).getTime()) {
+    lastBdayYear -= 1;
+    lastBday = getBdayDate(lastBdayYear);
+  }
+
+  const nextBdayYear = lastBdayYear + 1;
+  const nextBday = getBdayDate(nextBdayYear);
+
+  const daysElapsed = getDifferenceInDays(lastBday, target);
+  const daysTotalInYear = getDifferenceInDays(lastBday, nextBday);
+  const daysRemaining = daysTotalInYear - daysElapsed;
+
+  const percentCompleted = Math.min(
+    100,
+    Math.max(0, Number(((daysElapsed / daysTotalInYear) * 100).toFixed(1)))
+  );
+
+  return {
+    lastBirthdayStr: formatISODate(lastBday),
+    nextBirthdayStr: formatISODate(nextBday),
+    percentCompleted,
+    daysElapsed,
+    daysTotalInYear,
+    daysRemaining,
+  };
+}
+
+/**
+ * Calculates next major milestone age (e.g., 18, 21, 25, 30, 40, 50, 60, 75, 100).
+ */
+export function calculateNextMajorMilestone(
+  currentYears: number,
+  dobStr: string,
+  targetDateStr: string
+): NextMajorMilestone {
+  const milestoneAges = [1, 5, 10, 18, 21, 25, 30, 40, 50, 60, 70, 75, 80, 90, 100];
+  const targetAge = milestoneAges.find((a) => a > currentYears) || (Math.floor(currentYears / 10) + 1) * 10;
+
+  const dob = parseISODate(dobStr)!;
+  const target = parseISODate(targetDateStr)!;
+
+  let mYear = dob.year + targetAge;
+  let mMonth = dob.month;
+  let mDay = dob.day;
+
+  if (mMonth === 2 && mDay === 29 && !isLeapYear(mYear)) {
+    mMonth = 3;
+    mDay = 1;
+  }
+
+  const milestoneParsed: ParsedDate = { year: mYear, month: mMonth, day: mDay };
+  const formattedTargetDate = formatDateLong(formatISODate(milestoneParsed));
+
+  // Compute duration from target date to milestone
+  let yearsRem = milestoneParsed.year - target.year;
+  let monthsRem = milestoneParsed.month - target.month;
+  let daysRem = milestoneParsed.day - target.day;
+
+  if (daysRem < 0) {
+    monthsRem -= 1;
+    let pM = target.month - 1;
+    let pY = target.year;
+    if (pM === 0) {
+      pM = 12;
+      pY -= 1;
+    }
+    daysRem += getDaysInMonth(pY, pM);
+  }
+
+  if (monthsRem < 0) {
+    yearsRem -= 1;
+    monthsRem += 12;
+  }
+
+  const totalDaysRemaining = getDifferenceInDays(target, milestoneParsed);
+
+  return {
+    targetAge,
+    formattedTargetDate,
+    yearsRemaining: Math.max(0, yearsRem),
+    monthsRemaining: Math.max(0, monthsRem),
+    daysRemaining: Math.max(0, daysRem),
+    totalDaysRemaining: Math.max(0, totalDaysRemaining),
+  };
+}
+
+/**
+ * Generates neutral age milestone timeline nodes (0, 10, 18, 21, 25, 30, 40, 50, 75, 100).
+ */
+export function calculateMilestoneTimeline(
+  currentYears: number,
+  dobStr: string
+): AgeTimelineNode[] {
+  const dob = parseISODate(dobStr)!;
+  const milestoneAges = [0, 10, 18, 21, 25, 30, 40, 50, 75, 100];
+
+  const nextAge = milestoneAges.find((a) => a > currentYears) || 100;
+
+  return milestoneAges.map((age) => {
+    let mYear = dob.year + age;
+    let mMonth = dob.month;
+    let mDay = dob.day;
+    if (mMonth === 2 && mDay === 29 && !isLeapYear(mYear)) {
+      mMonth = 3;
+      mDay = 1;
+    }
+
+    const dateStr = formatISODate({ year: mYear, month: mMonth, day: mDay });
+
+    return {
+      age,
+      label: age === 0 ? 'Birth' : `${age} Years`,
+      isReached: age <= currentYears,
+      isNext: age === nextAge,
+      formattedDate: formatDateLong(dateStr),
+    };
+  });
+}
+
+/**
  * Calculates lifetime day milestones (1k, 5k, 10k, 15k, 20k, 25k, 30k days lived).
  */
 export function calculateMilestones(
@@ -66,7 +220,6 @@ export function calculateMilestones(
   const targets = [1000, 5000, 10000, 15000, 20000, 25000, 30000];
 
   return targets.map((mDays) => {
-    // Add mDays to birth date
     const mDate = new Date(dobDate.getTime() + mDays * 24 * 60 * 60 * 1000);
     const y = mDate.getFullYear();
     const m = (mDate.getMonth() + 1).toString().padStart(2, '0');
@@ -132,8 +285,41 @@ export function calculateAge(
   const totalMinutes = totalHours * 60;
   const totalSeconds = totalMinutes * 60;
 
+  const dayOfYear = getDayOfYear(dob);
   const nextBirthday = calculateNextBirthday(dobStr, targetDateStr);
   const milestones = calculateMilestones(dobStr, targetDateStr);
+  const progress = calculateAgeProgress(dobStr, targetDateStr);
+  const nextMajorMilestone = calculateNextMajorMilestone(years, dobStr, targetDateStr);
+  const timeline = calculateMilestoneTimeline(years, dobStr);
+
+  const dobWeekday = getDayOfWeek(dobStr);
+
+  const quickFacts: QuickFact[] = [
+    {
+      id: 'born-day',
+      title: 'Day of Birth',
+      value: `Born on a ${dobWeekday}`,
+      subtitle: `Calendar day ${dayOfYear} of ${dob.year}`,
+    },
+    {
+      id: 'weeks-lived',
+      title: 'Total Weeks Lived',
+      value: `${totalWeeks.toLocaleString()} Weeks`,
+      subtitle: `Plus ${(totalDays % 7)} additional days`,
+    },
+    {
+      id: 'next-bday-rem',
+      title: 'Next Birthday Countdown',
+      value: `${nextBirthday.daysRemaining} Days Away`,
+      subtitle: `Turning ${nextBirthday.turningAge} on ${nextBirthday.formattedDate}`,
+    },
+    {
+      id: 'next-milestone-fact',
+      title: 'Next Age Milestone',
+      value: `${nextMajorMilestone.targetAge} Years Old`,
+      subtitle: `${nextMajorMilestone.yearsRemaining}y ${nextMajorMilestone.monthsRemaining}m ${nextMajorMilestone.daysRemaining}d remaining`,
+    },
+  ];
 
   return {
     years,
@@ -149,12 +335,17 @@ export function calculateAge(
     targetDateStr,
     formattedDOB: formatDateLong(dobStr),
     formattedTargetDate: formatDateLong(targetDateStr),
-    dobWeekday: getDayOfWeek(dobStr),
+    dobWeekday,
     targetWeekday: getDayOfWeek(targetDateStr),
     isLeapYearDOB: isLeapYear(dob.year),
     zodiacSign: getZodiacSign(dob.month, dob.day),
+    dayOfYear,
     nextBirthday,
     milestones,
+    progress,
+    nextMajorMilestone,
+    timeline,
+    quickFacts,
   };
 }
 
@@ -236,10 +427,8 @@ export function calculateNextBirthday(
 
   let nextYear = current.year;
 
-  // Determine birthday month and day in target year
   const getBdayParsedDate = (y: number): ParsedDate => {
     if (dob.month === 2 && dob.day === 29 && !isLeapYear(y)) {
-      // In non-leap year, Feb 29 birthday is celebrated on March 1
       return { year: y, month: 3, day: 1 };
     }
     return { year: y, month: dob.month, day: dob.day };
