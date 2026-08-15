@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { RefreshCw, Calculator, AlertCircle, RotateCcw } from 'lucide-react';
-import CustomDatePicker from '../ui/CustomDatePicker';
+import RobustDateInput from '../ui/RobustDateInput';
 import PresetButtons from '../ui/PresetButtons';
 import CuteCharacter from '../ui/CuteCharacter';
 import { getTodayISODate } from '../../lib/age/dateUtils';
@@ -88,7 +88,7 @@ export default function AgeCalculatorForm({
 
       <form onSubmit={handleSubmit} noValidate className="space-y-6">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8">
-          {/* Date of Birth Field (Type directly OR click calendar icon for popover + month/year dropdowns) */}
+          {/* Date of Birth Field */}
           <div className="space-y-2">
             <label
               htmlFor="dob-picker"
@@ -98,7 +98,7 @@ export default function AgeCalculatorForm({
               <span className="text-[11px] text-coral-500 font-bold">* Required</span>
             </label>
 
-            <CustomDatePicker
+            <RobustDateInput
               id="dob-picker"
               value={dob}
               onChange={(val) => {
@@ -141,7 +141,7 @@ export default function AgeCalculatorForm({
               </button>
             </label>
 
-            <CustomDatePicker
+            <RobustDateInput
               id="target-picker"
               value={targetDate}
               onChange={(val) => {

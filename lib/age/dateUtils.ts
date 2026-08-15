@@ -44,6 +44,42 @@ export function parseISODate(dateStr: string): ParsedDate | null {
 }
 
 /**
+ * Flexible date parser supporting DD-MM-YYYY, DD/MM/YYYY, DD.MM.YYYY, YYYY-MM-DD, YYYY/MM/DD
+ */
+export function parseAnyDateString(dateStr: string): ParsedDate | null {
+  if (!dateStr || typeof dateStr !== 'string') return null;
+  const clean = dateStr.trim();
+
+  // Try YYYY-MM-DD or YYYY/MM/DD
+  const matchYMD = /^(\d{4})[-.\/](\d{1,2})[-.\/](\d{1,2})$/.exec(clean);
+  if (matchYMD) {
+    const year = parseInt(matchYMD[1], 10);
+    const month = parseInt(matchYMD[2], 10);
+    const day = parseInt(matchYMD[3], 10);
+    if (month >= 1 && month <= 12 && year >= 1900 && year <= 2035) {
+      if (day >= 1 && day <= getDaysInMonth(year, month)) {
+        return { year, month, day };
+      }
+    }
+  }
+
+  // Try DD-MM-YYYY or DD/MM/YYYY or DD.MM.YYYY
+  const matchDMY = /^(\d{1,2})[-.\/](\d{1,2})[-.\/](\d{4})$/.exec(clean);
+  if (matchDMY) {
+    const day = parseInt(matchDMY[1], 10);
+    const month = parseInt(matchDMY[2], 10);
+    const year = parseInt(matchDMY[3], 10);
+    if (month >= 1 && month <= 12 && year >= 1900 && year <= 2035) {
+      if (day >= 1 && day <= getDaysInMonth(year, month)) {
+        return { year, month, day };
+      }
+    }
+  }
+
+  return null;
+}
+
+/**
  * Formats a ParsedDate into YYYY-MM-DD string format.
  */
 export function formatISODate(date: ParsedDate): string {
