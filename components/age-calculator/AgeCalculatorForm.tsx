@@ -71,7 +71,7 @@ export default function AgeCalculatorForm({
   };
 
   return (
-    <div id="calculator-form" className="w-full bg-white dark:bg-plum-900 rounded-3xl sm:rounded-4xl p-6 sm:p-8 border-2 border-blush-200/80 dark:border-plum-800 shadow-cute transition-all relative overflow-hidden">
+    <div id="calculator-form" className="w-full bg-white dark:bg-plum-900 rounded-3xl sm:rounded-4xl p-6 sm:p-8 border-2 border-blush-200/80 dark:border-plum-800 shadow-cute transition-all relative">
       {/* Top Header with Cute Mascot Emblem */}
       <div className="flex items-center justify-between border-b border-blush-200/80 dark:border-plum-800 pb-4 mb-6">
         <div>
