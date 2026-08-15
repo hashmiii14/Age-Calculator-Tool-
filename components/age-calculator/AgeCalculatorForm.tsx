@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { RefreshCw, Calculator, AlertCircle, RotateCcw } from 'lucide-react';
-import DateInputTripleMethod from '../ui/DateInputTripleMethod';
+import CustomDatePicker from '../ui/CustomDatePicker';
 import PresetButtons from '../ui/PresetButtons';
 import CuteCharacter from '../ui/CuteCharacter';
 import { getTodayISODate } from '../../lib/age/dateUtils';
@@ -88,7 +88,7 @@ export default function AgeCalculatorForm({
 
       <form onSubmit={handleSubmit} noValidate className="space-y-6">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8">
-          {/* Date of Birth Field (3 Input Methods supported: Calendar, Dropdowns, Direct Typing) */}
+          {/* Date of Birth Field (Type directly OR click calendar icon for popover + month/year dropdowns) */}
           <div className="space-y-2">
             <label
               htmlFor="dob-picker"
@@ -98,14 +98,14 @@ export default function AgeCalculatorForm({
               <span className="text-[11px] text-coral-500 font-bold">* Required</span>
             </label>
 
-            <DateInputTripleMethod
+            <CustomDatePicker
               id="dob-picker"
               value={dob}
               onChange={(val) => {
                 setDob(val);
                 if (errors.dob) setErrors((prev) => ({ ...prev, dob: undefined }));
               }}
-              placeholder="DD - MM - YYYY"
+              placeholder="DD - MM - YYYY (e.g. 15-08-2000)"
               error={!!errors.dob}
             />
 
@@ -124,7 +124,7 @@ export default function AgeCalculatorForm({
             />
           </div>
 
-          {/* Today's Date / Age On Field (3 Input Methods supported) */}
+          {/* Today's Date / Age On Field */}
           <div className="space-y-2">
             <label
               htmlFor="target-picker"
@@ -141,14 +141,14 @@ export default function AgeCalculatorForm({
               </button>
             </label>
 
-            <DateInputTripleMethod
+            <CustomDatePicker
               id="target-picker"
               value={targetDate}
               onChange={(val) => {
                 setTargetDate(val);
                 if (errors.targetDate) setErrors((prev) => ({ ...prev, targetDate: undefined }));
               }}
-              placeholder="DD - MM - YYYY"
+              placeholder="DD - MM - YYYY (e.g. 15-08-2000)"
               error={!!errors.targetDate}
             />
 

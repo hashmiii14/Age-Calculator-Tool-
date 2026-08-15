@@ -23,12 +23,11 @@ export default function CustomDatePicker({
   id,
   value,
   onChange,
-  placeholder = 'DD - MM - YYYY',
+  placeholder = 'DD - MM - YYYY (e.g. 15-08-2000)',
   error = false,
 }: CustomDatePickerProps) {
   const [isOpen, setIsOpen] = useState(false);
   const popoverRef = useRef<HTMLDivElement>(null);
-  const dateInputRef = useRef<HTMLInputElement>(null);
 
   const parsedValue = parseISODate(value);
   const [viewYear, setViewYear] = useState<number>(
@@ -38,11 +37,17 @@ export default function CustomDatePicker({
     parsedValue ? parsedValue.month : new Date().getMonth() + 1
   );
 
+  // Raw typed text state
+  const [typedText, setTypedText] = useState<string>('');
+
   useEffect(() => {
     const parsed = parseISODate(value);
     if (parsed) {
       setViewYear(parsed.year);
       setViewMonth(parsed.month);
+      setTypedText(`${parsed.day.toString().padStart(2, '0')} - ${parsed.month.toString().padStart(2, '0')} - ${parsed.year}`);
+    } else if (!value) {
+      setTypedText('');
     }
   }, [value]);
 
@@ -57,6 +62,44 @@ export default function CustomDatePicker({
     }
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, [isOpen]);
+
+  // Handle direct manual typing
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const raw = e.target.value;
+    setTypedText(raw);
+
+    const clean = raw.trim().replace(/[\/\.]/g, '-');
+    
+    // Check DD-MM-YYYY
+    const matchDMY = /^(\d{1,2})[-.](\d{1,2})[-.](\d{4})$/.exec(clean);
+    if (matchDMY) {
+      const day = parseInt(matchDMY[1], 10);
+      const month = parseInt(matchDMY[2], 10);
+      const year = parseInt(matchDMY[3], 10);
+      if (month >= 1 && month <= 12 && year >= 1900 && year <= 2035) {
+        const maxD = getDaysInMonth(year, month);
+        if (day >= 1 && day <= maxD) {
+          onChange(formatISODate({ year, month, day }));
+          return;
+        }
+      }
+    }
+
+    // Check YYYY-MM-DD
+    const matchYMD = /^(\d{4})[-.](\d{1,2})[-.](\d{1,2})$/.exec(clean);
+    if (matchYMD) {
+      const year = parseInt(matchYMD[1], 10);
+      const month = parseInt(matchYMD[2], 10);
+      const day = parseInt(matchYMD[3], 10);
+      if (month >= 1 && month <= 12 && year >= 1900 && year <= 2035) {
+        const maxD = getDaysInMonth(year, month);
+        if (day >= 1 && day <= maxD) {
+          onChange(formatISODate({ year, month, day }));
+          return;
+        }
+      }
+    }
+  };
 
   const handleDaySelect = (day: number) => {
     const formatted = formatISODate({ year: viewYear, month: viewMonth, day });
@@ -90,55 +133,35 @@ export default function CustomDatePicker({
     yearOptions.push(y);
   }
 
-  const displayString = parsedValue
-    ? `${parsedValue.day.toString().padStart(2, '0')} - ${parsedValue.month.toString().padStart(2, '0')} - ${parsedValue.year}`
-    : '';
-
   return (
     <div className="relative w-full" ref={popoverRef}>
-      {/* Hidden Native Date Picker for Quick Mobile OS Keyboard Trigger */}
-      <input
-        ref={dateInputRef}
-        type="date"
-        value={value}
-        onChange={(e) => {
-          if (e.target.value) {
-            onChange(e.target.value);
-            setIsOpen(false);
-          }
-        }}
-        className="sr-only"
-        aria-hidden="true"
-        tabIndex={-1}
-      />
-
-      {/* Input Field Surface */}
+      {/* Input Field Surface (Allows Direct Manual Typing!) */}
       <div className="relative flex items-center">
         <input
           id={id}
           type="text"
-          readOnly
-          onClick={() => setIsOpen(!isOpen)}
-          value={displayString}
+          value={typedText}
+          onChange={handleInputChange}
           placeholder={placeholder}
-          className={`w-full px-4 py-3.5 sm:px-5 sm:py-4 rounded-2xl text-base font-medium cursor-pointer transition-all focus:outline-none bg-white dark:bg-plum-900 text-plum-900 dark:text-white border-2 placeholder-slate-400 ${
+          className={`w-full px-4 py-3.5 sm:px-5 sm:py-4 rounded-2xl text-base font-bold transition-all focus:outline-none bg-white dark:bg-plum-900 text-plum-900 dark:text-white border-2 placeholder-slate-400 pr-12 ${
             error
               ? 'border-coral-500 ring-2 ring-coral-500/20'
-              : 'border-blush-200 dark:border-plum-800 hover:border-coral-300 dark:hover:border-plum-700'
+              : 'border-blush-200 dark:border-plum-800 focus:border-coral-500'
           }`}
         />
 
         <button
           type="button"
           onClick={() => setIsOpen(!isOpen)}
-          className="absolute right-3.5 sm:right-4 p-2 rounded-xl text-coral-500 hover:bg-blush-100 dark:hover:bg-plum-800 transition-colors focus:outline-none"
+          className="absolute right-2.5 p-2 rounded-xl text-coral-500 hover:bg-blush-100 dark:hover:bg-plum-800 transition-colors focus:outline-none cursor-pointer"
           aria-label="Open calendar picker"
+          title="Open Calendar & Select Month/Year"
         >
           <CalendarIcon className="w-5 h-5" />
         </button>
       </div>
 
-      {/* Mobile Backdrop & Calendar Popover */}
+      {/* Mobile Backdrop & Calendar Popover Modal */}
       {isOpen && (
         <>
           {/* Backdrop on mobile */}
@@ -150,7 +173,7 @@ export default function CustomDatePicker({
 
           {/* Popover Card */}
           <div className="fixed inset-x-4 top-1/2 -translate-y-1/2 sm:absolute sm:inset-auto sm:right-0 sm:top-full sm:mt-2 sm:translate-y-0 z-50 w-[calc(100vw-2rem)] max-w-[340px] sm:w-[340px] mx-auto rounded-3xl p-4 sm:p-5 shadow-2xl bg-white dark:bg-plum-900 border-2 border-blush-200 dark:border-plum-800 animate-fade-up">
-            {/* Header Controls: Month & Year Pickers */}
+            {/* Header Controls: Month & Year Dropdowns */}
             <div className="flex items-center justify-between gap-1.5 mb-3 pb-3 border-b border-blush-200 dark:border-plum-800">
               <button
                 type="button"
@@ -162,7 +185,7 @@ export default function CustomDatePicker({
               </button>
 
               <div className="flex items-center space-x-1.5">
-                {/* Month Selector */}
+                {/* Month Dropdown */}
                 <select
                   value={viewMonth}
                   onChange={(e) => setViewMonth(Number(e.target.value))}
@@ -175,7 +198,7 @@ export default function CustomDatePicker({
                   ))}
                 </select>
 
-                {/* Year Selector */}
+                {/* Year Dropdown */}
                 <select
                   value={viewYear}
                   onChange={(e) => setViewYear(Number(e.target.value))}
@@ -301,4 +324,3 @@ export default function CustomDatePicker({
     </div>
   );
 }
-
