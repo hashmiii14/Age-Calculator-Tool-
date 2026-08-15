@@ -51,10 +51,10 @@ const config: Config = {
           950: "#1A0E1F", // Main dark page background
         },
         surface: {
-          bg:  "#0E1018",   
-          card: "#161A26",  
-          elevated: "#1D2133",
-          border: "#252A3D", 
+          bg:  "#FAF3F0",   
+          card: "#FFFFFF",  
+          elevated: "#FFF5F2",
+          border: "#FDEAE8", 
         },
       },
       fontFamily: {

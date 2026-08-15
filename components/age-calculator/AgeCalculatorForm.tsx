@@ -1,9 +1,10 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { RefreshCw, Calculator, AlertCircle, RotateCcw, Sparkles } from 'lucide-react';
-import CustomDatePicker from '../ui/CustomDatePicker';
+import { RefreshCw, Calculator, AlertCircle, RotateCcw } from 'lucide-react';
+import DateInputTripleMethod from '../ui/DateInputTripleMethod';
 import PresetButtons from '../ui/PresetButtons';
+import CuteCharacter from '../ui/CuteCharacter';
 import { getTodayISODate } from '../../lib/age/dateUtils';
 import { validateAgeInputs } from '../../lib/age/ageEngine';
 import { ValidationErrors } from '../../lib/age/types';
@@ -71,7 +72,7 @@ export default function AgeCalculatorForm({
 
   return (
     <div id="calculator-form" className="w-full bg-white dark:bg-plum-900 rounded-3xl sm:rounded-4xl p-6 sm:p-8 border-2 border-blush-200/80 dark:border-plum-800 shadow-cute transition-all relative overflow-hidden">
-      {/* Top Header */}
+      {/* Top Header with Cute Mascot Emblem */}
       <div className="flex items-center justify-between border-b border-blush-200/80 dark:border-plum-800 pb-4 mb-6">
         <div>
           <h2 className="text-2xl sm:text-3xl font-extrabold font-serif tracking-tight text-plum-900 dark:text-white">
@@ -82,14 +83,12 @@ export default function AgeCalculatorForm({
           </p>
         </div>
 
-        <div className="w-10 h-10 rounded-2xl bg-coral-500 text-white flex items-center justify-center shadow-md shadow-coral-500/20 shrink-0">
-          <Sparkles className="w-5 h-5" />
-        </div>
+        <CuteCharacter variant="calendar" size={64} className="hidden sm:block" />
       </div>
 
       <form onSubmit={handleSubmit} noValidate className="space-y-6">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-5 sm:gap-6">
-          {/* Date of Birth Field */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8">
+          {/* Date of Birth Field (3 Input Methods supported: Calendar, Dropdowns, Direct Typing) */}
           <div className="space-y-2">
             <label
               htmlFor="dob-picker"
@@ -99,7 +98,7 @@ export default function AgeCalculatorForm({
               <span className="text-[11px] text-coral-500 font-bold">* Required</span>
             </label>
 
-            <CustomDatePicker
+            <DateInputTripleMethod
               id="dob-picker"
               value={dob}
               onChange={(val) => {
@@ -125,7 +124,7 @@ export default function AgeCalculatorForm({
             />
           </div>
 
-          {/* Today's Date / Age On Field */}
+          {/* Today's Date / Age On Field (3 Input Methods supported) */}
           <div className="space-y-2">
             <label
               htmlFor="target-picker"
@@ -135,14 +134,14 @@ export default function AgeCalculatorForm({
               <button
                 type="button"
                 onClick={handleUseTodayTarget}
-                className="text-xs font-bold text-coral-500 hover:underline flex items-center space-x-1 focus:outline-none"
+                className="text-xs font-bold text-coral-500 hover:underline flex items-center space-x-1 focus:outline-none cursor-pointer"
               >
                 <RefreshCw className="w-3 h-3" />
                 <span>Use Today</span>
               </button>
             </label>
 
-            <CustomDatePicker
+            <DateInputTripleMethod
               id="target-picker"
               value={targetDate}
               onChange={(val) => {
@@ -173,7 +172,7 @@ export default function AgeCalculatorForm({
             className="w-full sm:flex-1 py-4 px-6 rounded-2xl bg-coral-500 hover:bg-coral-600 active:scale-[0.99] text-white font-extrabold text-base shadow-cute hover:shadow-cute-hover transition-all flex items-center justify-center space-x-2 focus:outline-none focus:ring-2 focus:ring-coral-400 cursor-pointer"
           >
             <Calculator className="w-5 h-5" />
-            <span>Calculate</span>
+            <span>Calculate Age</span>
           </button>
 
           <button
@@ -189,4 +188,5 @@ export default function AgeCalculatorForm({
     </div>
   );
 }
+
 

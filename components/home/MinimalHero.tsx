@@ -23,41 +23,23 @@ export default function MinimalHero({ onCalculate }: MinimalHeroProps) {
   };
 
   return (
-    <section id="dob-input-section" className="min-h-[82vh] flex flex-col items-center justify-center py-12 sm:py-20 relative overflow-hidden">
+    <section id="dob-input-section" className="min-h-[70vh] flex flex-col items-center justify-center py-12 sm:py-16 relative overflow-hidden">
+      <div className="relative z-10 w-full max-w-xl mx-auto space-y-8 text-center">
 
-      {/* Ambient glow — subtle, not loud */}
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute inset-0 flex items-center justify-center"
-      >
-        <div
-          className="w-[600px] h-[600px] rounded-full blur-[140px] opacity-[0.06]"
-          style={{ background: 'radial-gradient(circle, #E85D36 0%, transparent 70%)' }}
-        />
-      </div>
+        <span className="text-[11px] font-extrabold uppercase tracking-widest px-3.5 py-1 rounded-full bg-blush-100 dark:bg-plum-950 text-coral-500 border border-blush-200 dark:border-plum-800 inline-block">
+          Free · 100% Private · Runs Locally
+        </span>
 
-      <div className="relative z-10 w-full max-w-xl mx-auto space-y-10 text-center">
-
-        {/* Top eyebrow — NOT a "badge", just small quiet text */}
-        <p style={{ color: '#636B8A' }} className="text-xs tracking-[0.2em] uppercase font-semibold">
-          Free · No account · Runs locally
-        </p>
-
-        {/* Headline — let the typography do the talking */}
-        <div className="space-y-4">
-          <h1
-            className="text-[2.75rem] sm:text-[3.5rem] lg:text-[4.25rem] font-extrabold font-serif leading-[1.1] tracking-tight"
-            style={{ color: '#F2F4FB' }}
-          >
+        <div className="space-y-3">
+          <h1 className="text-3xl sm:text-5xl font-black font-serif leading-tight text-plum-900 dark:text-white tracking-tight">
             How old are you,{' '}
-            <em className="not-italic" style={{ color: '#E85D36' }}>exactly?</em>
+            <em className="not-italic text-coral-500">exactly?</em>
           </h1>
-          <p style={{ color: '#9AA3C4' }} className="text-base sm:text-lg leading-relaxed">
+          <p className="text-sm sm:text-base text-slate-600 dark:text-slate-300 font-medium leading-relaxed">
             Enter your date of birth. Get your precise age, next birthday, milestones, and more — instantly.
           </p>
         </div>
 
-        {/* Primary Input — clean, no extra labels */}
         <form onSubmit={handleSubmit} className="space-y-3">
           <CustomDatePicker
             id="hero-dob"
@@ -69,53 +51,37 @@ export default function MinimalHero({ onCalculate }: MinimalHeroProps) {
           <button
             type="submit"
             disabled={!dob}
-            className="w-full flex items-center justify-center gap-2.5 py-4 rounded-xl font-bold text-sm tracking-wide transition-all duration-150"
-            style={{
-              backgroundColor: dob ? '#E85D36' : '#1D2133',
-              color: dob ? '#fff' : '#636B8A',
-              cursor: dob ? 'pointer' : 'default',
-              border: dob ? 'none' : '1px solid #252A3D',
-            }}
+            className={`w-full flex items-center justify-center gap-2 py-4 rounded-2xl font-extrabold text-base transition-all cursor-pointer ${
+              dob
+                ? 'bg-coral-500 hover:bg-coral-600 text-white shadow-cute'
+                : 'bg-blush-100 dark:bg-plum-800 text-slate-400 border border-blush-200 dark:border-plum-800 cursor-not-allowed'
+            }`}
           >
-            Calculate My Age
-            <ArrowRight className="w-4 h-4" style={{ opacity: dob ? 1 : 0.4 }} />
+            <span>Calculate My Age</span>
+            <ArrowRight className="w-4 h-4" />
           </button>
         </form>
 
-        {/* Quick examples */}
         <div className="flex flex-wrap items-center justify-center gap-2">
-          <span style={{ color: '#636B8A' }} className="text-xs">Quick pick:</span>
+          <span className="text-xs font-bold text-slate-400">Quick pick:</span>
           {EXAMPLES.map(({ label, date }) => (
             <button
               key={date}
               type="button"
               onClick={() => onCalculate(date)}
-              className="px-3 py-1 rounded-lg text-xs font-semibold transition-colors"
-              style={{
-                backgroundColor: '#161A26',
-                color: '#9AA3C4',
-                border: '1px solid #252A3D',
-              }}
-              onMouseEnter={e => {
-                (e.currentTarget as HTMLButtonElement).style.color = '#E85D36';
-                (e.currentTarget as HTMLButtonElement).style.borderColor = 'rgba(232,93,54,0.4)';
-              }}
-              onMouseLeave={e => {
-                (e.currentTarget as HTMLButtonElement).style.color = '#9AA3C4';
-                (e.currentTarget as HTMLButtonElement).style.borderColor = '#252A3D';
-              }}
+              className="px-3 py-1.5 rounded-xl text-xs font-bold bg-white dark:bg-plum-900 text-coral-600 dark:text-coral-300 border border-blush-200 dark:border-plum-800 hover:border-coral-400 transition-all cursor-pointer shadow-sm"
             >
               {label}
             </button>
           ))}
         </div>
 
-        {/* Privacy — small, honest, not overdone */}
-        <div className="flex items-center justify-center gap-1.5" style={{ color: '#636B8A' }}>
-          <Lock className="w-3 h-3" />
-          <span className="text-xs">Your date never leaves your browser.</span>
+        <div className="flex items-center justify-center gap-1.5 text-slate-500 dark:text-slate-400">
+          <Lock className="w-3.5 h-3.5 text-coral-500" />
+          <span className="text-xs font-bold">Your date never leaves your browser.</span>
         </div>
       </div>
     </section>
   );
 }
+

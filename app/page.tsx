@@ -8,6 +8,7 @@ import FAQAccordion from '../components/content/FAQAccordion';
 import AboutUsSection from '../components/content/AboutUsSection';
 import PrivacyPolicySection from '../components/content/PrivacyPolicySection';
 import ContactSection from '../components/content/ContactSection';
+import CuteCharacter from '../components/ui/CuteCharacter';
 import { calculateAge } from '../lib/age/ageEngine';
 import { getTodayISODate } from '../lib/age/dateUtils';
 import { AgeResult } from '../lib/age/types';
@@ -55,17 +56,22 @@ export default function HomePage() {
 
   return (
     <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-10 space-y-8 animate-fade-up">
-      {/* Hero Intro Header */}
-      <div className="text-center space-y-2 max-w-2xl mx-auto">
-        <span className="text-[11px] font-extrabold uppercase tracking-widest px-3 py-1 rounded-full bg-blush-100 dark:bg-plum-900 text-coral-500 border border-blush-200 dark:border-plum-800">
-          Free · 100% Private · Accurate
-        </span>
-        <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black font-serif text-plum-900 dark:text-white tracking-tight leading-tight">
-          Exact <span className="text-coral-500 italic">Age Calculator</span>
-        </h1>
-        <p className="text-xs sm:text-base text-slate-600 dark:text-slate-300 font-medium leading-relaxed">
-          Find your exact age in years, months, and days. Calculate your age on any past or future date instantly.
-        </p>
+      {/* Hero Intro Header with Cute Character Mascot */}
+      <div className="flex flex-col sm:flex-row items-center justify-between gap-6 bg-blush-50/60 dark:bg-plum-900/50 p-6 sm:p-8 rounded-3xl border-2 border-blush-200 dark:border-plum-800">
+        <div className="space-y-2 text-center sm:text-left max-w-xl">
+          <span className="text-[11px] font-extrabold uppercase tracking-widest px-3.5 py-1 rounded-full bg-blush-100 dark:bg-plum-950 text-coral-500 border border-blush-200 dark:border-plum-800 inline-block">
+            Free · 100% Private · Accurate
+          </span>
+          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black font-serif text-plum-900 dark:text-white tracking-tight leading-tight">
+            Exact <span className="text-coral-500 italic">Age Calculator</span>
+          </h1>
+          <p className="text-xs sm:text-base text-slate-600 dark:text-slate-300 font-medium leading-relaxed">
+            Find your exact age in years, months, and days. Calculate your age on any past or future date instantly.
+          </p>
+        </div>
+
+        {/* Cute Mascot Character */}
+        <CuteCharacter variant="thinking" size={130} className="shrink-0 drop-shadow-sm" />
       </div>
 
       {/* CORE PRODUCT: Age Calculator Card */}
@@ -103,4 +109,5 @@ export default function HomePage() {
     </div>
   );
 }
+
 

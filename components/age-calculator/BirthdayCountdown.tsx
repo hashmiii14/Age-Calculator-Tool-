@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { Gift } from 'lucide-react';
+import { Gift, PartyPopper } from 'lucide-react';
 import confetti from 'canvas-confetti';
 import { NextBirthdayResult, UpcomingBirthday } from '../../lib/age/types';
 
@@ -45,63 +45,63 @@ export default function BirthdayCountdown({ nextBirthday, nextFiveBirthdays }: B
 
   if (nextBirthday.isToday) {
     return (
-      <div className="rounded-2xl p-10 text-center space-y-5 animate-fade-up"
-        style={{ background: 'linear-gradient(135deg, #E85D36 0%, #b84520 100%)', border: '1px solid rgba(255,255,255,0.08)' }}>
+      <div className="rounded-3xl sm:rounded-4xl p-8 sm:p-10 text-center space-y-4 animate-fade-up bg-gradient-to-br from-coral-500 to-coral-600 text-white shadow-cute border-2 border-coral-400">
         <div className="text-5xl">🎂</div>
         <div>
-          <p style={{ color: 'rgba(255,255,255,0.65)' }} className="text-xs uppercase tracking-widest font-semibold mb-2">Today is your birthday</p>
-          <h2 className="text-4xl sm:text-5xl font-extrabold font-serif text-white">Happy Birthday!</h2>
-          <p style={{ color: 'rgba(255,255,255,0.8)' }} className="text-base mt-2">
-            You&apos;re turning <span className="font-extrabold text-white text-xl">{nextBirthday.turningAge}</span> today 🎉
+          <p className="text-xs uppercase tracking-widest font-extrabold text-white/80 mb-1">Today is your birthday</p>
+          <h2 className="text-3xl sm:text-5xl font-black font-serif">Happy Birthday!</h2>
+          <p className="text-sm sm:text-base mt-2 text-white/90 font-medium">
+            You&apos;re turning <span className="font-black text-white text-xl">{nextBirthday.turningAge}</span> today 🎉
           </p>
         </div>
-        <button onClick={fireConfetti} type="button"
-          className="px-6 py-2.5 rounded-xl font-semibold text-sm transition-colors"
-          style={{ backgroundColor: 'rgba(0,0,0,0.2)', color: '#fff', border: '1px solid rgba(255,255,255,0.2)' }}>
-          Launch confetti
+        <button
+          onClick={fireConfetti}
+          type="button"
+          className="px-6 py-3 rounded-2xl font-extrabold text-sm bg-white/20 hover:bg-white/30 text-white border border-white/30 transition-all cursor-pointer"
+        >
+          Launch Confetti 🎉
         </button>
       </div>
     );
   }
 
   return (
-    <div id="birthday-countdown" className="rounded-2xl" style={{ backgroundColor: '#161A26', border: '1px solid #252A3D' }}>
+    <div id="birthday-countdown" className="rounded-3xl sm:rounded-4xl bg-white dark:bg-plum-900 border-2 border-blush-200 dark:border-plum-800 shadow-cute overflow-hidden transition-all">
 
       {/* Header */}
-      <div className="px-6 pt-6 pb-5 border-b border-[#1D2133] flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+      <div className="px-6 pt-6 pb-4 border-b border-blush-200 dark:border-plum-800 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
         <div>
-          <p style={{ color: '#636B8A' }} className="text-xs font-semibold uppercase tracking-widest mb-1">Upcoming Birthday</p>
-          <h3 style={{ color: '#F2F4FB' }} className="text-xl font-extrabold font-serif leading-tight">
+          <p className="text-xs font-extrabold uppercase tracking-widest text-slate-400 mb-0.5">Upcoming Birthday</p>
+          <h3 className="text-xl sm:text-2xl font-extrabold font-serif text-plum-900 dark:text-white leading-tight">
             {nextBirthday.formattedDate}
-            <span style={{ color: '#636B8A' }} className="text-sm font-medium ml-2">
+            <span className="text-sm font-bold text-coral-500 ml-2">
               ({nextBirthday.weekday}) · Turning {nextBirthday.turningAge}
             </span>
           </h3>
         </div>
-        <button onClick={fireConfetti} type="button"
-          className="text-xs font-semibold px-3 py-1.5 rounded-lg shrink-0 transition-colors"
-          style={{ backgroundColor: '#1D2133', color: '#9AA3C4', border: '1px solid #252A3D' }}
-          onMouseEnter={e => (e.currentTarget.style.color = '#F2F4FB')}
-          onMouseLeave={e => (e.currentTarget.style.color = '#9AA3C4')}>
-          🎉 Confetti
+
+        <button
+          onClick={fireConfetti}
+          type="button"
+          className="text-xs font-extrabold px-4 py-2 rounded-xl bg-blush-100 dark:bg-plum-800 text-coral-600 dark:text-coral-300 hover:bg-coral-500 hover:text-white transition-all cursor-pointer border border-blush-200 dark:border-plum-700"
+        >
+          🎉 Celebrate
         </button>
       </div>
 
-      {/* Countdown numbers — the main event */}
-      <div className="px-4 sm:px-6 py-6 sm:py-8 grid grid-cols-4 gap-1.5 sm:gap-5 text-center">
+      {/* Countdown numbers */}
+      <div className="px-4 sm:px-6 py-6 sm:py-8 grid grid-cols-4 gap-2 sm:gap-4 text-center">
         {[
           { label: 'Days',    value: timeLeft.days    },
           { label: 'Hours',   value: timeLeft.hours   },
           { label: 'Min',     value: timeLeft.minutes },
           { label: 'Sec',     value: timeLeft.seconds },
         ].map(({ label, value }) => (
-          <div key={label} className="space-y-1">
-            <p className="text-2xl sm:text-5xl font-extrabold font-mono tabular-nums tracking-tight"
-              style={{ color: '#F2F4FB' }}>
+          <div key={label} className="p-3 sm:p-4 rounded-2xl bg-blush-50/70 dark:bg-plum-950/60 border border-blush-100 dark:border-plum-800/80">
+            <p className="text-2xl sm:text-4xl font-extrabold font-mono tabular-nums tracking-tight text-plum-900 dark:text-white">
               {pad(value)}
             </p>
-            <p className="text-[10px] sm:text-xs font-semibold uppercase tracking-widest"
-              style={{ color: '#636B8A' }}>
+            <p className="text-[10px] sm:text-xs font-extrabold uppercase tracking-widest text-coral-500 mt-1">
               {label}
             </p>
           </div>
@@ -109,26 +109,29 @@ export default function BirthdayCountdown({ nextBirthday, nextFiveBirthdays }: B
       </div>
 
       {/* Progress bar */}
-      <div className="px-4 sm:px-6 pb-5 space-y-1.5">
-        <div className="flex justify-between text-xs font-medium" style={{ color: '#636B8A' }}>
-          <span>Year progress</span><span>{progress.toFixed(0)}%</span>
+      <div className="px-4 sm:px-6 pb-6 space-y-1.5">
+        <div className="flex justify-between text-xs font-bold text-slate-500 dark:text-slate-400">
+          <span>Year Progress to Birthday</span>
+          <span>{progress.toFixed(0)}%</span>
         </div>
-        <div className="w-full h-1.5 rounded-full overflow-hidden" style={{ backgroundColor: '#1D2133' }}>
-          <div className="h-full rounded-full" style={{ width: `${progress}%`, backgroundColor: '#E85D36', transition: 'width 0.5s ease' }} />
+        <div className="w-full h-2.5 rounded-full overflow-hidden bg-blush-100 dark:bg-plum-950 border border-blush-200 dark:border-plum-800">
+          <div className="h-full rounded-full bg-coral-500 transition-all duration-500" style={{ width: `${progress}%` }} />
         </div>
       </div>
 
       {/* Next 5 Birthdays */}
       {nextFiveBirthdays && nextFiveBirthdays.length > 0 && (
-        <div className="border-t border-[#1D2133] px-4 sm:px-6 py-5 space-y-3">
-          <p style={{ color: '#636B8A' }} className="text-[11px] uppercase tracking-widest font-semibold">Next 5 birthdays</p>
+        <div className="border-t border-blush-200 dark:border-plum-800 px-4 sm:px-6 py-5 space-y-3 bg-blush-50/40 dark:bg-plum-950/40">
+          <p className="text-[11px] uppercase tracking-widest font-extrabold text-slate-400">Next 5 Birthdays</p>
           <div className="grid grid-cols-2 sm:grid-cols-5 gap-2 text-center">
             {nextFiveBirthdays.map((b) => (
-              <div key={b.year} className="rounded-xl py-2.5 sm:py-3 px-2 sm:px-1"
-                style={{ backgroundColor: '#1D2133', border: '1px solid #252A3D' }}>
-                <span style={{ color: '#E85D36' }} className="font-extrabold text-sm block">{b.year}</span>
-                <span style={{ color: '#9AA3C4' }} className="text-[11px] sm:text-[10px] block mt-0.5">{b.weekday.slice(0,3)}</span>
-                <span style={{ color: '#636B8A' }} className="text-[11px] sm:text-[10px] block">Age {b.turningAge}</span>
+              <div
+                key={b.year}
+                className="rounded-2xl py-2.5 px-2 bg-white dark:bg-plum-900 border border-blush-200 dark:border-plum-800 shadow-sm"
+              >
+                <span className="font-extrabold text-sm text-coral-500 block">{b.year}</span>
+                <span className="text-[11px] font-bold text-plum-900 dark:text-white block mt-0.5">{b.weekday.slice(0,3)}</span>
+                <span className="text-[10px] font-bold text-slate-400 block">Turning {b.turningAge}</span>
               </div>
             ))}
           </div>
@@ -137,3 +140,4 @@ export default function BirthdayCountdown({ nextBirthday, nextFiveBirthdays }: B
     </div>
   );
 }
+

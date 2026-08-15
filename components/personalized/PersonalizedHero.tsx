@@ -12,79 +12,65 @@ export default function PersonalizedHero({ profile, onClearDate }: PersonalizedH
   const { years, months, days, dobWeekday, formattedDOB, totalDays, totalWeeks, nextBirthday } = profile;
 
   return (
-    <section className="animate-fade-up relative overflow-hidden rounded-2xl" style={{ backgroundColor: '#0f1520' }}>
-
-      {/* Decorative left border accent */}
-      <div className="absolute left-0 top-0 bottom-0 w-1 rounded-l-2xl" style={{ background: 'linear-gradient(180deg, #E85D36 0%, rgba(232,93,54,0.1) 100%)' }} />
-
-      <div className="px-6 sm:px-10 lg:px-14 py-10 sm:py-14">
-
-        {/* Top utility bar */}
-        <div className="flex items-center justify-between mb-10">
-          <div className="flex items-center gap-2" style={{ color: '#636B8A' }}>
-            <span className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: '#22c55e' }} />
-            <span className="text-xs tracking-widest uppercase font-semibold">Your AgePulse</span>
-          </div>
-          <button
-            onClick={onClearDate}
-            className="flex items-center gap-1.5 text-xs font-semibold transition-colors px-3 py-1.5 rounded-lg"
-            style={{ color: '#636B8A', backgroundColor: 'rgba(255,255,255,0.04)', border: '1px solid #252A3D' }}
-            onMouseEnter={e => (e.currentTarget.style.color = '#E85D36')}
-            onMouseLeave={e => (e.currentTarget.style.color = '#636B8A')}
-          >
-            <RotateCcw className="w-3.5 h-3.5" />
-            Clear
-          </button>
+    <section className="animate-fade-up relative overflow-hidden rounded-3xl sm:rounded-4xl bg-gradient-to-b from-[#FFF7F5] to-[#FFF0EC] dark:from-[#2C1933] dark:to-[#1F1224] border-2 border-coral-200/60 dark:border-plum-700 shadow-cute p-6 sm:p-10 text-plum-900 dark:text-white">
+      <div className="flex items-center justify-between mb-6">
+        <div className="flex items-center gap-2 text-coral-500">
+          <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+          <span className="text-xs tracking-widest uppercase font-extrabold">Your AgePulse</span>
         </div>
+        <button
+          onClick={onClearDate}
+          className="flex items-center gap-1.5 text-xs font-extrabold px-3 py-1.5 rounded-xl bg-blush-100 dark:bg-plum-800 text-coral-600 dark:text-coral-300 hover:bg-coral-500 hover:text-white transition-all border border-blush-200 dark:border-plum-700 cursor-pointer"
+        >
+          <RotateCcw className="w-3.5 h-3.5" />
+          Reset Date
+        </button>
+      </div>
 
-        {/* Born line — small, honest */}
-        <p style={{ color: '#636B8A' }} className="text-sm font-semibold tracking-wide mb-3">
-          Born {dobWeekday}, {formattedDOB}
+      <p className="text-sm font-extrabold tracking-wide text-slate-500 dark:text-slate-400 mb-2">
+        Born {dobWeekday}, {formattedDOB}
+      </p>
+
+      <div className="flex flex-wrap items-baseline gap-x-3 gap-y-2 mb-6">
+        <span className="font-serif font-black tracking-tight text-4xl sm:text-6xl text-plum-900 dark:text-white">
+          {years}
+        </span>
+        <span className="text-xl sm:text-2xl font-extrabold text-coral-500">years</span>
+
+        <span className="font-serif font-black tracking-tight text-3xl sm:text-5xl text-plum-900 dark:text-white">
+          {months}
+        </span>
+        <span className="text-lg font-extrabold text-coral-500">months</span>
+
+        <span className="font-serif font-black tracking-tight text-3xl sm:text-5xl text-plum-900 dark:text-white">
+          {days}
+        </span>
+        <span className="text-lg font-extrabold text-coral-500">days</span>
+      </div>
+
+      {!nextBirthday.isToday && (
+        <p className="text-sm text-slate-600 dark:text-slate-300 font-medium">
+          Turning <strong className="font-extrabold text-plum-900 dark:text-white">{nextBirthday.turningAge}</strong> in{' '}
+          <strong className="text-coral-500 font-extrabold">{nextBirthday.daysRemaining}</strong> days — {nextBirthday.formattedDate}
         </p>
+      )}
+      {nextBirthday.isToday && (
+        <p className="text-sm font-extrabold text-coral-500">🎉 Happy Birthday! You&apos;re turning {nextBirthday.turningAge} today!</p>
+      )}
 
-        {/* Giant Age Number — the star of the show */}
-        <div className="flex flex-wrap items-baseline gap-x-3 gap-y-2 mb-6">
-          <span className="font-serif font-extrabold tracking-tight" style={{ fontSize: 'clamp(3.5rem, 10vw, 6rem)', lineHeight: 1, color: '#F2F4FB' }}>
-            {years}
-          </span>
-          <span className="text-xl sm:text-2xl font-semibold" style={{ color: '#636B8A' }}>years</span>
-
-          <span className="font-serif font-extrabold tracking-tight" style={{ fontSize: 'clamp(2rem, 6vw, 3.5rem)', lineHeight: 1, color: '#E85D36' }}>
-            {months}
-          </span>
-          <span className="text-lg font-semibold" style={{ color: '#636B8A' }}>months</span>
-
-          <span className="font-serif font-extrabold tracking-tight" style={{ fontSize: 'clamp(2rem, 6vw, 3.5rem)', lineHeight: 1, color: '#E85D36' }}>
-            {days}
-          </span>
-          <span className="text-lg font-semibold" style={{ color: '#636B8A' }}>days</span>
-        </div>
-
-        {/* Birthday indicator — one clean line */}
-        {!nextBirthday.isToday && (
-          <p style={{ color: '#9AA3C4' }} className="text-sm">
-            Turning <strong style={{ color: '#F2F4FB' }}>{nextBirthday.turningAge}</strong> in{' '}
-            <strong style={{ color: '#E85D36' }}>{nextBirthday.daysRemaining}</strong> days — {nextBirthday.formattedDate}
-          </p>
-        )}
-        {nextBirthday.isToday && (
-          <p style={{ color: '#E85D36' }} className="text-sm font-bold">🎉 Happy Birthday! You&apos;re turning {nextBirthday.turningAge} today!</p>
-        )}
-
-        {/* Subtle divider + secondary stats */}
-        <div className="mt-8 pt-6 border-t border-[#1D2133] flex flex-wrap gap-4 sm:gap-8">
-          {[
-            { value: totalDays.toLocaleString(), label: 'days alive' },
-            { value: totalWeeks.toLocaleString(), label: 'weeks' },
-            { value: profile.totalHours.toLocaleString(), label: 'hours' },
-          ].map(({ value, label }) => (
-            <div key={label}>
-              <p style={{ color: '#F2F4FB' }} className="text-xl sm:text-2xl font-extrabold font-serif">{value}</p>
-              <p style={{ color: '#636B8A' }} className="text-xs font-medium mt-0.5">{label}</p>
-            </div>
-          ))}
-        </div>
+      <div className="mt-8 pt-6 border-t border-blush-200 dark:border-plum-800 flex flex-wrap gap-4 sm:gap-8">
+        {[
+          { value: totalDays.toLocaleString(), label: 'Days Alive' },
+          { value: totalWeeks.toLocaleString(), label: 'Weeks' },
+          { value: profile.totalHours.toLocaleString(), label: 'Hours' },
+        ].map(({ value, label }) => (
+          <div key={label}>
+            <p className="text-xl sm:text-2xl font-black font-serif text-coral-500">{value}</p>
+            <p className="text-xs font-bold text-slate-400 mt-0.5">{label}</p>
+          </div>
+        ))}
       </div>
     </section>
   );
 }
+

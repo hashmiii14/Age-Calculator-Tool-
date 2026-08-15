@@ -16,6 +16,7 @@ import ZodiacAstrologySection from '../astrology/ZodiacAstrologySection';
 import BirthdayCountdown from './BirthdayCountdown';
 import AgeMilestoneTimeline from './AgeMilestoneTimeline';
 import ShareCardGenerator from '../share/ShareCardGenerator';
+import CuteCharacter from '../ui/CuteCharacter';
 
 interface AgeResultDashboardProps {
   result: AgeResult;
@@ -46,20 +47,23 @@ export default function AgeResultDashboard({ result }: AgeResultDashboardProps) 
       </div>
 
       {/* Dominant Main Result Card */}
-      <div className="bg-gradient-to-b from-[#FFF7F5] to-[#FFF0EC] dark:from-[#2C1933] dark:to-[#1F1224] rounded-4xl p-6 sm:p-10 border-2 border-coral-200/60 dark:border-plum-700 shadow-cute text-center relative overflow-hidden">
-        <div className="inline-flex items-center space-x-1.5 px-4 py-1.5 rounded-full bg-white/90 dark:bg-plum-800 text-coral-600 dark:text-coral-300 text-xs sm:text-sm font-extrabold shadow-sm mb-4 max-w-full truncate">
+      <div className="bg-gradient-to-b from-[#FFF7F5] to-[#FFF0EC] dark:from-[#2C1933] dark:to-[#1F1224] rounded-4xl p-6 sm:p-10 border-2 border-coral-200/60 dark:border-plum-700 shadow-cute text-center relative overflow-hidden flex flex-col items-center">
+        <div className="inline-flex items-center space-x-1.5 px-4 py-1.5 rounded-full bg-white/90 dark:bg-plum-800 text-coral-600 dark:text-coral-300 text-xs sm:text-sm font-extrabold shadow-sm mb-3 max-w-full truncate">
           <Calendar className="w-4 h-4 shrink-0 text-coral-500" />
           <span className="truncate">Born on {result.formattedDOB} ({result.dobWeekday})</span>
         </div>
 
+        {/* Celebrating Cute Character Mascot */}
+        <CuteCharacter variant="celebrating" size={96} className="my-2 drop-shadow-sm" />
+
         {/* Primary Age Banner */}
-        <div className="flex flex-wrap items-baseline justify-center gap-x-3 sm:gap-x-5 gap-y-2 text-3xl sm:text-5xl lg:text-6xl font-black text-plum-900 dark:text-white font-serif tracking-tight my-3">
+        <div className="flex flex-wrap items-baseline justify-center gap-x-3 sm:gap-x-5 gap-y-2 text-3xl sm:text-5xl lg:text-6xl font-black text-plum-900 dark:text-white font-serif tracking-tight my-2">
           <span>{result.years} <span className="text-coral-500 text-2xl sm:text-4xl font-extrabold">Years</span></span>
           <span>{result.months} <span className="text-coral-500 text-2xl sm:text-4xl font-extrabold">Months</span></span>
           <span>{result.days} <span className="text-coral-500 text-2xl sm:text-4xl font-extrabold">Days</span></span>
         </div>
 
-        <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300 max-w-lg mx-auto font-medium mt-2">
+        <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300 max-w-lg mx-auto font-medium mt-1">
           Calculated precisely as of {result.formattedTargetDate} ({result.targetWeekday}).
         </p>
       </div>
