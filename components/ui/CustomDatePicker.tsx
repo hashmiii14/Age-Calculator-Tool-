@@ -140,7 +140,7 @@ export default function CustomDatePicker({
 
       {/* Mobile-optimized Calendar Popover */}
       {isOpen && (
-        <div className="absolute left-1/2 -translate-x-1/2 sm:left-auto sm:right-0 sm:translate-x-0 top-full mt-2 z-50 w-[calc(100vw-2rem)] max-w-[340px] sm:w-[340px] rounded-3xl p-4 sm:p-5 shadow-2xl bg-white dark:bg-plum-900 border-2 border-blush-200 dark:border-plum-800 animate-fade-up">
+        <div className="fixed inset-x-4 top-1/2 -translate-y-1/2 sm:absolute sm:inset-auto sm:right-0 sm:top-full sm:mt-2 sm:translate-y-0 z-50 w-[calc(100vw-2rem)] max-w-[340px] sm:w-[340px] mx-auto rounded-3xl p-4 sm:p-5 shadow-2xl bg-white dark:bg-plum-900 border-2 border-blush-200 dark:border-plum-800 animate-fade-up">
           {/* Header Controls: Month & Year Pickers */}
           <div className="flex items-center justify-between gap-1.5 mb-3 pb-3 border-b border-blush-200 dark:border-plum-800">
             <button

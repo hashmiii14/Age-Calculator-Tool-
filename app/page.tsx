@@ -55,9 +55,9 @@ export default function HomePage() {
   };
 
   return (
-    <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-10 space-y-8 animate-fade-up">
+    <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-10 space-y-8 sm:space-y-10 animate-fade-up">
       {/* Hero Intro Header with Cute Character Mascot */}
-      <div className="flex flex-col sm:flex-row items-center justify-between gap-6 bg-blush-50/60 dark:bg-plum-900/50 p-6 sm:p-8 rounded-3xl border-2 border-blush-200 dark:border-plum-800">
+      <div className="flex flex-col sm:flex-row items-center justify-between gap-6 bg-blush-50/70 dark:bg-plum-900/50 p-6 sm:p-8 lg:p-10 rounded-3xl sm:rounded-4xl border-2 border-blush-200 dark:border-plum-800 shadow-cute">
         <div className="space-y-2 text-center sm:text-left max-w-xl">
           <span className="text-[11px] font-extrabold uppercase tracking-widest px-3.5 py-1 rounded-full bg-blush-100 dark:bg-plum-950 text-coral-500 border border-blush-200 dark:border-plum-800 inline-block">
             Free · 100% Private · Accurate
