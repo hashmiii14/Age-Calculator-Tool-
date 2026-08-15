@@ -19,15 +19,26 @@ export default function ShareCopyButtons({ result }: ShareCopyButtonsProps) {
       ` Total Days: ${result.totalDays.toLocaleString()} days`,
       ` Next Birthday: ${result.nextBirthday.formattedDate} (${result.nextBirthday.daysRemaining} days remaining)`,
       ` Zodiac Sign: ${result.zodiacSign}`,
-      `Calculated with AgePulse — Free Precision Age Calculator`
+      `Calculated with AGEpulse — https://www.agepulse.site`
     ].join('\n');
   };
 
   const handleCopy = async () => {
     try {
-      await navigator.clipboard.writeText(getSummaryText());
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        await navigator.clipboard.writeText(getSummaryText());
+      } else {
+        const textarea = document.createElement('textarea');
+        textarea.value = getSummaryText();
+        textarea.style.position = 'fixed';
+        textarea.style.opacity = '0';
+        document.body.appendChild(textarea);
+        textarea.select();
+        document.execCommand('copy');
+        document.body.removeChild(textarea);
+      }
       setCopied(true);
-      setTimeout(() => setCopied(false), 2500);
+      setTimeout(() => setCopied(false), 2000);
     } catch (err) {
       console.error('Failed to copy result:', err);
     }
@@ -56,17 +67,17 @@ export default function ShareCopyButtons({ result }: ShareCopyButtonsProps) {
     <div className="flex items-center space-x-3">
       <button
         onClick={handleCopy}
-        className="flex items-center space-x-2 px-4 py-2.5 rounded-xl border border-slate-700 bg-slate-800 text-slate-200 hover:bg-slate-700 text-sm font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-orange-500"
+        className="flex items-center space-x-2 px-4 py-2.5 rounded-xl border border-pinkPastel-200 dark:border-purpleText-700 bg-pinkPastel-100 dark:bg-purpleText-800 text-pinkPastel-600 dark:text-pinkPastel-300 hover:bg-pinkPastel-200 text-sm font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-pinkPastel-400 cursor-pointer"
         aria-label="Copy result summary to clipboard"
       >
         {copied ? (
           <>
-            <Check className="w-4 h-4 text-emerald-400" />
-            <span className="text-emerald-400">Copied!</span>
+            <Check className="w-4 h-4 text-emerald-500" />
+            <span className="text-emerald-600 dark:text-emerald-400">Copied!</span>
           </>
         ) : (
           <>
-            <Copy className="w-4 h-4 text-slate-400" />
+            <Copy className="w-4 h-4 text-pinkPastel-500" />
             <span>Copy Result</span>
           </>
         )}
@@ -74,7 +85,7 @@ export default function ShareCopyButtons({ result }: ShareCopyButtonsProps) {
 
       <button
         onClick={handleShare}
-        className="flex items-center space-x-2 px-4 py-2.5 rounded-xl bg-orange-950/60 border border-orange-900/60 text-orange-300 hover:bg-orange-900/60 text-sm font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-orange-500"
+        className="flex items-center space-x-2 px-4 py-2.5 rounded-xl bg-pinkPastel-500 hover:bg-pinkPastel-600 text-white text-sm font-semibold transition-colors shadow-cute focus:outline-none focus:ring-2 focus:ring-pinkPastel-400 cursor-pointer"
         aria-label="Share age result"
       >
         <Share2 className="w-4 h-4" />
@@ -83,3 +94,4 @@ export default function ShareCopyButtons({ result }: ShareCopyButtonsProps) {
     </div>
   );
 }
+

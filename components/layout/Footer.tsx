@@ -22,10 +22,9 @@ export default function Footer() {
 
           {/* Brand column */}
           <div className="lg:col-span-2 space-y-4">
-            <Link href="/" className="inline-flex items-center gap-2">
-              <div className="w-8 h-8 rounded-xl bg-coral-500 text-white flex items-center justify-center font-black text-sm font-sans tracking-tight">AP</div>
-              <span className="font-black text-xl tracking-wide font-sans uppercase text-plum-900 dark:text-white">
-                AGE<span className="text-coral-500 font-serif lowercase italic text-xl">Pulse</span>
+            <Link href="/" className="inline-flex items-center gap-1">
+              <span className="font-extrabold text-xl tracking-tight font-sans uppercase text-plum-900 dark:text-white">
+                AGE<span className="text-coral-500 font-serif lowercase italic text-2xl font-bold ml-0.5">pulse</span>
               </span>
             </Link>
             <p className="text-sm leading-relaxed max-w-sm text-slate-600 dark:text-slate-300 font-medium">
@@ -33,7 +32,7 @@ export default function Footer() {
             </p>
             <div className="flex flex-wrap gap-2 pt-1">
               <div className="inline-flex items-center gap-1.5 text-xs font-bold px-3 py-1.5 rounded-full bg-blush-100 dark:bg-plum-900 text-slate-700 dark:text-slate-300 border border-blush-200 dark:border-plum-800">
-                <ShieldCheck className="w-3.5 h-3.5 text-green-500" />
+                <ShieldCheck className="w-3.5 h-3.5 text-pink-500" />
                 100% Client-side & Private
               </div>
               <button

@@ -5,10 +5,8 @@ import {
   Sparkles,
   Calendar,
   Share2,
-  Clock,
-  Heart,
-  Compass,
-  Trophy,
+  Copy,
+  Check,
 } from 'lucide-react';
 import { AgeResult } from '../../lib/age/types';
 import BirthDateDiscoveryCard from '../discovery/BirthDateDiscoveryCard';
@@ -24,109 +22,169 @@ interface AgeResultDashboardProps {
 
 export default function AgeResultDashboard({ result }: AgeResultDashboardProps) {
   const [showShareModal, setShowShareModal] = useState(false);
+  const [copied, setCopied] = useState(false);
+
+  const getSummaryText = () => {
+    return `Your Exact Age: ${result.years} Years, ${result.months} Months, ${result.days} Days\nBorn: ${result.formattedDOB} (${result.dobWeekday})\nTotal Days Lived: ${result.totalDays.toLocaleString()} Days\nCalculated with AGEpulse — https://www.agepulse.site`;
+  };
+
+  const handleCopy = async () => {
+    try {
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        await navigator.clipboard.writeText(getSummaryText());
+      } else {
+        const textarea = document.createElement('textarea');
+        textarea.value = getSummaryText();
+        textarea.style.position = 'fixed';
+        textarea.style.opacity = '0';
+        document.body.appendChild(textarea);
+        textarea.select();
+        document.execCommand('copy');
+        document.body.removeChild(textarea);
+      }
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  const handleShare = async () => {
+    const text = getSummaryText();
+    if (navigator.share) {
+      try {
+        await navigator.share({
+          title: 'My Exact Age Result — AGEpulse',
+          text,
+          url: window.location.href,
+        });
+      } catch (err) {
+        if ((err as Error).name !== 'AbortError') {
+          handleCopy();
+        }
+      }
+    } else {
+      handleCopy();
+    }
+  };
 
   return (
-    <div id="result-dashboard" className="space-y-8 animate-fade-up scroll-mt-20">
-      {/* Top Banner & Quick Share */}
-      <div className="flex flex-col sm:flex-row items-center justify-between gap-3 sm:gap-4 p-4 rounded-3xl bg-white dark:bg-plum-900 border-2 border-blush-200 dark:border-plum-800 shadow-cute">
+    <div id="result-dashboard" className="space-y-6 animate-fade-up scroll-mt-20">
+      {/* Top Banner & Quick Share / Copy Actions */}
+      <div className="flex flex-col sm:flex-row items-center justify-between gap-3 p-4 rounded-3xl bg-white dark:bg-purpleText-900 border-2 border-pinkPastel-200 dark:border-purpleText-800 shadow-cute">
         <div className="flex items-center space-x-2">
-          <Sparkles className="w-5 h-5 text-coral-500" />
-          <span className="font-extrabold text-sm sm:text-base text-plum-900 dark:text-white font-serif">
+          <Sparkles className="w-5 h-5 text-pinkPastel-500" />
+          <span className="font-extrabold text-sm sm:text-base text-purpleText-900 dark:text-white font-serif">
             Your Exact Age Result
           </span>
         </div>
 
-        <button
-          onClick={() => setShowShareModal(true)}
-          type="button"
-          className="inline-flex items-center space-x-2 px-4 py-2 rounded-2xl bg-coral-500 hover:bg-coral-600 text-white text-xs font-extrabold shadow-cute hover:shadow-cute-hover transition-all cursor-pointer"
-        >
-          <Share2 className="w-4 h-4" />
-          <span>Share & Copy Result</span>
-        </button>
+        <div className="flex items-center space-x-2 w-full sm:w-auto">
+          <button
+            onClick={handleCopy}
+            type="button"
+            className="flex-1 sm:flex-none inline-flex items-center justify-center space-x-1.5 px-4 py-2.5 rounded-2xl bg-pinkPastel-100 dark:bg-purpleText-800 text-pinkPastel-600 dark:text-pinkPastel-300 text-xs font-extrabold hover:bg-pinkPastel-200 transition-all cursor-pointer border border-pinkPastel-200 dark:border-purpleText-700"
+          >
+            {copied ? <Check className="w-4 h-4 text-emerald-500" /> : <Copy className="w-4 h-4" />}
+            <span>{copied ? 'Copied!' : 'Copy Result'}</span>
+          </button>
+
+          <button
+            onClick={handleShare}
+            type="button"
+            className="flex-1 sm:flex-none inline-flex items-center justify-center space-x-1.5 px-4 py-2.5 rounded-2xl bg-pinkPastel-500 hover:bg-pinkPastel-600 text-white text-xs font-extrabold shadow-cute transition-all cursor-pointer"
+          >
+            <Share2 className="w-4 h-4" />
+            <span>Share Result</span>
+          </button>
+        </div>
       </div>
 
       {/* Dominant Main Result Card */}
-      <div className="bg-gradient-to-b from-[#FFF7F5] to-[#FFF0EC] dark:from-[#2C1933] dark:to-[#1F1224] rounded-4xl p-6 sm:p-10 border-2 border-coral-200/60 dark:border-plum-700 shadow-cute text-center relative overflow-hidden flex flex-col items-center">
-        <div className="inline-flex items-center space-x-1.5 px-4 py-1.5 rounded-full bg-white/90 dark:bg-plum-800 text-coral-600 dark:text-coral-300 text-xs sm:text-sm font-extrabold shadow-sm mb-3 max-w-full truncate">
-          <Calendar className="w-4 h-4 shrink-0 text-coral-500" />
+      <div className="bg-gradient-to-b from-white via-pinkPastel-50 to-pinkPastel-100 dark:from-purpleText-900 dark:to-purpleText-950 rounded-4xl p-6 sm:p-10 border-2 border-pinkPastel-200 dark:border-purpleText-800 shadow-cute text-center relative overflow-hidden flex flex-col items-center">
+        <div className="inline-flex items-center space-x-1.5 px-4 py-1.5 rounded-full bg-white dark:bg-purpleText-800 text-pinkPastel-600 dark:text-pinkPastel-300 text-xs sm:text-sm font-extrabold shadow-sm mb-3 max-w-full truncate border border-pinkPastel-200 dark:border-purpleText-700">
+          <Calendar className="w-4 h-4 shrink-0 text-pinkPastel-500" />
           <span className="truncate">Born on {result.formattedDOB} ({result.dobWeekday})</span>
         </div>
 
-        {/* Celebrating Cute Character Mascot */}
-        <CuteCharacter variant="celebrating" size={96} className="my-2 drop-shadow-sm" />
+        {/* Mascot */}
+        <CuteCharacter variant="celebrating" size={88} className="my-1 drop-shadow-sm" />
 
-        {/* Primary Age Banner */}
-        <div className="flex flex-wrap items-baseline justify-center gap-x-3 sm:gap-x-5 gap-y-2 text-3xl sm:text-5xl lg:text-6xl font-black text-plum-900 dark:text-white font-serif tracking-tight my-2">
-          <span>{result.years} <span className="text-coral-500 text-2xl sm:text-4xl font-extrabold">Years</span></span>
-          <span>{result.months} <span className="text-coral-500 text-2xl sm:text-4xl font-extrabold">Months</span></span>
-          <span>{result.days} <span className="text-coral-500 text-2xl sm:text-4xl font-extrabold">Days</span></span>
+        <span className="text-xs font-black uppercase tracking-widest text-purpleText-400 mt-2 block">
+          Your Exact Age
+        </span>
+
+        {/* Primary Age Display */}
+        <div className="flex flex-wrap items-baseline justify-center gap-x-3 sm:gap-x-5 gap-y-1 text-3xl sm:text-5xl lg:text-6xl font-black text-purpleText-900 dark:text-white font-serif tracking-tight my-2">
+          <span>{result.years} <span className="text-pinkPastel-500 text-2xl sm:text-4xl font-extrabold">Years</span></span>
+          <span>{result.months} <span className="text-pinkPastel-500 text-2xl sm:text-4xl font-extrabold">Months</span></span>
+          <span>{result.days} <span className="text-pinkPastel-500 text-2xl sm:text-4xl font-extrabold">Days</span></span>
         </div>
 
-        <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300 max-w-lg mx-auto font-medium mt-1">
+        <p className="text-xs sm:text-sm text-purpleText-600 dark:text-purpleText-300 max-w-lg mx-auto font-medium mt-1">
           Calculated precisely as of {result.formattedTargetDate} ({result.targetWeekday}).
         </p>
       </div>
 
-      {/* Compact Secondary Statistics Grid */}
+      {/* Secondary Lifetime Breakdown Cards */}
       <div className="space-y-3">
-        <h3 className="text-sm font-extrabold uppercase tracking-wider text-slate-500 dark:text-slate-400 font-sans px-1">
+        <h3 className="text-xs font-black uppercase tracking-wider text-purpleText-400 font-sans px-1">
           Detailed Lifetime Breakdown
         </h3>
 
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 sm:gap-4">
           {/* Total Days */}
-          <div className="p-4 rounded-3xl bg-white dark:bg-plum-900 border border-blush-200 dark:border-plum-800 shadow-sm text-center">
-            <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest block">Total Days</span>
-            <span className="text-lg sm:text-2xl font-extrabold text-coral-500 font-serif block truncate mt-0.5">
+          <div className="p-4 rounded-3xl bg-white dark:bg-purpleText-900 border border-pinkPastel-200 dark:border-purpleText-800 shadow-sm text-center">
+            <span className="text-[10px] font-bold text-purpleText-400 uppercase tracking-widest block">Total Days</span>
+            <span className="text-lg sm:text-2xl font-extrabold text-pinkPastel-500 font-serif block truncate mt-0.5">
               {result.totalDays.toLocaleString()}
             </span>
-            <span className="text-[10px] font-bold text-slate-400 block mt-1">Days Lived</span>
+            <span className="text-[10px] font-bold text-purpleText-400 block mt-1">Days Lived</span>
           </div>
 
           {/* Total Weeks */}
-          <div className="p-4 rounded-3xl bg-white dark:bg-plum-900 border border-blush-200 dark:border-plum-800 shadow-sm text-center">
-            <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest block">Total Weeks</span>
-            <span className="text-lg sm:text-2xl font-extrabold text-plum-900 dark:text-white font-serif block truncate mt-0.5">
+          <div className="p-4 rounded-3xl bg-white dark:bg-purpleText-900 border border-pinkPastel-200 dark:border-purpleText-800 shadow-sm text-center">
+            <span className="text-[10px] font-bold text-purpleText-400 uppercase tracking-widest block">Total Weeks</span>
+            <span className="text-lg sm:text-2xl font-extrabold text-purpleText-900 dark:text-white font-serif block truncate mt-0.5">
               {result.totalWeeks.toLocaleString()}
             </span>
-            <span className="text-[10px] font-bold text-slate-400 block mt-1">Weeks Lived</span>
+            <span className="text-[10px] font-bold text-purpleText-400 block mt-1">Weeks Lived</span>
           </div>
 
           {/* Total Months */}
-          <div className="p-4 rounded-3xl bg-white dark:bg-plum-900 border border-blush-200 dark:border-plum-800 shadow-sm text-center">
-            <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest block">Total Months</span>
-            <span className="text-lg sm:text-2xl font-extrabold text-coral-500 font-serif block truncate mt-0.5">
+          <div className="p-4 rounded-3xl bg-white dark:bg-purpleText-900 border border-pinkPastel-200 dark:border-purpleText-800 shadow-sm text-center">
+            <span className="text-[10px] font-bold text-purpleText-400 uppercase tracking-widest block">Total Months</span>
+            <span className="text-lg sm:text-2xl font-extrabold text-pinkPastel-500 font-serif block truncate mt-0.5">
               {result.totalMonths.toLocaleString()}
             </span>
-            <span className="text-[10px] font-bold text-slate-400 block mt-1">Months Lived</span>
+            <span className="text-[10px] font-bold text-purpleText-400 block mt-1">Months Lived</span>
           </div>
 
           {/* Total Hours */}
-          <div className="p-4 rounded-3xl bg-white dark:bg-plum-900 border border-blush-200 dark:border-plum-800 shadow-sm text-center">
-            <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest block">Total Hours</span>
-            <span className="text-lg sm:text-2xl font-extrabold text-plum-900 dark:text-white font-serif block truncate mt-0.5">
+          <div className="p-4 rounded-3xl bg-white dark:bg-purpleText-900 border border-pinkPastel-200 dark:border-purpleText-800 shadow-sm text-center">
+            <span className="text-[10px] font-bold text-purpleText-400 uppercase tracking-widest block">Total Hours</span>
+            <span className="text-lg sm:text-2xl font-extrabold text-purpleText-900 dark:text-white font-serif block truncate mt-0.5">
               {result.totalHours.toLocaleString()}
             </span>
-            <span className="text-[10px] font-bold text-slate-400 block mt-1">Hours Lived</span>
+            <span className="text-[10px] font-bold text-purpleText-400 block mt-1">Hours Lived</span>
           </div>
 
           {/* Total Minutes */}
-          <div className="p-4 rounded-3xl bg-white dark:bg-plum-900 border border-blush-200 dark:border-plum-800 shadow-sm text-center">
-            <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest block">Total Minutes</span>
-            <span className="text-lg sm:text-2xl font-extrabold text-coral-500 font-serif block truncate mt-0.5">
+          <div className="p-4 rounded-3xl bg-white dark:bg-purpleText-900 border border-pinkPastel-200 dark:border-purpleText-800 shadow-sm text-center">
+            <span className="text-[10px] font-bold text-purpleText-400 uppercase tracking-widest block">Total Minutes</span>
+            <span className="text-lg sm:text-2xl font-extrabold text-pinkPastel-500 font-serif block truncate mt-0.5">
               {result.totalMinutes.toLocaleString()}
             </span>
-            <span className="text-[10px] font-bold text-slate-400 block mt-1">Minutes Lived</span>
+            <span className="text-[10px] font-bold text-purpleText-400 block mt-1">Minutes Lived</span>
           </div>
 
           {/* Zodiac Sign */}
-          <div className="p-4 rounded-3xl bg-white dark:bg-plum-900 border border-blush-200 dark:border-plum-800 shadow-sm text-center">
-            <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest block">Zodiac Sign</span>
-            <span className="text-base sm:text-xl font-extrabold text-plum-900 dark:text-white font-serif block truncate mt-0.5">
+          <div className="p-4 rounded-3xl bg-white dark:bg-purpleText-900 border border-pinkPastel-200 dark:border-purpleText-800 shadow-sm text-center">
+            <span className="text-[10px] font-bold text-purpleText-400 uppercase tracking-widest block">Zodiac Sign</span>
+            <span className="text-base sm:text-xl font-extrabold text-purpleText-900 dark:text-white font-serif block truncate mt-0.5">
               {result.zodiacProfile.unicodeSymbol} {result.zodiacSign}
             </span>
-            <span className="text-[10px] font-bold text-coral-500 block mt-1">{result.zodiacProfile.element} Sign</span>
+            <span className="text-[10px] font-bold text-pinkPastel-500 block mt-1">{result.zodiacProfile.element} Sign</span>
           </div>
         </div>
       </div>
@@ -155,4 +213,5 @@ export default function AgeResultDashboard({ result }: AgeResultDashboardProps) 
     </div>
   );
 }
+
 
