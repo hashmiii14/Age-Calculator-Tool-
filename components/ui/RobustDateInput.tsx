@@ -123,12 +123,29 @@ export default function RobustDateInput({
     return () => document.removeEventListener('keydown', handleKeyDown);
   }, [isOpen]);
 
-  // Direct manual text typing handler
+  // Direct manual text typing handler with auto-masking (e.g. 14 - 07 - 2005)
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const raw = e.target.value;
-    setTypedText(raw);
+    const isDeleting = (e.nativeEvent as InputEvent)?.inputType === 'deleteContentBackward';
 
-    const parsed = parseAnyDateString(raw);
+    let formatted = raw;
+
+    if (!isDeleting) {
+      const digits = raw.replace(/\D/g, '').slice(0, 8);
+      if (digits.length === 0) {
+        formatted = '';
+      } else if (digits.length <= 2) {
+        formatted = digits;
+      } else if (digits.length <= 4) {
+        formatted = `${digits.slice(0, 2)} - ${digits.slice(2)}`;
+      } else {
+        formatted = `${digits.slice(0, 2)} - ${digits.slice(2, 4)} - ${digits.slice(4, 8)}`;
+      }
+    }
+
+    setTypedText(formatted);
+
+    const parsed = parseAnyDateString(formatted);
     if (parsed) {
       const iso = formatISODate(parsed);
       setViewYear(parsed.year);
