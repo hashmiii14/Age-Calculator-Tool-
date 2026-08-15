@@ -11,50 +11,44 @@ const TOOLS = [
   { href: '/age-calculator',     title: 'Exact Age Calculator',       icon: 'Clock',    tag: 'Core'        },
   { href: '/birthday-countdown', title: 'Birthday Countdown',          icon: 'Heart',    tag: 'Popular'     },
   { href: '/zodiac-sign',        title: 'Zodiac Sign Profile',         icon: 'Compass',  tag: 'Astrology'   },
-  { href: '/birth-date',         title: 'Birth Date Profile',          icon: 'Sparkles', tag: 'Discovery'   },
-  { href: '/age-milestones',     title: 'Day Milestone Tracker',       icon: 'Trophy',   tag: 'Tracker'     },
-  { href: '/date-difference',    title: 'Date Difference',             icon: 'Calendar', tag: 'Calculator'  },
-  { href: '/on-this-date',       title: 'On This Date',                icon: 'History',  tag: 'History'     },
   { href: '/age-comparison',     title: 'Age Comparison',              icon: 'Users',    tag: 'Comparison'  },
+  { href: '/date-difference',    title: 'Date Difference',             icon: 'Calendar', tag: 'Calculator'  },
+  { href: '/age-milestones',     title: 'Day Milestone Tracker',       icon: 'Trophy',   tag: 'Tracker'     },
 ];
 
 export default function DateToolsGrid() {
   return (
-    <div className="space-y-5">
-
-      <div className="flex items-baseline gap-3">
-        <h2 style={{ color: '#F2F4FB' }} className="text-2xl font-extrabold font-serif">All Tools</h2>
-        <span style={{ color: '#636B8A' }} className="text-sm">Free · Client-side · No account needed</span>
+    <div className="space-y-4 pt-4">
+      <div className="flex items-baseline justify-between">
+        <h2 className="text-xl sm:text-2xl font-extrabold font-serif text-plum-900 dark:text-white">
+          Related Tools
+        </h2>
+        <span className="text-xs text-slate-500 dark:text-slate-400 font-medium">Free & Private</span>
       </div>
 
-      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2.5 sm:gap-3">
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-3 gap-3">
         {TOOLS.map(({ href, title, icon, tag }) => {
           const Icon = ICON_MAP[icon] || Sparkles;
           return (
             <Link
               key={href}
               href={href}
-              className="group flex flex-col justify-between gap-3 p-3.5 sm:p-5 rounded-xl transition-colors"
-              style={{ backgroundColor: '#161A26', border: '1px solid #252A3D' }}
-              onMouseEnter={e => { (e.currentTarget as HTMLElement).style.borderColor = 'rgba(232,93,54,0.4)'; }}
-              onMouseLeave={e => { (e.currentTarget as HTMLElement).style.borderColor = '#252A3D'; }}
+              className="group flex flex-col justify-between gap-3 p-4 rounded-2xl bg-white dark:bg-plum-900 border border-blush-200 dark:border-plum-800 hover:border-coral-400 transition-all shadow-sm"
             >
-              {/* Top row: icon + tag */}
               <div className="flex items-center justify-between">
-                <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-lg flex items-center justify-center shrink-0" style={{ backgroundColor: '#1D2133' }}>
-                  <Icon className="w-3.5 h-3.5 sm:w-4 sm:h-4" style={{ color: '#E85D36' }} />
+                <div className="w-8 h-8 rounded-xl bg-blush-100 dark:bg-plum-800 flex items-center justify-center shrink-0">
+                  <Icon className="w-4 h-4 text-coral-500" />
                 </div>
-                <span style={{ color: '#636B8A' }} className="text-[10px] font-semibold">{tag}</span>
+                <span className="text-[10px] font-extrabold text-coral-500 uppercase tracking-wider bg-blush-50 dark:bg-plum-950 px-2 py-0.5 rounded-md border border-blush-200 dark:border-plum-800">{tag}</span>
               </div>
 
-              {/* Title */}
-              <p style={{ color: '#F2F4FB' }} className="text-xs sm:text-sm font-bold leading-snug group-hover:text-[#E85D36] transition-colors">
+              <p className="text-xs sm:text-sm font-bold text-plum-900 dark:text-white group-hover:text-coral-500 transition-colors">
                 {title}
               </p>
 
-              {/* Arrow */}
-              <div className="flex items-center gap-1 text-[11px] sm:text-xs font-medium" style={{ color: '#636B8A' }}>
-                Open <ArrowRight className="w-3 h-3 group-hover:translate-x-0.5 transition-transform" />
+              <div className="flex items-center gap-1 text-xs font-bold text-coral-500">
+                <span>Try Tool</span>
+                <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
               </div>
             </Link>
           );
@@ -63,3 +57,4 @@ export default function DateToolsGrid() {
     </div>
   );
 }
+

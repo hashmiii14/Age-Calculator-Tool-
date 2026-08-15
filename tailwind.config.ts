@@ -1,7 +1,7 @@
 import type { Config } from "tailwindcss";
 
 const config: Config = {
-  // No darkMode class — single unified dark theme only
+  darkMode: "class",
   content: [
     "./pages/**/*.{js,ts,jsx,tsx,mdx}",
     "./components/**/*.{js,ts,jsx,tsx,mdx}",
@@ -10,39 +10,51 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        // Primary brand color — warm coral/orange
-        brand: {
-          50:  "#FFF5F0",
-          100: "#FFE8DA",
-          200: "#FFCDB4",
-          300: "#FFA882",
-          400: "#F87B4E",
-          500: "#E85D36", // primary CTA
-          600: "#D04521",
-          700: "#A83318",
-          800: "#8A2914",
-          900: "#722212",
+        // Vibrant Orange / Terracotta primary brand
+        coral: {
+          50:  "#FFF5F2",
+          100: "#FCEAE6",
+          200: "#F9CFC5",
+          300: "#F4A390",
+          400: "#EE7254",
+          500: "#E85D36", // Primary CTA button color from reference image
+          600: "#D2441D",
+          700: "#A93213",
+          800: "#892A13",
+          900: "#712716",
         },
-        // Surface / structure
+        // Warm peach & blush background accents
+        blush: {
+          50:  "#FFFAF9",
+          100: "#FFF5F4",
+          200: "#FDEAE8",
+          300: "#FBD6D2",
+          400: "#F7B2AA",
+          500: "#EE867B",
+          600: "#DB5E53",
+          700: "#B84239",
+          800: "#973932",
+          900: "#7D332D",
+        },
+        // Deep plum / warm dark theme
+        plum: {
+          50:  "#FAF7FA",
+          100: "#F3EEF4",
+          200: "#E6DCE8",
+          300: "#D1C0D4",
+          400: "#B299B6",
+          500: "#917096",
+          600: "#75547B",
+          700: "#5D4163",
+          800: "#3D2843",
+          900: "#26172C", // Rich dark card background
+          950: "#1A0E1F", // Main dark page background
+        },
         surface: {
-          50:  "#F5F6FA",
-          100: "#E8EAF2",
-          200: "#D0D4E6",
-          300: "#A8AFCC",
-          400: "#7880A8",
-          500: "#4E5680",
-          bg:  "#0E1018",   // page background
-          card: "#161A26",  // card surface
-          elevated: "#1D2133", // elevated card / popover
-          border: "#252A3D", // default border
-          muted:  "#2A3050", // muted border / dividers
-        },
-        // Text scale
-        content: {
-          primary:   "#F2F4FB",
-          secondary: "#9AA3C4",
-          tertiary:  "#636B8A",
-          inverse:   "#0E1018",
+          bg:  "#0E1018",   
+          card: "#161A26",  
+          elevated: "#1D2133",
+          border: "#252A3D", 
         },
       },
       fontFamily: {
@@ -55,12 +67,13 @@ const config: Config = {
         prose:   "72ch",
       },
       borderRadius: {
-        "4xl": "2rem",
+        "3xl": "1.75rem",
+        "4xl": "2.25rem",
       },
       boxShadow: {
-        // Subtle elevation for cards in dark backgrounds
-        card:  "0 1px 4px 0 rgba(0,0,0,0.35), 0 4px 24px -4px rgba(0,0,0,0.5)",
-        hover: "0 2px 8px 0 rgba(0,0,0,0.4), 0 8px 32px -4px rgba(0,0,0,0.55)",
+        card:  "0 4px 20px -2px rgba(0, 0, 0, 0.05), 0 2px 6px -1px rgba(0, 0, 0, 0.03)",
+        cute:  "0 10px 30px -5px rgba(232, 93, 54, 0.08), 0 4px 12px -2px rgba(0, 0, 0, 0.04)",
+        "cute-hover": "0 14px 36px -4px rgba(232, 93, 54, 0.15), 0 6px 16px -2px rgba(0, 0, 0, 0.06)",
         glow:  "0 0 0 3px rgba(232,93,54,0.25)",
       },
       keyframes: {
@@ -68,14 +81,14 @@ const config: Config = {
           "0%":   { opacity: "0", transform: "translateY(8px)" },
           "100%": { opacity: "1", transform: "translateY(0)" },
         },
-        pulse: {
-          "0%, 100%": { opacity: "1" },
-          "50%":      { opacity: "0.5" },
+        fadeIn: {
+          "0%":   { opacity: "0" },
+          "100%": { opacity: "1" },
         },
       },
       animation: {
-        "fade-up":    "fadeUp 0.25s cubic-bezier(0.16,1,0.3,1) forwards",
-        "pulse-slow": "pulse 2.5s ease-in-out infinite",
+        "fade-up": "fadeUp 0.25s cubic-bezier(0.16,1,0.3,1) forwards",
+        "fadeIn":  "fadeIn 0.3s ease-in-out forwards",
       },
     },
   },
@@ -83,3 +96,4 @@ const config: Config = {
 };
 
 export default config;
+

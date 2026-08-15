@@ -14,45 +14,44 @@ export default function Footer() {
   };
 
   return (
-    <footer style={{ backgroundColor: '#0A0D14', borderColor: '#252A3D' }} className="border-t mt-auto">
-      <div className="max-w-[1140px] mx-auto px-5 sm:px-6 lg:px-8 py-12">
+    <footer className="border-t border-blush-200 dark:border-plum-800 bg-white/60 dark:bg-plum-950/80 mt-auto transition-colors">
+      <div className="max-w-[1140px] mx-auto px-5 sm:px-6 lg:px-8 py-10 sm:py-12">
 
         {/* Top grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-8 pb-10 border-b border-[#252A3D]">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-8 pb-8 border-b border-blush-200 dark:border-plum-800">
 
           {/* Brand column */}
           <div className="lg:col-span-2 space-y-4">
-            <Link href="/" className="inline-flex items-center gap-2.5">
-              <div style={{ backgroundColor: '#E85D36' }} className="w-8 h-8 rounded-lg flex items-center justify-center text-white font-black text-sm font-sans tracking-tighter">AP</div>
-              <span style={{ color: '#F2F4FB' }} className="font-black text-xl tracking-wider font-sans uppercase">
-                AGE<span style={{ color: '#E85D36' }}>PULSE</span>
+            <Link href="/" className="inline-flex items-center gap-2">
+              <div className="w-8 h-8 rounded-xl bg-coral-500 text-white flex items-center justify-center font-black text-sm font-sans tracking-tight">AP</div>
+              <span className="font-black text-xl tracking-wide font-sans uppercase text-plum-900 dark:text-white">
+                AGE<span className="text-coral-500 font-serif lowercase italic text-xl">Pulse</span>
               </span>
             </Link>
-            <p style={{ color: '#636B8A' }} className="text-sm leading-relaxed max-w-sm">
-              Personal date intelligence platform. Exact age, birthday countdown, day milestones, and date discoveries — all calculated in your browser.
+            <p className="text-sm leading-relaxed max-w-sm text-slate-600 dark:text-slate-300 font-medium">
+              Simple, clean, precision age calculator tool. Calculate exact age in years, months, and days instantly in your browser.
             </p>
             <div className="flex flex-wrap gap-2 pt-1">
-              <div style={{ backgroundColor: '#161A26', borderColor: '#252A3D', color: '#9AA3C4' }} className="inline-flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-full border">
-                <ShieldCheck className="w-3.5 h-3.5" style={{ color: '#22c55e' }} />
-                Calculations stay in your browser
+              <div className="inline-flex items-center gap-1.5 text-xs font-bold px-3 py-1.5 rounded-full bg-blush-100 dark:bg-plum-900 text-slate-700 dark:text-slate-300 border border-blush-200 dark:border-plum-800">
+                <ShieldCheck className="w-3.5 h-3.5 text-green-500" />
+                100% Client-side & Private
               </div>
               <button
                 onClick={handleClearData}
-                style={{ backgroundColor: '#161A26', borderColor: '#252A3D', color: '#636B8A' }}
-                className="inline-flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-full border hover:text-[#E85D36] transition-colors"
+                className="inline-flex items-center gap-1.5 text-xs font-bold px-3 py-1.5 rounded-full bg-blush-100 dark:bg-plum-900 text-slate-600 dark:text-slate-400 border border-blush-200 dark:border-plum-800 hover:text-coral-500 transition-colors cursor-pointer"
               >
                 <Trash2 className="w-3 h-3" />
-                Clear Saved Date
+                Clear Saved Data
               </button>
             </div>
           </div>
 
           {/* Calculators */}
           <div>
-            <h3 style={{ color: '#F2F4FB' }} className="text-xs font-extrabold uppercase tracking-wider mb-4 font-sans">
+            <h3 className="text-xs font-extrabold uppercase tracking-wider mb-4 font-sans text-plum-900 dark:text-white">
               Calculators
             </h3>
-            <ul className="space-y-2.5 text-sm font-medium" style={{ color: '#636B8A' }}>
+            <ul className="space-y-2.5 text-sm font-medium text-slate-600 dark:text-slate-400">
               {[
                 ['/age-calculator',      'Exact Age Calculator'],
                 ['/birthday-countdown',  'Birthday Countdown'],
@@ -60,7 +59,7 @@ export default function Footer() {
                 ['/birth-date',          'Birth Date Profile'],
               ].map(([href, label]) => (
                 <li key={href}>
-                  <Link href={href} className="hover:text-[#E85D36] transition-colors">{label}</Link>
+                  <Link href={href} className="hover:text-coral-500 transition-colors">{label}</Link>
                 </li>
               ))}
             </ul>
@@ -68,10 +67,10 @@ export default function Footer() {
 
           {/* More Tools */}
           <div>
-            <h3 style={{ color: '#F2F4FB' }} className="text-xs font-extrabold uppercase tracking-wider mb-4 font-sans">
+            <h3 className="text-xs font-extrabold uppercase tracking-wider mb-4 font-sans text-plum-900 dark:text-white">
               More Tools
             </h3>
-            <ul className="space-y-2.5 text-sm font-medium" style={{ color: '#636B8A' }}>
+            <ul className="space-y-2.5 text-sm font-medium text-slate-600 dark:text-slate-400">
               {[
                 ['/date-difference',  'Date Difference'],
                 ['/age-comparison',   'Age Comparison'],
@@ -80,7 +79,7 @@ export default function Footer() {
                 ['/age-milestones',   'Age Milestones'],
               ].map(([href, label]) => (
                 <li key={href}>
-                  <Link href={href} className="hover:text-[#E85D36] transition-colors">{label}</Link>
+                  <Link href={href} className="hover:text-coral-500 transition-colors">{label}</Link>
                 </li>
               ))}
             </ul>
@@ -88,19 +87,19 @@ export default function Footer() {
 
           {/* Legal */}
           <div>
-            <h3 style={{ color: '#F2F4FB' }} className="text-xs font-extrabold uppercase tracking-wider mb-4 font-sans">
-              Legal
+            <h3 className="text-xs font-extrabold uppercase tracking-wider mb-4 font-sans text-plum-900 dark:text-white">
+              Legal & About
             </h3>
-            <ul className="space-y-2.5 text-sm font-medium" style={{ color: '#636B8A' }}>
+            <ul className="space-y-2.5 text-sm font-medium text-slate-600 dark:text-slate-400">
               {[
                 ['/about',          'About AgePulse'],
                 ['/privacy-policy', 'Privacy Policy'],
                 ['/terms',          'Terms of Service'],
                 ['/disclaimer',     'Disclaimer'],
-                ['/contact',        'Contact'],
+                ['/contact',        'Contact Us'],
               ].map(([href, label]) => (
                 <li key={href}>
-                  <Link href={href} className="hover:text-[#E85D36] transition-colors">{label}</Link>
+                  <Link href={href} className="hover:text-coral-500 transition-colors">{label}</Link>
                 </li>
               ))}
             </ul>
@@ -108,16 +107,14 @@ export default function Footer() {
         </div>
 
         {/* Disclaimer + copyright */}
-        <div className="pt-8 space-y-4">
-          <p style={{ color: '#636B8A', backgroundColor: '#161A26', borderColor: '#252A3D' }} className="text-xs leading-relaxed rounded-xl border px-4 py-3">
-            <strong style={{ color: '#9AA3C4' }}>Astrology Disclaimer:</strong> Zodiac profiles on AgePulse are provided strictly for general interest and entertainment. They do not constitute psychological, medical, financial, or legal advice.
-          </p>
-          <div className="flex flex-col sm:flex-row items-center justify-between gap-2 text-xs" style={{ color: '#636B8A' }}>
+        <div className="pt-6 space-y-3">
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-2 text-xs text-slate-500 dark:text-slate-400">
             <span>© {year} AgePulse. All rights reserved.</span>
-            <span>Precise calendar arithmetic · Client-side privacy · Free forever</span>
+            <span>Precise calendar arithmetic · Client-side privacy · Free & simple</span>
           </div>
         </div>
       </div>
     </footer>
   );
 }
+

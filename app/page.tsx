@@ -1,163 +1,106 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import MinimalHero from '../components/home/MinimalHero';
-import PersonalizedHero from '../components/personalized/PersonalizedHero';
-import SingleMilestoneCard from '../components/personalized/SingleMilestoneCard';
-import PersonalizedDateCard from '../components/personalized/PersonalizedDateCard';
-import DateDiscoveriesCard from '../components/personalized/DateDiscoveriesCard';
-import CompactZodiacCard from '../components/personalized/CompactZodiacCard';
-import ContextualExplore from '../components/personalized/ContextualExplore';
-import BirthdayCountdown from '../components/age-calculator/BirthdayCountdown';
-import FAQAccordion from '../components/content/FAQAccordion';
+import AgeCalculatorForm from '../components/age-calculator/AgeCalculatorForm';
+import AgeResultDashboard from '../components/age-calculator/AgeResultDashboard';
 import DateToolsGrid from '../components/tools/DateToolsGrid';
+import FAQAccordion from '../components/content/FAQAccordion';
 import AboutUsSection from '../components/content/AboutUsSection';
 import PrivacyPolicySection from '../components/content/PrivacyPolicySection';
 import ContactSection from '../components/content/ContactSection';
-import { createPersonalProfile } from '../lib/age/profileEngine';
-import { PersonalProfile } from '../lib/age/types';
-
-/* ---- AdSense slot placeholder ---- */
-function AdSlot({ className = '' }: { className?: string }) {
-  return (
-    <div
-      className={`ad-slot rounded-xl flex items-center justify-center ${className}`}
-      style={{ backgroundColor: '#161A26', border: '1px dashed #252A3D', minHeight: 90 }}
-      aria-hidden="true"
-    >
-      <span style={{ color: '#636B8A' }} className="text-xs font-medium select-none">
-        Advertisement
-      </span>
-    </div>
-  );
-}
+import { calculateAge } from '../lib/age/ageEngine';
+import { getTodayISODate } from '../lib/age/dateUtils';
+import { AgeResult } from '../lib/age/types';
 
 export default function HomePage() {
-  const [profile, setProfile] = useState<PersonalProfile | null>(null);
-  const [error, setError] = useState('');
+  const [result, setResult] = useState<AgeResult | null>(null);
+  const [initialDOB, setInitialDOB] = useState<string>('');
 
   useEffect(() => {
-    const saved = localStorage.getItem('agepulse_dob');
-    if (saved) {
+    const savedDOB = localStorage.getItem('agepulse_dob');
+    if (savedDOB) {
       try {
-        setProfile(createPersonalProfile(saved));
+        setInitialDOB(savedDOB);
+        const res = calculateAge(savedDOB, getTodayISODate());
+        setResult(res);
       } catch {
         localStorage.removeItem('agepulse_dob');
       }
     }
   }, []);
 
-  const handleCalculate = (dob: string) => {
+  const handleCalculate = (dob: string, targetDate: string) => {
     try {
-      setError('');
-      const p = createPersonalProfile(dob);
-      setProfile(p);
+      const res = calculateAge(dob, targetDate);
+      setResult(res);
       localStorage.setItem('agepulse_dob', dob);
-    } catch {
-      setError('Could not calculate age. Please check your date and try again.');
+
+      // Smooth scroll to result on mobile/tablet
+      setTimeout(() => {
+        const el = document.getElementById('result-dashboard');
+        if (el) {
+          el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      }, 100);
+    } catch (err) {
+      console.error('Calculation error:', err);
     }
   };
 
-  const handleClearDate = () => {
+  const handleReset = () => {
     localStorage.removeItem('agepulse_dob');
-    setProfile(null);
-    setError('');
+    setResult(null);
+    setInitialDOB('');
   };
 
   return (
-    <div className="max-w-[1140px] mx-auto px-5 sm:px-6 lg:px-8 py-6 sm:py-10 space-y-6">
+    <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-10 space-y-8 animate-fade-up">
+      {/* Hero Intro Header */}
+      <div className="text-center space-y-2 max-w-2xl mx-auto">
+        <span className="text-[11px] font-extrabold uppercase tracking-widest px-3 py-1 rounded-full bg-blush-100 dark:bg-plum-900 text-coral-500 border border-blush-200 dark:border-plum-800">
+          Free · 100% Private · Accurate
+        </span>
+        <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black font-serif text-plum-900 dark:text-white tracking-tight leading-tight">
+          Exact <span className="text-coral-500 italic">Age Calculator</span>
+        </h1>
+        <p className="text-xs sm:text-base text-slate-600 dark:text-slate-300 font-medium leading-relaxed">
+          Find your exact age in years, months, and days. Calculate your age on any past or future date instantly.
+        </p>
+      </div>
 
-      {/* ━━━━━ STATE A — DISCOVERY ━━━━━ */}
-      {!profile ? (
-        <div className="space-y-12 animate-fade-up">
+      {/* CORE PRODUCT: Age Calculator Card */}
+      <section aria-label="Age Calculator">
+        <AgeCalculatorForm
+          onCalculate={handleCalculate}
+          onReset={handleReset}
+          initialDOB={initialDOB}
+        />
+      </section>
 
-          {/* Dominant Hero */}
-          <MinimalHero onCalculate={handleCalculate} />
-          {error && (
-            <p style={{ color: '#f87171', backgroundColor: 'rgba(239,68,68,0.08)', borderColor: 'rgba(239,68,68,0.2)' }}
-              className="text-sm rounded-xl border px-4 py-3 text-center">{error}</p>
-          )}
-
-          {/* AdSense — after hero */}
-          <AdSlot />
-
-          {/* Tools Grid */}
-          <DateToolsGrid />
-
-          {/* AdSense — mid-content */}
-          <AdSlot />
-
-          {/* About Us Section */}
-          <AboutUsSection />
-
-          {/* Privacy Policy Section */}
-          <PrivacyPolicySection />
-
-          {/* Contact Section (gmail mdhashmi955@gmail.com) */}
-          <ContactSection />
-
-          {/* FAQ */}
-          <FAQAccordion />
-
-          {/* AdSense — before footer */}
-          <AdSlot />
-        </div>
-
-      ) : (
-        /* ━━━━━ STATE B — PERSONALIZED ━━━━━ */
-        <div className="space-y-6 animate-fade-up">
-
-          {/* 1. Personalized Hero */}
-          <PersonalizedHero profile={profile} onClearDate={handleClearDate} />
-
-          {/* 2. Next Milestone */}
-          <SingleMilestoneCard milestone={profile.nextSingleMilestone} />
-
-          {/* 3. Birthday Countdown */}
-          <BirthdayCountdown
-            nextBirthday={profile.nextBirthday}
-            nextFiveBirthdays={profile.nextFiveBirthdays}
-          />
-
-          {/* AdSense — between content sections */}
-          <AdSlot />
-
-          {/* 4. Your Date */}
-          <PersonalizedDateCard profile={profile} />
-
-          {/* 5. Date Discoveries */}
-          <DateDiscoveriesCard discoveries={profile.dateDiscoveries} />
-
-          {/* AdSense — mid page */}
-          <AdSlot />
-
-          {/* 6. Zodiac */}
-          <CompactZodiacCard zodiac={profile.zodiac} />
-
-          {/* 7. Contextual Tools */}
-          <ContextualExplore profile={profile} />
-
-          {/* AdSense — before About/Privacy/Contact */}
-          <AdSlot />
-
-          {/* About Us Section */}
-          <AboutUsSection />
-
-          {/* Privacy Policy Section */}
-          <PrivacyPolicySection />
-
-          {/* Contact Section (gmail mdhashmi955@gmail.com) */}
-          <ContactSection />
-
-          {/* FAQ */}
-          <div className="pt-4">
-            <FAQAccordion />
-          </div>
-
-          {/* AdSense — bottom */}
-          <AdSlot />
-        </div>
+      {/* Revealed Calculation Result */}
+      {result && (
+        <section aria-label="Calculation Result">
+          <AgeResultDashboard result={result} />
+        </section>
       )}
+
+      {/* Secondary Tools */}
+      <section aria-label="Related Date Tools">
+        <DateToolsGrid />
+      </section>
+
+      {/* Concise FAQ Accordion */}
+      <section aria-label="Frequently Asked Questions">
+        <FAQAccordion />
+      </section>
+
+      {/* SEO & Informational Content */}
+      <div className="space-y-8 pt-4 border-t border-blush-200 dark:border-plum-800">
+        <AboutUsSection />
+        <PrivacyPolicySection />
+        <ContactSection />
+      </div>
     </div>
   );
 }
+

@@ -1,51 +1,55 @@
 'use client';
 
 import { useState } from 'react';
-import { ChevronDown } from 'lucide-react';
+import { ChevronDown, HelpCircle } from 'lucide-react';
 
 const FAQS = [
-  { q: 'How many days have I lived?',              a: 'AgePulse counts your exact total days by adding completed calendar years (accounting for 366-day leap years) plus the remaining days since your last birthday to today.' },
   { q: 'How does exact age calculation work?',      a: 'AgePulse uses proper calendar arithmetic — completed years, then remaining months, then remaining days — correctly handling leap years, February 29 birthdays, and different month lengths.' },
-  { q: 'What is my 10,000th day alive?',           a: 'Your 10,000th day falls around age 27 years and 4 months. AgePulse automatically calculates your 1,000, 5,000, 10,000, 15,000, 20,000, 25,000, and 30,000 day milestone dates and countdowns.' },
-  { q: 'Can I calculate my age on a future date?', a: 'Yes. Enter any historical or future date in the Age Calculator to see your exact age at that moment.' },
-  { q: 'Is my birth date private?',                a: 'Yes. All calculations run entirely inside your browser. Your birth date is never transmitted to any server or stored externally.' },
-  { q: 'How are upcoming birthdays calculated?',   a: 'AgePulse shows the exact date, day of the week, and turning age for your next 5 birthdays. February 29 birthdays fall on March 1 in non-leap years.' },
-  { q: 'Can I compare two people\'s ages?',        a: 'Yes — use the Age Comparison tool to find the exact age difference in years, months, days, and total days between any two birth dates.' },
+  { q: 'How many total days have I lived?',        a: 'AgePulse calculates your total days alive by counting every calendar year (including 366-day leap years) plus the days elapsed since your last birthday.' },
+  { q: 'Can I calculate my age on a future date?', a: 'Yes! Select any target date in "Today\'s Date / Age On" to calculate your age on any past or future day.' },
+  { q: 'Is my date of birth private?',             a: 'Yes. 100% of calculations run inside your web browser. Your birth date is never sent to a server or stored online.' },
+  { q: 'How are February 29 birthdays handled?',  a: 'For leap year birthdays (Feb 29), AgePulse calculates your age on Feb 29 in leap years and March 1 in non-leap years.' },
+  { q: 'What is my 10,000th day milestone?',       a: 'Your 10,000th day alive occurs around age 27 years and 4 months. AgePulse tracks lifetime day milestones automatically.' },
 ];
 
 export default function FAQAccordion() {
-  const [open, setOpen] = useState<number | null>(null);
+  const [open, setOpen] = useState<number | null>(0);
 
   return (
-    <section className="w-full space-y-5">
-      <div>
-        <h2 style={{ color: '#F2F4FB' }} className="text-2xl font-extrabold font-serif">Frequently Asked</h2>
-        <p style={{ color: '#636B8A' }} className="text-sm mt-1">About age calculations, milestones, and date tools.</p>
+    <section className="w-full space-y-4 pt-4">
+      <div className="flex items-center space-x-2">
+        <HelpCircle className="w-5 h-5 text-coral-500" />
+        <h2 className="text-xl sm:text-2xl font-extrabold font-serif text-plum-900 dark:text-white">
+          Frequently Asked Questions
+        </h2>
       </div>
 
-      <div style={{ borderTop: '1px solid #1D2133' }}>
+      <div className="space-y-3">
         {FAQS.map(({ q, a }, idx) => {
           const isOpen = open === idx;
           return (
-            <div key={idx} style={{ borderBottom: '1px solid #1D2133' }}>
+            <div
+              key={idx}
+              className="rounded-2xl bg-white dark:bg-plum-900 border border-blush-200 dark:border-plum-800 transition-all overflow-hidden"
+            >
               <button
                 type="button"
                 onClick={() => setOpen(isOpen ? null : idx)}
                 aria-expanded={isOpen}
-                className="w-full py-4 text-left flex items-center justify-between gap-4 focus-visible:outline-none"
-                style={{ color: isOpen ? '#F2F4FB' : '#9AA3C4' }}
+                className="w-full px-5 py-4 text-left flex items-center justify-between gap-4 focus:outline-none cursor-pointer"
               >
-                <span className="text-sm font-semibold">{q}</span>
+                <span className="text-sm font-extrabold text-plum-900 dark:text-white font-sans">
+                  {q}
+                </span>
                 <ChevronDown
-                  className="w-4 h-4 shrink-0 transition-transform duration-200"
-                  style={{
-                    transform: isOpen ? 'rotate(180deg)' : 'rotate(0deg)',
-                    color: isOpen ? '#E85D36' : '#636B8A',
-                  }}
+                  className={`w-4 h-4 shrink-0 transition-transform duration-200 text-coral-500 ${
+                    isOpen ? 'rotate-180' : ''
+                  }`}
                 />
               </button>
+
               {isOpen && (
-                <div style={{ color: '#9AA3C4' }} className="text-sm leading-relaxed pb-5 animate-fade-up">
+                <div className="px-5 pb-4 text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed border-t border-blush-100 dark:border-plum-800/60 pt-3 animate-fade-up">
                   {a}
                 </div>
               )}
@@ -56,3 +60,4 @@ export default function FAQAccordion() {
     </section>
   );
 }
+

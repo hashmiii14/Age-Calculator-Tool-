@@ -23,11 +23,12 @@ export default function CustomDatePicker({
   id,
   value,
   onChange,
-  placeholder = 'Select date of birth',
+  placeholder = 'DD - MM - YYYY',
   error = false,
 }: CustomDatePickerProps) {
   const [isOpen, setIsOpen] = useState(false);
   const popoverRef = useRef<HTMLDivElement>(null);
+  const dateInputRef = useRef<HTMLInputElement>(null);
 
   const parsedValue = parseISODate(value);
   const [viewYear, setViewYear] = useState<number>(
@@ -95,7 +96,23 @@ export default function CustomDatePicker({
 
   return (
     <div className="relative w-full" ref={popoverRef}>
-      {/* Input Field */}
+      {/* Hidden Native Date Picker for Quick Mobile OS Keyboard Trigger */}
+      <input
+        ref={dateInputRef}
+        type="date"
+        value={value}
+        onChange={(e) => {
+          if (e.target.value) {
+            onChange(e.target.value);
+            setIsOpen(false);
+          }
+        }}
+        className="sr-only"
+        aria-hidden="true"
+        tabIndex={-1}
+      />
+
+      {/* Input Field Surface */}
       <div className="relative flex items-center">
         <input
           id={id}
@@ -104,21 +121,17 @@ export default function CustomDatePicker({
           onClick={() => setIsOpen(!isOpen)}
           value={displayString}
           placeholder={placeholder}
-          className="w-full px-4 py-3.5 sm:px-5 sm:py-4 rounded-xl text-base font-medium cursor-pointer transition-all focus:outline-none"
-          style={{
-            backgroundColor: '#1D2133',
-            color: '#F2F4FB',
-            borderColor: error ? '#ef4444' : '#252A3D',
-            borderWidth: '1px',
-            borderStyle: 'solid',
-          }}
+          className={`w-full px-4 py-3.5 sm:px-5 sm:py-4 rounded-2xl text-base font-medium cursor-pointer transition-all focus:outline-none bg-white dark:bg-plum-900 text-plum-900 dark:text-white border-2 placeholder-slate-400 ${
+            error
+              ? 'border-coral-500 ring-2 ring-coral-500/20'
+              : 'border-blush-200 dark:border-plum-800 hover:border-coral-300 dark:hover:border-plum-700'
+          }`}
         />
 
         <button
           type="button"
           onClick={() => setIsOpen(!isOpen)}
-          className="absolute right-3.5 sm:right-4 p-1.5 rounded-lg transition-colors focus:outline-none"
-          style={{ color: '#E85D36' }}
+          className="absolute right-3.5 sm:right-4 p-2 rounded-xl text-coral-500 hover:bg-blush-100 dark:hover:bg-plum-800 transition-colors focus:outline-none"
           aria-label="Open calendar picker"
         >
           <CalendarIcon className="w-5 h-5" />
@@ -127,22 +140,13 @@ export default function CustomDatePicker({
 
       {/* Mobile-optimized Calendar Popover */}
       {isOpen && (
-        <div
-          className="absolute left-1/2 -translate-x-1/2 sm:left-auto sm:right-0 sm:translate-x-0 top-full mt-2 z-50 w-[calc(100vw-2rem)] max-w-[340px] sm:w-[340px] rounded-2xl p-4 sm:p-5 shadow-2xl animate-fade-up"
-          style={{
-            backgroundColor: '#161A26',
-            borderColor: '#252A3D',
-            borderWidth: '1px',
-            borderStyle: 'solid',
-          }}
-        >
+        <div className="absolute left-1/2 -translate-x-1/2 sm:left-auto sm:right-0 sm:translate-x-0 top-full mt-2 z-50 w-[calc(100vw-2rem)] max-w-[340px] sm:w-[340px] rounded-3xl p-4 sm:p-5 shadow-2xl bg-white dark:bg-plum-900 border-2 border-blush-200 dark:border-plum-800 animate-fade-up">
           {/* Header Controls: Month & Year Pickers */}
-          <div className="flex items-center justify-between gap-1.5 mb-3 pb-3 border-b" style={{ borderColor: '#252A3D' }}>
+          <div className="flex items-center justify-between gap-1.5 mb-3 pb-3 border-b border-blush-200 dark:border-plum-800">
             <button
               type="button"
               onClick={handlePrevMonth}
-              className="p-1.5 rounded-lg transition-colors"
-              style={{ backgroundColor: '#1D2133', color: '#9AA3C4' }}
+              className="p-1.5 rounded-xl bg-blush-100 dark:bg-plum-800 text-slate-700 dark:text-slate-200 hover:bg-coral-500 hover:text-white transition-colors"
               title="Previous Month"
             >
               <ChevronLeft className="w-4 h-4" />
@@ -153,8 +157,7 @@ export default function CustomDatePicker({
               <select
                 value={viewMonth}
                 onChange={(e) => setViewMonth(Number(e.target.value))}
-                className="px-2 py-1 rounded-lg text-xs font-bold focus:outline-none cursor-pointer"
-                style={{ backgroundColor: '#1D2133', color: '#F2F4FB', borderColor: '#252A3D', borderWidth: '1px' }}
+                className="px-2 py-1 rounded-xl text-xs font-bold bg-blush-50 dark:bg-plum-950 text-plum-900 dark:text-white border border-blush-200 dark:border-plum-800 focus:outline-none cursor-pointer"
               >
                 {MONTH_NAMES.map((name, idx) => (
                   <option key={name} value={idx + 1}>
@@ -167,8 +170,7 @@ export default function CustomDatePicker({
               <select
                 value={viewYear}
                 onChange={(e) => setViewYear(Number(e.target.value))}
-                className="px-2 py-1 rounded-lg text-xs font-bold focus:outline-none cursor-pointer"
-                style={{ backgroundColor: '#1D2133', color: '#F2F4FB', borderColor: '#252A3D', borderWidth: '1px' }}
+                className="px-2 py-1 rounded-xl text-xs font-bold bg-blush-50 dark:bg-plum-950 text-plum-900 dark:text-white border border-blush-200 dark:border-plum-800 focus:outline-none cursor-pointer"
               >
                 {yearOptions.map((y) => (
                   <option key={y} value={y}>
@@ -181,8 +183,7 @@ export default function CustomDatePicker({
             <button
               type="button"
               onClick={handleNextMonth}
-              className="p-1.5 rounded-lg transition-colors"
-              style={{ backgroundColor: '#1D2133', color: '#9AA3C4' }}
+              className="p-1.5 rounded-xl bg-blush-100 dark:bg-plum-800 text-slate-700 dark:text-slate-200 hover:bg-coral-500 hover:text-white transition-colors"
               title="Next Month"
             >
               <ChevronRight className="w-4 h-4" />
@@ -191,7 +192,7 @@ export default function CustomDatePicker({
 
           {/* Quick Year Jump */}
           <div className="mb-3">
-            <span className="text-[10px] font-bold uppercase tracking-wider block mb-1" style={{ color: '#636B8A' }}>
+            <span className="text-[10px] font-bold uppercase tracking-wider block mb-1 text-slate-400">
               Quick Year Jump
             </span>
             <div className="flex items-center gap-1 overflow-x-auto pb-1.5 custom-scrollbar">
@@ -200,11 +201,11 @@ export default function CustomDatePicker({
                   key={y}
                   type="button"
                   onClick={() => setViewYear(y)}
-                  className="px-2 py-1 rounded-md text-[11px] font-semibold whitespace-nowrap transition-colors"
-                  style={{
-                    backgroundColor: viewYear === y ? '#E85D36' : '#1D2133',
-                    color: viewYear === y ? '#fff' : '#9AA3C4',
-                  }}
+                  className={`px-2 py-1 rounded-lg text-[11px] font-bold whitespace-nowrap transition-colors ${
+                    viewYear === y
+                      ? 'bg-coral-500 text-white'
+                      : 'bg-blush-100 dark:bg-plum-800 text-slate-700 dark:text-slate-300 hover:bg-blush-200'
+                  }`}
                 >
                   {y}
                 </button>
@@ -215,7 +216,7 @@ export default function CustomDatePicker({
           {/* Weekday Headers */}
           <div className="grid grid-cols-7 gap-1 text-center mb-1">
             {['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'].map((d) => (
-              <span key={d} className="text-[10px] font-extrabold uppercase" style={{ color: '#636B8A' }}>
+              <span key={d} className="text-[10px] font-extrabold uppercase text-slate-400">
                 {d}
               </span>
             ))}
@@ -248,20 +249,13 @@ export default function CustomDatePicker({
                   key={day}
                   type="button"
                   onClick={() => handleDaySelect(day)}
-                  className="h-8 w-full max-w-[32px] mx-auto rounded-lg text-xs font-semibold flex items-center justify-center transition-all focus:outline-none"
-                  style={{
-                    backgroundColor: isSelected
-                      ? '#E85D36'
+                  className={`h-8 w-full max-w-[32px] mx-auto rounded-xl text-xs font-bold flex items-center justify-center transition-all ${
+                    isSelected
+                      ? 'bg-coral-500 text-white shadow-cute'
                       : isToday
-                      ? 'rgba(232,93,54,0.15)'
-                      : 'transparent',
-                    color: isSelected
-                      ? '#ffffff'
-                      : isToday
-                      ? '#E85D36'
-                      : '#F2F4FB',
-                    border: isToday && !isSelected ? '1px solid #E85D36' : 'none',
-                  }}
+                      ? 'bg-blush-100 dark:bg-plum-800 text-coral-500 border border-coral-500'
+                      : 'text-plum-900 dark:text-white hover:bg-blush-100 dark:hover:bg-plum-800'
+                  }`}
                 >
                   {day}
                 </button>
@@ -269,8 +263,8 @@ export default function CustomDatePicker({
             })}
           </div>
 
-          {/* Footer Today Button */}
-          <div className="mt-3 pt-2.5 border-t flex items-center justify-between" style={{ borderColor: '#252A3D' }}>
+          {/* Footer Actions */}
+          <div className="mt-3 pt-2.5 border-t border-blush-200 dark:border-plum-800 flex items-center justify-between">
             <button
               type="button"
               onClick={() => {
@@ -278,8 +272,7 @@ export default function CustomDatePicker({
                 onChange(today);
                 setIsOpen(false);
               }}
-              className="text-xs font-bold flex items-center space-x-1"
-              style={{ color: '#E85D36' }}
+              className="text-xs font-extrabold text-coral-500 hover:underline flex items-center space-x-1"
             >
               <Clock className="w-3.5 h-3.5" />
               <span>Select Today ({getTodayISODate()})</span>
@@ -288,8 +281,7 @@ export default function CustomDatePicker({
             <button
               type="button"
               onClick={() => setIsOpen(false)}
-              className="p-1 rounded-md"
-              style={{ color: '#636B8A' }}
+              className="p-1.5 rounded-xl text-slate-400 hover:text-plum-900 dark:hover:text-white"
             >
               <X className="w-4 h-4" />
             </button>
@@ -299,3 +291,4 @@ export default function CustomDatePicker({
     </div>
   );
 }
+

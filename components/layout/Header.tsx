@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Clock, Heart, Compass, Trophy, Grid, Info, Users, Menu, X } from 'lucide-react';
+import { Clock, Heart, Compass, Trophy, Users, Grid, Info, Menu, X } from 'lucide-react';
 
 export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -20,30 +20,24 @@ export default function Header() {
   ];
 
   return (
-    <header
-      style={{ backgroundColor: 'rgba(14,16,24,0.95)', borderColor: '#252A3D' }}
-      className="sticky top-0 z-50 w-full border-b backdrop-blur-lg"
-    >
+    <header className="sticky top-0 z-50 w-full border-b border-blush-200/80 dark:border-plum-800 bg-white/90 dark:bg-plum-950/95 backdrop-blur-md transition-colors">
       <div className="max-w-[1140px] mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-14 sm:h-16">
 
-          {/* Brand Logo - ALWAYS visible on mobile, tablet & desktop */}
+          {/* Brand Logo */}
           <Link
             href="/"
-            className="flex items-center gap-2 shrink-0 rounded-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#E85D36]"
+            className="flex items-center gap-2 shrink-0 rounded-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-coral-500"
           >
-            <div
-              style={{ backgroundColor: '#E85D36' }}
-              className="w-7 h-7 sm:w-8 sm:h-8 rounded-lg flex items-center justify-center text-white font-black text-xs sm:text-sm font-sans shadow-md select-none tracking-tighter shrink-0"
-            >
+            <div className="w-8 h-8 rounded-xl bg-coral-500 text-white flex items-center justify-center font-black text-sm font-sans shadow-cute select-none tracking-tight shrink-0">
               AP
             </div>
-            <span style={{ color: '#F2F4FB' }} className="font-black text-base sm:text-lg lg:text-xl tracking-wider font-sans uppercase whitespace-nowrap">
-              AGE<span style={{ color: '#E85D36' }}>PULSE</span>
+            <span className="font-black text-lg sm:text-xl tracking-wide font-sans uppercase whitespace-nowrap text-plum-900 dark:text-white">
+              AGE<span className="text-coral-500 font-serif lowercase italic text-xl">Pulse</span>
             </span>
           </Link>
 
-          {/* Desktop & Tablet Nav */}
+          {/* Desktop Nav */}
           <nav className="hidden lg:flex items-center gap-1" aria-label="Main navigation">
             {navLinks.map(({ href, label, icon: Icon }) => {
               const active = pathname === href;
@@ -51,11 +45,11 @@ export default function Header() {
                 <Link
                   key={href}
                   href={href}
-                  style={active
-                    ? { backgroundColor: '#E85D36', color: '#fff' }
-                    : { color: '#9AA3C4' }
-                  }
-                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition-colors hover:text-white hover:bg-[#1D2133]"
+                  className={`flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-bold transition-all ${
+                    active
+                      ? 'bg-coral-500 text-white shadow-cute'
+                      : 'text-slate-600 dark:text-slate-300 hover:text-coral-600 dark:hover:text-white hover:bg-blush-100 dark:hover:bg-plum-900'
+                  }`}
                 >
                   <Icon className="w-3.5 h-3.5 shrink-0" />
                   {label}
@@ -64,20 +58,18 @@ export default function Header() {
             })}
           </nav>
 
-          {/* Right Controls — CTA + Mobile Toggle */}
+          {/* Right Action + Mobile Toggle */}
           <div className="flex items-center gap-2 sm:gap-3 shrink-0">
             <Link
               href="/"
-              style={{ backgroundColor: '#E85D36', color: '#fff' }}
-              className="hidden sm:inline-flex items-center gap-1.5 px-3.5 py-1.5 sm:px-4 sm:py-2 rounded-lg text-xs font-extrabold shadow hover:bg-[#D04521] transition-colors whitespace-nowrap"
+              className="hidden sm:inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-coral-500 hover:bg-coral-600 text-white text-xs font-extrabold shadow-cute hover:shadow-cute-hover transition-all whitespace-nowrap"
             >
-              Discover My Age
+              Calculate Age
             </Link>
 
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              style={{ backgroundColor: '#161A26', borderColor: '#252A3D', color: '#9AA3C4' }}
-              className="lg:hidden p-2 rounded-lg border hover:bg-[#1D2133] hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#E85D36] shrink-0"
+              className="lg:hidden p-2 rounded-xl border border-blush-200 dark:border-plum-800 bg-blush-50 dark:bg-plum-900 text-slate-700 dark:text-slate-300 hover:text-coral-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-coral-500 shrink-0"
               aria-label="Toggle menu"
             >
               {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
@@ -86,9 +78,9 @@ export default function Header() {
         </div>
       </div>
 
-      {/* Mobile & Tablet Drawer */}
+      {/* Mobile Drawer */}
       {mobileMenuOpen && (
-        <div style={{ backgroundColor: '#0E1018', borderColor: '#252A3D' }} className="lg:hidden border-b animate-fade-up">
+        <div className="lg:hidden border-b border-blush-200 dark:border-plum-800 bg-white/95 dark:bg-plum-950/95 animate-fade-up">
           <div className="max-w-[1140px] mx-auto px-4 py-4 grid grid-cols-2 gap-2 sm:gap-3">
             {navLinks.map(({ href, label, icon: Icon }) => {
               const active = pathname === href;
@@ -97,11 +89,11 @@ export default function Header() {
                   key={href}
                   href={href}
                   onClick={() => setMobileMenuOpen(false)}
-                  style={active
-                    ? { backgroundColor: '#E85D36', color: '#fff', borderColor: '#E85D36' }
-                    : { backgroundColor: '#161A26', color: '#9AA3C4', borderColor: '#252A3D' }
-                  }
-                  className="flex items-center gap-2.5 px-3.5 py-3 rounded-xl text-xs sm:text-sm font-bold border transition-all"
+                  className={`flex items-center gap-2.5 px-3.5 py-3 rounded-2xl text-xs sm:text-sm font-bold border transition-all ${
+                    active
+                      ? 'bg-coral-500 text-white border-coral-500 shadow-cute'
+                      : 'bg-blush-50 dark:bg-plum-900 text-slate-700 dark:text-slate-300 border-blush-200 dark:border-plum-800 hover:border-coral-300'
+                  }`}
                 >
                   <Icon className="w-4 h-4 shrink-0" />
                   <span className="truncate">{label}</span>
@@ -114,3 +106,4 @@ export default function Header() {
     </header>
   );
 }
+

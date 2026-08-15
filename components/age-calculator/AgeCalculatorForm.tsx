@@ -26,7 +26,7 @@ export default function AgeCalculatorForm({
     initialTargetDate || getTodayISODate()
   );
   const [errors, setErrors] = useState<ValidationErrors>({});
-  const [hasCalculated, setHasCalculated] = useState(false);
+  const [, setHasCalculated] = useState(false);
 
   useEffect(() => {
     if (!targetDate) {
@@ -36,6 +36,12 @@ export default function AgeCalculatorForm({
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+
+    if (!dob) {
+      setErrors({ dob: 'Please enter your date of birth.' });
+      return;
+    }
+
     const validationErrors = validateAgeInputs(dob, targetDate);
 
     if (validationErrors.dob || validationErrors.targetDate) {
@@ -64,27 +70,26 @@ export default function AgeCalculatorForm({
   };
 
   return (
-    <div id="calculator-form" className="w-full bg-gradient-to-b from-[#FFF5F8] to-[#FFEBF0] dark:from-[#2A182E] dark:to-[#1E1122] rounded-4xl p-6 sm:p-10 border-2 border-blush-200/80 dark:border-plum-800 shadow-cute transition-colors relative overflow-hidden">
-      {/* Top Form Header */}
-      <div className="flex items-center justify-between border-b border-blush-200/80 dark:border-plum-800 pb-5 mb-6">
+    <div id="calculator-form" className="w-full bg-white dark:bg-plum-900 rounded-3xl sm:rounded-4xl p-6 sm:p-8 border-2 border-blush-200/80 dark:border-plum-800 shadow-cute transition-all relative overflow-hidden">
+      {/* Top Header */}
+      <div className="flex items-center justify-between border-b border-blush-200/80 dark:border-plum-800 pb-4 mb-6">
         <div>
-          <h2 className="text-3xl sm:text-4xl font-extrabold font-serif tracking-tight text-plum-900 dark:text-white">
+          <h2 className="text-2xl sm:text-3xl font-extrabold font-serif tracking-tight text-plum-900 dark:text-white">
             Age <span className="text-coral-500 font-serif">Calculator</span>
           </h2>
-          <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-1">
-            Select your date of birth and target calculation date below
+          <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-0.5">
+            Calculate your exact age in years, months, and days
           </p>
         </div>
 
-        {/* Emblem */}
-        <div className="w-12 h-12 rounded-2xl bg-coral-500 text-white flex items-center justify-center shadow-md shadow-coral-500/20">
-          <Sparkles className="w-6 h-6 animate-sparkle" />
+        <div className="w-10 h-10 rounded-2xl bg-coral-500 text-white flex items-center justify-center shadow-md shadow-coral-500/20 shrink-0">
+          <Sparkles className="w-5 h-5" />
         </div>
       </div>
 
       <form onSubmit={handleSubmit} noValidate className="space-y-6">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {/* Date of Birth Input */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-5 sm:gap-6">
+          {/* Date of Birth Field */}
           <div className="space-y-2">
             <label
               htmlFor="dob-picker"
@@ -120,7 +125,7 @@ export default function AgeCalculatorForm({
             />
           </div>
 
-          {/* Calculate Age On Input */}
+          {/* Today's Date / Age On Field */}
           <div className="space-y-2">
             <label
               htmlFor="target-picker"
@@ -156,16 +161,16 @@ export default function AgeCalculatorForm({
             )}
 
             <p className="text-xs text-slate-500 dark:text-slate-400 mt-2">
-              Defaults to today. Pick any date to calculate your past or future age.
+              Defaults to today. Choose any date to calculate age on that day.
             </p>
           </div>
         </div>
 
-        {/* Action Buttons (Terracotta / Coral Primary & Peach Outline Secondary) */}
+        {/* Action Buttons */}
         <div className="flex flex-col sm:flex-row items-center gap-3 pt-2">
           <button
             type="submit"
-            className="w-full sm:flex-1 py-4 px-6 rounded-2xl bg-coral-500 hover:bg-coral-600 text-white font-extrabold text-base shadow-cute hover:shadow-cute-hover transition-all flex items-center justify-center space-x-2 focus:outline-none focus:ring-2 focus:ring-coral-400 active:scale-[0.99]"
+            className="w-full sm:flex-1 py-4 px-6 rounded-2xl bg-coral-500 hover:bg-coral-600 active:scale-[0.99] text-white font-extrabold text-base shadow-cute hover:shadow-cute-hover transition-all flex items-center justify-center space-x-2 focus:outline-none focus:ring-2 focus:ring-coral-400 cursor-pointer"
           >
             <Calculator className="w-5 h-5" />
             <span>Calculate</span>
@@ -174,7 +179,7 @@ export default function AgeCalculatorForm({
           <button
             type="button"
             onClick={handleReset}
-            className="w-full sm:w-auto py-4 px-8 rounded-2xl bg-blush-100 dark:bg-plum-800 hover:bg-blush-200 dark:hover:bg-plum-700 text-coral-600 dark:text-coral-300 font-extrabold text-base transition-colors flex items-center justify-center space-x-2 focus:outline-none border border-blush-200 dark:border-plum-700"
+            className="w-full sm:w-auto py-4 px-8 rounded-2xl bg-blush-100 dark:bg-plum-800 hover:bg-blush-200 dark:hover:bg-plum-700 text-coral-600 dark:text-coral-300 font-extrabold text-base transition-all flex items-center justify-center space-x-2 focus:outline-none border border-blush-200 dark:border-plum-700 cursor-pointer"
           >
             <RotateCcw className="w-4 h-4" />
             <span>Reset</span>
@@ -184,3 +189,4 @@ export default function AgeCalculatorForm({
     </div>
   );
 }
+
