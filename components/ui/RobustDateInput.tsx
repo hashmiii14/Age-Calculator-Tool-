@@ -59,7 +59,17 @@ export default function RobustDateInput({
     if (parsed) {
       setViewYear(parsed.year);
       setViewMonth(parsed.month);
-      setTypedText(`${parsed.day.toString().padStart(2, '0')} - ${parsed.month.toString().padStart(2, '0')} - ${parsed.year}`);
+
+      // Only format text if typedText does not already parse to this date
+      const currentTypedParsed = parseAnyDateString(typedText);
+      if (
+        !currentTypedParsed ||
+        currentTypedParsed.year !== parsed.year ||
+        currentTypedParsed.month !== parsed.month ||
+        currentTypedParsed.day !== parsed.day
+      ) {
+        setTypedText(`${parsed.day.toString().padStart(2, '0')} - ${parsed.month.toString().padStart(2, '0')} - ${parsed.year}`);
+      }
     } else if (!value) {
       setTypedText('');
     }
@@ -120,7 +130,10 @@ export default function RobustDateInput({
 
     const parsed = parseAnyDateString(raw);
     if (parsed) {
-      onChange(formatISODate(parsed));
+      const iso = formatISODate(parsed);
+      setViewYear(parsed.year);
+      setViewMonth(parsed.month);
+      onChange(iso);
     }
   };
 

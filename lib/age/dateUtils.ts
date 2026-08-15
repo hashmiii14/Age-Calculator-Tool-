@@ -44,14 +44,15 @@ export function parseISODate(dateStr: string): ParsedDate | null {
 }
 
 /**
- * Flexible date parser supporting DD-MM-YYYY, DD/MM/YYYY, DD.MM.YYYY, YYYY-MM-DD, YYYY/MM/DD
+ * Flexible date parser supporting DD-MM-YYYY, DD/MM/YYYY, DD.MM.YYYY, YYYY-MM-DD, YYYY/MM/DD, 8-digit compact strings, and spaces around delimiters.
  */
 export function parseAnyDateString(dateStr: string): ParsedDate | null {
   if (!dateStr || typeof dateStr !== 'string') return null;
-  const clean = dateStr.trim();
+  const clean = dateStr.trim().replace(/\s*[\/\.\-\s]\s*/g, '-');
+  if (!clean) return null;
 
-  // Try YYYY-MM-DD or YYYY/MM/DD
-  const matchYMD = /^(\d{4})[-.\/](\d{1,2})[-.\/](\d{1,2})$/.exec(clean);
+  // Try YYYY-MM-DD
+  const matchYMD = /^(\d{4})-(\d{1,2})-(\d{1,2})$/.exec(clean);
   if (matchYMD) {
     const year = parseInt(matchYMD[1], 10);
     const month = parseInt(matchYMD[2], 10);
@@ -63,12 +64,25 @@ export function parseAnyDateString(dateStr: string): ParsedDate | null {
     }
   }
 
-  // Try DD-MM-YYYY or DD/MM/YYYY or DD.MM.YYYY
-  const matchDMY = /^(\d{1,2})[-.\/](\d{1,2})[-.\/](\d{4})$/.exec(clean);
+  // Try DD-MM-YYYY
+  const matchDMY = /^(\d{1,2})-(\d{1,2})-(\d{4})$/.exec(clean);
   if (matchDMY) {
     const day = parseInt(matchDMY[1], 10);
     const month = parseInt(matchDMY[2], 10);
     const year = parseInt(matchDMY[3], 10);
+    if (month >= 1 && month <= 12 && year >= 1900 && year <= 2035) {
+      if (day >= 1 && day <= getDaysInMonth(year, month)) {
+        return { year, month, day };
+      }
+    }
+  }
+
+  // Try 8-digit compact DDMMYYYY (e.g. 14032006)
+  const matchCompact = /^(\d{2})(\d{2})(\d{4})$/.exec(clean);
+  if (matchCompact) {
+    const day = parseInt(matchCompact[1], 10);
+    const month = parseInt(matchCompact[2], 10);
+    const year = parseInt(matchCompact[3], 10);
     if (month >= 1 && month <= 12 && year >= 1900 && year <= 2035) {
       if (day >= 1 && day <= getDaysInMonth(year, month)) {
         return { year, month, day };
