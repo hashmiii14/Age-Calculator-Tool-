@@ -21,26 +21,26 @@ export default function Footer() {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-8 pb-8 border-b border-blush-200 dark:border-plum-800">
 
           {/* Brand column */}
-          <div className="lg:col-span-2 space-y-4">
+          <div className="lg:col-span-2 space-y-3">
             <Link href="/" className="inline-flex items-center gap-1">
-              <span className="font-extrabold text-xl tracking-tight font-sans uppercase text-plum-900 dark:text-white">
-                AGE<span className="text-coral-500 font-serif lowercase italic text-2xl font-bold ml-0.5">pulse</span>
+              <span className="font-extrabold text-xl tracking-tight font-sans text-charcoal-900 dark:text-white">
+                Age<span className="text-roseProduct-500 font-serif italic text-2xl font-bold ml-0.5">Pulse</span>
               </span>
             </Link>
-            <p className="text-sm leading-relaxed max-w-sm text-slate-600 dark:text-slate-300 font-medium">
-              Simple, clean, precision age calculator tool. Calculate exact age in years, months, and days instantly in your browser.
+            <p className="text-sm leading-relaxed max-w-sm text-charcoal-500 dark:text-charcoal-400 font-medium">
+              Exact age calculations made simple, fast, and completely private in your browser.
             </p>
             <div className="flex flex-wrap gap-2 pt-1">
-              <div className="inline-flex items-center gap-1.5 text-xs font-bold px-3 py-1.5 rounded-full bg-blush-100 dark:bg-plum-900 text-slate-700 dark:text-slate-300 border border-blush-200 dark:border-plum-800">
-                <ShieldCheck className="w-3.5 h-3.5 text-pink-500" />
-                100% Client-side & Private
+              <div className="inline-flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-full bg-roseProduct-50 dark:bg-charcoal-800 text-roseProduct-700 dark:text-roseProduct-300 border border-roseProduct-200 dark:border-charcoal-700">
+                <ShieldCheck className="w-3.5 h-3.5 text-roseProduct-500" />
+                <span>Client-Side Privacy</span>
               </div>
               <button
                 onClick={handleClearData}
-                className="inline-flex items-center gap-1.5 text-xs font-bold px-3 py-1.5 rounded-full bg-blush-100 dark:bg-plum-900 text-slate-600 dark:text-slate-400 border border-blush-200 dark:border-plum-800 hover:text-coral-500 transition-colors cursor-pointer"
+                className="inline-flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-full bg-charcoal-100 dark:bg-charcoal-800 text-charcoal-600 dark:text-charcoal-300 border border-charcoal-200 dark:border-charcoal-700 hover:text-roseProduct-500 transition-colors cursor-pointer"
               >
                 <Trash2 className="w-3 h-3" />
-                Clear Saved Data
+                <span>Clear Saved Data</span>
               </button>
             </div>
           </div>

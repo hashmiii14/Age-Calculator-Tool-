@@ -222,11 +222,11 @@ export default function RobustDateInput({
   const renderCalendarContent = () => (
     <>
       {/* Header Controls: Month & Year Selectors */}
-      <div className="flex items-center justify-between gap-1.5 mb-3 pb-3 border-b border-pinkPastel-200 dark:border-purpleText-800">
+      <div className="flex items-center justify-between gap-1.5 mb-3 pb-3 border-b border-roseProduct-200 dark:border-charcoal-700">
         <button
           type="button"
           onClick={handlePrevMonth}
-          className="p-2 rounded-xl bg-pinkPastel-100 dark:bg-purpleText-800 text-purpleText-900 dark:text-purpleText-100 hover:bg-pinkPastel-500 hover:text-white transition-colors cursor-pointer"
+          className="p-2 rounded-xl bg-roseProduct-50 dark:bg-charcoal-800 text-charcoal-700 dark:text-charcoal-200 hover:bg-roseProduct-500 hover:text-white transition-colors cursor-pointer"
           title="Previous Month"
         >
           <ChevronLeft className="w-4 h-4" />
@@ -236,7 +236,7 @@ export default function RobustDateInput({
           <select
             value={viewMonth}
             onChange={(e) => setViewMonth(Number(e.target.value))}
-            className="px-2.5 py-1.5 rounded-xl text-xs font-extrabold bg-pinkPastel-50 dark:bg-purpleText-950 text-purpleText-900 dark:text-white border border-pinkPastel-200 dark:border-purpleText-800 focus:outline-none cursor-pointer"
+            className="px-2.5 py-1.5 rounded-xl text-xs font-bold bg-white dark:bg-charcoal-900 text-charcoal-900 dark:text-white border border-roseProduct-200 dark:border-charcoal-700 focus:outline-none cursor-pointer"
           >
             {MONTH_NAMES.map((name, idx) => (
               <option key={name} value={idx + 1}>
@@ -248,7 +248,7 @@ export default function RobustDateInput({
           <select
             value={viewYear}
             onChange={(e) => setViewYear(Number(e.target.value))}
-            className="px-2.5 py-1.5 rounded-xl text-xs font-extrabold bg-pinkPastel-50 dark:bg-purpleText-950 text-purpleText-900 dark:text-white border border-pinkPastel-200 dark:border-purpleText-800 focus:outline-none cursor-pointer"
+            className="px-2.5 py-1.5 rounded-xl text-xs font-bold bg-white dark:bg-charcoal-900 text-charcoal-900 dark:text-white border border-roseProduct-200 dark:border-charcoal-700 focus:outline-none cursor-pointer"
           >
             {yearOptions.map((y) => (
               <option key={y} value={y}>
@@ -261,7 +261,7 @@ export default function RobustDateInput({
         <button
           type="button"
           onClick={handleNextMonth}
-          className="p-2 rounded-xl bg-pinkPastel-100 dark:bg-purpleText-800 text-purpleText-900 dark:text-purpleText-100 hover:bg-pinkPastel-500 hover:text-white transition-colors cursor-pointer"
+          className="p-2 rounded-xl bg-roseProduct-50 dark:bg-charcoal-800 text-charcoal-700 dark:text-charcoal-200 hover:bg-roseProduct-500 hover:text-white transition-colors cursor-pointer"
           title="Next Month"
         >
           <ChevronRight className="w-4 h-4" />
@@ -270,7 +270,7 @@ export default function RobustDateInput({
 
       {/* Quick Year Jump */}
       <div className="mb-3">
-        <span className="text-[10px] font-extrabold uppercase tracking-wider block mb-1 text-purpleText-400">
+        <span className="text-[10px] font-bold uppercase tracking-wider block mb-1 text-charcoal-400">
           Quick Year Jump
         </span>
         <div className="flex items-center gap-1 overflow-x-auto pb-1.5 custom-scrollbar">
@@ -279,10 +279,10 @@ export default function RobustDateInput({
               key={y}
               type="button"
               onClick={() => setViewYear(y)}
-              className={`px-2.5 py-1 rounded-lg text-[11px] font-extrabold whitespace-nowrap transition-colors cursor-pointer ${
+              className={`px-2.5 py-1 rounded-lg text-[11px] font-bold whitespace-nowrap transition-colors cursor-pointer ${
                 viewYear === y
-                  ? 'bg-pinkPastel-500 text-white'
-                  : 'bg-pinkPastel-100 dark:bg-purpleText-800 text-purpleText-900 dark:text-purpleText-300 hover:bg-pinkPastel-200'
+                  ? 'bg-roseProduct-500 text-white'
+                  : 'bg-roseProduct-50 dark:bg-charcoal-800 text-charcoal-700 dark:text-charcoal-300 hover:bg-roseProduct-100'
               }`}
             >
               {y}
@@ -294,7 +294,7 @@ export default function RobustDateInput({
       {/* Weekday Headers */}
       <div className="grid grid-cols-7 gap-1 text-center mb-1">
         {['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'].map((d) => (
-          <span key={d} className="text-[10px] font-black uppercase text-purpleText-400">
+          <span key={d} className="text-[10px] font-bold uppercase text-charcoal-400">
             {d}
           </span>
         ))}
@@ -327,12 +327,12 @@ export default function RobustDateInput({
               key={day}
               type="button"
               onClick={() => handleDaySelect(day)}
-              className={`h-8 w-full max-w-[34px] mx-auto rounded-xl text-xs font-black flex items-center justify-center transition-all cursor-pointer ${
+              className={`h-8 w-full max-w-[34px] mx-auto rounded-xl text-xs font-bold flex items-center justify-center transition-all cursor-pointer ${
                 isSelected
-                  ? 'bg-pinkPastel-500 text-white shadow-cute'
+                  ? 'bg-roseProduct-500 text-white shadow-sm'
                   : isToday
-                  ? 'bg-pinkPastel-100 dark:bg-purpleText-800 text-pinkPastel-500 border border-pinkPastel-500 font-black'
-                  : 'text-purpleText-900 dark:text-white hover:bg-pinkPastel-100 dark:hover:bg-purpleText-800'
+                  ? 'bg-roseProduct-50 dark:bg-charcoal-800 text-roseProduct-600 border border-roseProduct-500 font-bold'
+                  : 'text-charcoal-900 dark:text-white hover:bg-roseProduct-50 dark:hover:bg-charcoal-800'
               }`}
             >
               {day}
@@ -342,7 +342,7 @@ export default function RobustDateInput({
       </div>
 
       {/* Footer Actions */}
-      <div className="mt-3 pt-2.5 border-t border-pinkPastel-200 dark:border-purpleText-800 flex items-center justify-between">
+      <div className="mt-3 pt-2.5 border-t border-roseProduct-200 dark:border-charcoal-700 flex items-center justify-between">
         <button
           type="button"
           onClick={() => {
@@ -350,16 +350,16 @@ export default function RobustDateInput({
             onChange(today);
             setIsOpen(false);
           }}
-          className="text-xs font-black text-pinkPastel-500 hover:underline flex items-center space-x-1 cursor-pointer"
+          className="text-xs font-bold text-roseProduct-500 hover:underline flex items-center space-x-1 cursor-pointer"
         >
           <Clock className="w-3.5 h-3.5" />
-          <span>Select Today ({getTodayISODate()})</span>
+          <span>Today ({getTodayISODate()})</span>
         </button>
 
         <button
           type="button"
           onClick={() => setIsOpen(false)}
-          className="p-1.5 rounded-xl text-purpleText-400 hover:text-purpleText-900 dark:hover:text-white cursor-pointer"
+          className="p-1.5 rounded-xl text-charcoal-400 hover:text-charcoal-900 dark:hover:text-white cursor-pointer"
         >
           <X className="w-4 h-4" />
         </button>
@@ -377,49 +377,49 @@ export default function RobustDateInput({
           value={typedText}
           onChange={handleInputChange}
           placeholder={placeholder}
-          className={`w-full px-4 py-3.5 sm:px-5 sm:py-4 rounded-2xl text-base font-bold transition-all focus:outline-none bg-white dark:bg-purpleText-900 text-purpleText-900 dark:text-white border-2 placeholder-purpleText-400 pr-24 ${
+          className={`w-full px-4 py-3 sm:px-4 sm:py-3.5 rounded-xl text-sm font-semibold transition-all focus:outline-none bg-white dark:bg-charcoal-900 text-charcoal-900 dark:text-white border placeholder-charcoal-400 pr-24 ${
             error
-              ? 'border-pinkPastel-500 ring-2 ring-pinkPastel-500/20'
-              : 'border-pinkPastel-200 dark:border-purpleText-800 focus:border-pinkPastel-500'
+              ? 'border-roseProduct-500 ring-2 ring-roseProduct-500/20'
+              : 'border-roseProduct-200 dark:border-charcoal-700 focus:border-roseProduct-500'
           }`}
         />
 
         <div className="absolute right-2 flex items-center space-x-1">
-          {/* Toggle Manual Day/Month/Year Dropdowns */}
+          {/* Toggle Manual Selects */}
           <button
             type="button"
             onClick={() => setShowManualDropdowns(!showManualDropdowns)}
-            className={`p-2 rounded-xl transition-colors cursor-pointer ${
+            className={`p-1.5 rounded-lg transition-colors cursor-pointer ${
               showManualDropdowns
-                ? 'bg-pinkPastel-500 text-white'
-                : 'text-purpleText-400 hover:text-pinkPastel-500 hover:bg-pinkPastel-100 dark:hover:bg-purpleText-800'
+                ? 'bg-roseProduct-500 text-white'
+                : 'text-charcoal-400 hover:text-roseProduct-500 hover:bg-roseProduct-50 dark:hover:bg-charcoal-800'
             }`}
-            title="Toggle Manual Day/Month/Year Selects"
+            title="Toggle Manual Selects"
           >
             <SlidersHorizontal className="w-4 h-4" />
           </button>
 
-          {/* Open Visual Calendar Modal/Popover */}
+          {/* Open Calendar Picker */}
           <button
             type="button"
             onClick={handleToggleCalendar}
-            className="p-2 rounded-xl text-pinkPastel-500 hover:bg-pinkPastel-100 dark:hover:bg-purpleText-800 transition-colors cursor-pointer"
+            className="p-1.5 rounded-lg text-roseProduct-500 hover:bg-roseProduct-50 dark:hover:bg-charcoal-800 transition-colors cursor-pointer"
             title="Open Calendar Picker"
           >
-            <CalendarIcon className="w-5 h-5" />
+            <CalendarIcon className="w-4 h-4" />
           </button>
         </div>
       </div>
 
-      {/* Optional Manual Day / Month / Year Dropdown Menus */}
+      {/* Optional Manual Day / Month / Year Dropdowns */}
       {showManualDropdowns && (
-        <div className="grid grid-cols-3 gap-2 p-3 rounded-2xl bg-pinkPastel-50 dark:bg-purpleText-950 border border-pinkPastel-200 dark:border-purpleText-800 animate-fade-up">
+        <div className="grid grid-cols-3 gap-2 p-3 rounded-xl bg-roseProduct-50 dark:bg-charcoal-950 border border-roseProduct-200 dark:border-charcoal-800 animate-fade-up">
           <div>
-            <label className="text-[10px] font-extrabold uppercase text-purpleText-400 block mb-1">Day</label>
+            <label className="text-[10px] font-bold uppercase text-charcoal-400 block mb-1">Day</label>
             <select
               value={currentDay}
               onChange={(e) => handleManualChange('day', Number(e.target.value))}
-              className="w-full px-2 py-2 rounded-xl text-xs font-extrabold bg-white dark:bg-purpleText-900 text-purpleText-900 dark:text-white border border-pinkPastel-200 dark:border-purpleText-800 focus:outline-none cursor-pointer"
+              className="w-full px-2 py-1.5 rounded-lg text-xs font-bold bg-white dark:bg-charcoal-900 text-charcoal-900 dark:text-white border border-roseProduct-200 dark:border-charcoal-700 focus:outline-none cursor-pointer"
             >
               {Array.from({ length: daysInMonthForDropdown }).map((_, i) => (
                 <option key={i + 1} value={i + 1}>
@@ -430,11 +430,11 @@ export default function RobustDateInput({
           </div>
 
           <div>
-            <label className="text-[10px] font-extrabold uppercase text-purpleText-400 block mb-1">Month</label>
+            <label className="text-[10px] font-bold uppercase text-charcoal-400 block mb-1">Month</label>
             <select
               value={currentMonth}
               onChange={(e) => handleManualChange('month', Number(e.target.value))}
-              className="w-full px-2 py-2 rounded-xl text-xs font-extrabold bg-white dark:bg-purpleText-900 text-purpleText-900 dark:text-white border border-pinkPastel-200 dark:border-purpleText-800 focus:outline-none cursor-pointer"
+              className="w-full px-2 py-1.5 rounded-lg text-xs font-bold bg-white dark:bg-charcoal-900 text-charcoal-900 dark:text-white border border-roseProduct-200 dark:border-charcoal-700 focus:outline-none cursor-pointer"
             >
               {MONTH_NAMES.map((name, i) => (
                 <option key={name} value={i + 1}>
@@ -445,11 +445,11 @@ export default function RobustDateInput({
           </div>
 
           <div>
-            <label className="text-[10px] font-extrabold uppercase text-purpleText-400 block mb-1">Year</label>
+            <label className="text-[10px] font-bold uppercase text-charcoal-400 block mb-1">Year</label>
             <select
               value={currentYear}
               onChange={(e) => handleManualChange('year', Number(e.target.value))}
-              className="w-full px-2 py-2 rounded-xl text-xs font-extrabold bg-white dark:bg-purpleText-900 text-purpleText-900 dark:text-white border border-pinkPastel-200 dark:border-purpleText-800 focus:outline-none cursor-pointer"
+              className="w-full px-2 py-1.5 rounded-lg text-xs font-bold bg-white dark:bg-charcoal-900 text-charcoal-900 dark:text-white border border-roseProduct-200 dark:border-charcoal-700 focus:outline-none cursor-pointer"
             >
               {yearOptions.map((y) => (
                 <option key={y} value={y}>
@@ -466,21 +466,21 @@ export default function RobustDateInput({
         <>
           {/* Backdrop Overlay */}
           <div
-            className="fixed inset-0 bg-purpleText-950/40 backdrop-blur-xs z-[9998]"
+            className="fixed inset-0 bg-charcoal-950/40 backdrop-blur-xs z-[9998]"
             onClick={() => setIsOpen(false)}
             aria-hidden="true"
           />
 
           {/* Mobile Modal Container (< 640px) */}
           <div className="sm:hidden fixed inset-0 flex items-center justify-center p-4 z-[9999] pointer-events-none">
-            <div className="w-full max-w-[340px] rounded-3xl p-4 shadow-2xl bg-white dark:bg-purpleText-900 border-2 border-pinkPastel-200 dark:border-purpleText-800 animate-fade-up pointer-events-auto">
+            <div className="w-full max-w-[340px] rounded-2xl p-4 shadow-2xl bg-white dark:bg-charcoal-900 border border-roseProduct-200 dark:border-charcoal-700 animate-fade-up pointer-events-auto">
               {renderCalendarContent()}
             </div>
           </div>
 
           {/* Desktop Anchored Popover (>= 640px) */}
           <div
-            className="hidden sm:block fixed z-[9999] w-[340px] rounded-3xl p-5 shadow-2xl bg-white dark:bg-purpleText-900 border-2 border-pinkPastel-200 dark:border-purpleText-800 animate-fade-up"
+            className="hidden sm:block fixed z-[9999] w-[340px] rounded-2xl p-5 shadow-2xl bg-white dark:bg-charcoal-900 border border-roseProduct-200 dark:border-charcoal-700 animate-fade-up"
             style={{
               top: `${popoverPos.top}px`,
               left: `${popoverPos.left}px`,
@@ -494,4 +494,5 @@ export default function RobustDateInput({
     </div>
   );
 }
+
 
