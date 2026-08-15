@@ -79,7 +79,7 @@ export default function RobustDateInput({
       if (leftPos < 16) leftPos = 16;
 
       setPopoverPos({
-        top: rect.bottom + window.scrollY + 8,
+        top: rect.bottom + 8,
         left: leftPos,
         width: popoverWidth,
       });
@@ -87,10 +87,8 @@ export default function RobustDateInput({
   };
 
   const handleToggleCalendar = () => {
-    if (!isOpen) {
-      updatePosition();
-    }
-    setIsOpen(!isOpen);
+    updatePosition();
+    setIsOpen((prev) => !prev);
   };
 
   useEffect(() => {
@@ -182,6 +180,154 @@ export default function RobustDateInput({
   const currentMonth = parsedValue ? parsedValue.month : new Date().getMonth() + 1;
   const currentDay = parsedValue ? parsedValue.day : new Date().getDate();
   const daysInMonthForDropdown = getDaysInMonth(currentYear, currentMonth);
+
+  const renderCalendarContent = () => (
+    <>
+      {/* Header Controls: Month & Year Selectors */}
+      <div className="flex items-center justify-between gap-1.5 mb-3 pb-3 border-b border-blush-200 dark:border-plum-800">
+        <button
+          type="button"
+          onClick={handlePrevMonth}
+          className="p-2 rounded-xl bg-blush-100 dark:bg-plum-800 text-slate-700 dark:text-slate-200 hover:bg-coral-500 hover:text-white transition-colors cursor-pointer"
+          title="Previous Month"
+        >
+          <ChevronLeft className="w-4 h-4" />
+        </button>
+
+        <div className="flex items-center space-x-1.5">
+          <select
+            value={viewMonth}
+            onChange={(e) => setViewMonth(Number(e.target.value))}
+            className="px-2.5 py-1.5 rounded-xl text-xs font-extrabold bg-blush-50 dark:bg-plum-950 text-plum-900 dark:text-white border border-blush-200 dark:border-plum-800 focus:outline-none cursor-pointer"
+          >
+            {MONTH_NAMES.map((name, idx) => (
+              <option key={name} value={idx + 1}>
+                {name}
+              </option>
+            ))}
+          </select>
+
+          <select
+            value={viewYear}
+            onChange={(e) => setViewYear(Number(e.target.value))}
+            className="px-2.5 py-1.5 rounded-xl text-xs font-extrabold bg-blush-50 dark:bg-plum-950 text-plum-900 dark:text-white border border-blush-200 dark:border-plum-800 focus:outline-none cursor-pointer"
+          >
+            {yearOptions.map((y) => (
+              <option key={y} value={y}>
+                {y}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        <button
+          type="button"
+          onClick={handleNextMonth}
+          className="p-2 rounded-xl bg-blush-100 dark:bg-plum-800 text-slate-700 dark:text-slate-200 hover:bg-coral-500 hover:text-white transition-colors cursor-pointer"
+          title="Next Month"
+        >
+          <ChevronRight className="w-4 h-4" />
+        </button>
+      </div>
+
+      {/* Quick Year Jump */}
+      <div className="mb-3">
+        <span className="text-[10px] font-extrabold uppercase tracking-wider block mb-1 text-slate-400">
+          Quick Year Jump
+        </span>
+        <div className="flex items-center gap-1 overflow-x-auto pb-1.5 custom-scrollbar">
+          {QUICK_YEARS.map((y) => (
+            <button
+              key={y}
+              type="button"
+              onClick={() => setViewYear(y)}
+              className={`px-2.5 py-1 rounded-lg text-[11px] font-extrabold whitespace-nowrap transition-colors cursor-pointer ${
+                viewYear === y
+                  ? 'bg-coral-500 text-white'
+                  : 'bg-blush-100 dark:bg-plum-800 text-slate-700 dark:text-slate-300 hover:bg-blush-200'
+              }`}
+            >
+              {y}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {/* Weekday Headers */}
+      <div className="grid grid-cols-7 gap-1 text-center mb-1">
+        {['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'].map((d) => (
+          <span key={d} className="text-[10px] font-black uppercase text-slate-400">
+            {d}
+          </span>
+        ))}
+      </div>
+
+      {/* Days Grid */}
+      <div className="grid grid-cols-7 gap-1 text-center">
+        {Array.from({ length: firstDayOfWeek }).map((_, idx) => (
+          <span key={`empty-${idx}`} className="h-8 w-8 block" />
+        ))}
+
+        {Array.from({ length: daysInCurrentMonth }).map((_, idx) => {
+          const day = idx + 1;
+          const isSelected =
+            parsedValue &&
+            parsedValue.year === viewYear &&
+            parsedValue.month === viewMonth &&
+            parsedValue.day === day;
+
+          const todayStr = getTodayISODate();
+          const todayParsed = parseISODate(todayStr);
+          const isToday =
+            todayParsed &&
+            todayParsed.year === viewYear &&
+            todayParsed.month === viewMonth &&
+            todayParsed.day === day;
+
+          return (
+            <button
+              key={day}
+              type="button"
+              onClick={() => handleDaySelect(day)}
+              className={`h-8 w-full max-w-[34px] mx-auto rounded-xl text-xs font-black flex items-center justify-center transition-all cursor-pointer ${
+                isSelected
+                  ? 'bg-coral-500 text-white shadow-cute'
+                  : isToday
+                  ? 'bg-blush-100 dark:bg-plum-800 text-coral-500 border border-coral-500 font-black'
+                  : 'text-plum-900 dark:text-white hover:bg-blush-100 dark:hover:bg-plum-800'
+              }`}
+            >
+              {day}
+            </button>
+          );
+        })}
+      </div>
+
+      {/* Footer Actions */}
+      <div className="mt-3 pt-2.5 border-t border-blush-200 dark:border-plum-800 flex items-center justify-between">
+        <button
+          type="button"
+          onClick={() => {
+            const today = getTodayISODate();
+            onChange(today);
+            setIsOpen(false);
+          }}
+          className="text-xs font-black text-coral-500 hover:underline flex items-center space-x-1 cursor-pointer"
+        >
+          <Clock className="w-3.5 h-3.5" />
+          <span>Select Today ({getTodayISODate()})</span>
+        </button>
+
+        <button
+          type="button"
+          onClick={() => setIsOpen(false)}
+          className="p-1.5 rounded-xl text-slate-400 hover:text-plum-900 dark:hover:text-white cursor-pointer"
+        >
+          <X className="w-4 h-4" />
+        </button>
+      </div>
+    </>
+  );
 
   return (
     <div className="w-full space-y-2" ref={inputContainerRef}>
@@ -287,158 +433,22 @@ export default function RobustDateInput({
             aria-hidden="true"
           />
 
-          {/* Calendar Card (Fixed modal on mobile, absolute portal position on sm: desktop) */}
+          {/* Mobile Modal Container (< 640px) */}
+          <div className="sm:hidden fixed inset-0 flex items-center justify-center p-4 z-[9999] pointer-events-none">
+            <div className="w-full max-w-[340px] rounded-3xl p-4 shadow-2xl bg-white dark:bg-plum-900 border-2 border-blush-200 dark:border-plum-800 animate-fade-up pointer-events-auto">
+              {renderCalendarContent()}
+            </div>
+          </div>
+
+          {/* Desktop Anchored Popover (>= 640px) */}
           <div
-            className="fixed inset-x-4 top-1/2 -translate-y-1/2 sm:fixed sm:inset-auto sm:translate-y-0 z-[9999] w-[calc(100vw-2rem)] max-w-[340px] sm:w-[340px] rounded-3xl p-4 sm:p-5 shadow-2xl bg-white dark:bg-plum-900 border-2 border-blush-200 dark:border-plum-800 animate-fade-up"
+            className="hidden sm:block fixed z-[9999] w-[340px] rounded-3xl p-5 shadow-2xl bg-white dark:bg-plum-900 border-2 border-blush-200 dark:border-plum-800 animate-fade-up"
             style={{
-              ...(window.innerWidth >= 640
-                ? { top: `${popoverPos.top}px`, left: `${popoverPos.left}px` }
-                : {}),
+              top: `${popoverPos.top}px`,
+              left: `${popoverPos.left}px`,
             }}
           >
-            {/* Header Controls: Month & Year Selectors */}
-            <div className="flex items-center justify-between gap-1.5 mb-3 pb-3 border-b border-blush-200 dark:border-plum-800">
-              <button
-                type="button"
-                onClick={handlePrevMonth}
-                className="p-2 rounded-xl bg-blush-100 dark:bg-plum-800 text-slate-700 dark:text-slate-200 hover:bg-coral-500 hover:text-white transition-colors cursor-pointer"
-                title="Previous Month"
-              >
-                <ChevronLeft className="w-4 h-4" />
-              </button>
-
-              <div className="flex items-center space-x-1.5">
-                <select
-                  value={viewMonth}
-                  onChange={(e) => setViewMonth(Number(e.target.value))}
-                  className="px-2.5 py-1.5 rounded-xl text-xs font-extrabold bg-blush-50 dark:bg-plum-950 text-plum-900 dark:text-white border border-blush-200 dark:border-plum-800 focus:outline-none cursor-pointer"
-                >
-                  {MONTH_NAMES.map((name, idx) => (
-                    <option key={name} value={idx + 1}>
-                      {name}
-                    </option>
-                  ))}
-                </select>
-
-                <select
-                  value={viewYear}
-                  onChange={(e) => setViewYear(Number(e.target.value))}
-                  className="px-2.5 py-1.5 rounded-xl text-xs font-extrabold bg-blush-50 dark:bg-plum-950 text-plum-900 dark:text-white border border-blush-200 dark:border-plum-800 focus:outline-none cursor-pointer"
-                >
-                  {yearOptions.map((y) => (
-                    <option key={y} value={y}>
-                      {y}
-                    </option>
-                  ))}
-                </select>
-              </div>
-
-              <button
-                type="button"
-                onClick={handleNextMonth}
-                className="p-2 rounded-xl bg-blush-100 dark:bg-plum-800 text-slate-700 dark:text-slate-200 hover:bg-coral-500 hover:text-white transition-colors cursor-pointer"
-                title="Next Month"
-              >
-                <ChevronRight className="w-4 h-4" />
-              </button>
-            </div>
-
-            {/* Quick Year Jump */}
-            <div className="mb-3">
-              <span className="text-[10px] font-extrabold uppercase tracking-wider block mb-1 text-slate-400">
-                Quick Year Jump
-              </span>
-              <div className="flex items-center gap-1 overflow-x-auto pb-1.5 custom-scrollbar">
-                {QUICK_YEARS.map((y) => (
-                  <button
-                    key={y}
-                    type="button"
-                    onClick={() => setViewYear(y)}
-                    className={`px-2.5 py-1 rounded-lg text-[11px] font-extrabold whitespace-nowrap transition-colors cursor-pointer ${
-                      viewYear === y
-                        ? 'bg-coral-500 text-white'
-                        : 'bg-blush-100 dark:bg-plum-800 text-slate-700 dark:text-slate-300 hover:bg-blush-200'
-                    }`}
-                  >
-                    {y}
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            {/* Weekday Headers */}
-            <div className="grid grid-cols-7 gap-1 text-center mb-1">
-              {['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'].map((d) => (
-                <span key={d} className="text-[10px] font-black uppercase text-slate-400">
-                  {d}
-                </span>
-              ))}
-            </div>
-
-            {/* Days Grid */}
-            <div className="grid grid-cols-7 gap-1 text-center">
-              {Array.from({ length: firstDayOfWeek }).map((_, idx) => (
-                <span key={`empty-${idx}`} className="h-8 w-8 block" />
-              ))}
-
-              {Array.from({ length: daysInCurrentMonth }).map((_, idx) => {
-                const day = idx + 1;
-                const isSelected =
-                  parsedValue &&
-                  parsedValue.year === viewYear &&
-                  parsedValue.month === viewMonth &&
-                  parsedValue.day === day;
-
-                const todayStr = getTodayISODate();
-                const todayParsed = parseISODate(todayStr);
-                const isToday =
-                  todayParsed &&
-                  todayParsed.year === viewYear &&
-                  todayParsed.month === viewMonth &&
-                  todayParsed.day === day;
-
-                return (
-                  <button
-                    key={day}
-                    type="button"
-                    onClick={() => handleDaySelect(day)}
-                    className={`h-8 w-full max-w-[34px] mx-auto rounded-xl text-xs font-black flex items-center justify-center transition-all cursor-pointer ${
-                      isSelected
-                        ? 'bg-coral-500 text-white shadow-cute'
-                        : isToday
-                        ? 'bg-blush-100 dark:bg-plum-800 text-coral-500 border border-coral-500 font-black'
-                        : 'text-plum-900 dark:text-white hover:bg-blush-100 dark:hover:bg-plum-800'
-                    }`}
-                  >
-                    {day}
-                  </button>
-                );
-              })}
-            </div>
-
-            {/* Footer Actions */}
-            <div className="mt-3 pt-2.5 border-t border-blush-200 dark:border-plum-800 flex items-center justify-between">
-              <button
-                type="button"
-                onClick={() => {
-                  const today = getTodayISODate();
-                  onChange(today);
-                  setIsOpen(false);
-                }}
-                className="text-xs font-black text-coral-500 hover:underline flex items-center space-x-1 cursor-pointer"
-              >
-                <Clock className="w-3.5 h-3.5" />
-                <span>Select Today ({getTodayISODate()})</span>
-              </button>
-
-              <button
-                type="button"
-                onClick={() => setIsOpen(false)}
-                className="p-1.5 rounded-xl text-slate-400 hover:text-plum-900 dark:hover:text-white cursor-pointer"
-              >
-                <X className="w-4 h-4" />
-              </button>
-            </div>
+            {renderCalendarContent()}
           </div>
         </>,
         document.body
