@@ -13,7 +13,7 @@ import DateToolsGrid from '../components/tools/DateToolsGrid';
 import AboutUsSection from '../components/content/AboutUsSection';
 import PrivacyPolicySection from '../components/content/PrivacyPolicySection';
 import ContactSection from '../components/content/ContactSection';
-import { calculateAge } from '../lib/age/ageEngine';
+import { calculateAge, validateAgeInputs } from '../lib/age/ageEngine';
 import { getTodayISODate } from '../lib/age/dateUtils';
 import { AgeResult } from '../lib/age/types';
 
@@ -21,6 +21,7 @@ export default function HomePage() {
   const [result, setResult] = useState<AgeResult | null>(null);
   const [initialDOB, setInitialDOB] = useState<string>('');
   const [showCelebrationModal, setShowCelebrationModal] = useState<boolean>(false);
+  const [calcError, setCalcError] = useState<string | null>(null);
 
   useEffect(() => {
     const savedDOB = localStorage.getItem('agepulse_dob');
@@ -36,36 +37,67 @@ export default function HomePage() {
   }, []);
 
   const handleCalculate = (dob: string, targetDate: string) => {
+    // Reset modal state and error state on every new calculation
+    setShowCelebrationModal(false);
+    setCalcError(null);
+
+    // Guarantee body overflow is restored
+    if (typeof document !== 'undefined') {
+      document.body.style.overflow = '';
+    }
+
     try {
-      // 1. Calculate real age result
+      // 1. Validate DOB and target date
+      const validationErrors = validateAgeInputs(dob, targetDate);
+      if (validationErrors.dob || validationErrors.targetDate) {
+        setCalcError(validationErrors.dob || validationErrors.targetDate || 'Invalid input dates.');
+        return;
+      }
+
+      // 2. Calculate real age result synchronously
       const res = calculateAge(dob, targetDate);
       
-      // 2. Immediately render result on page
+      // 3. Commit result to state immediately
       setResult(res);
-      localStorage.setItem('agepulse_dob', dob);
 
-      // 3. Smooth scroll to result on page
-      setTimeout(() => {
-        const el = document.getElementById('result-dashboard');
-        if (el) {
-          el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        }
-      }, 50);
+      if (typeof window !== 'undefined') {
+        localStorage.setItem('agepulse_dob', res.dobStr || dob);
 
-      // 4. Open celebration popup after result is rendered
-      setTimeout(() => {
-        setShowCelebrationModal(true);
-      }, 400);
+        // 4. Smooth scroll down to result card FIRST
+        setTimeout(() => {
+          const el = document.getElementById('result-dashboard');
+          if (el) {
+            el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }
+        }, 50);
+
+        // 5. ONLY AFTER successful result creation and rendering, open celebration modal
+        setTimeout(() => {
+          setShowCelebrationModal(true);
+        }, 400);
+      }
     } catch (err) {
-      console.error('Calculation error:', err);
+      console.error('Calculation error caught in HomePage:', err);
+      // Guarantee modal is closed and overflow is clean on any calculation error
+      setShowCelebrationModal(false);
+      if (typeof document !== 'undefined') {
+        document.body.style.overflow = '';
+      }
+      setCalcError(err instanceof Error ? err.message : 'Age calculation failed. Please check your dates.');
     }
   };
 
   const handleReset = () => {
-    localStorage.removeItem('agepulse_dob');
+    if (typeof window !== 'undefined') {
+      localStorage.removeItem('agepulse_dob');
+    }
     setResult(null);
     setInitialDOB('');
     setShowCelebrationModal(false);
+    setCalcError(null);
+    if (typeof document !== 'undefined') {
+      document.body.style.overflow = '';
+    }
   };
 
   return (
@@ -81,6 +113,13 @@ export default function HomePage() {
           initialDOB={initialDOB}
         />
 
+        {/* Calculation error display if any occurs */}
+        {calcError && (
+          <div className="p-4 rounded-2xl bg-pinkPastel-100 dark:bg-purpleText-900 border-2 border-pinkPastel-400 text-pinkPastel-600 dark:text-pinkPastel-300 font-extrabold text-xs text-center shadow-sm">
+            ⚠️ {calcError}
+          </div>
+        )}
+
         {/* Revealed Calculation Result Dashboard (Rendered immediately on page) */}
         {result && (
           <div id="result-dashboard" className="space-y-6 pt-2">
@@ -90,13 +129,18 @@ export default function HomePage() {
         )}
       </section>
 
-      {/* Interactive Celebration Modal Overlay (Triggers after result renders) */}
+      {/* Interactive Celebration Modal Overlay (Triggers only after result renders) */}
       {showCelebrationModal && result && (
         <CelebrationModal
           years={result.years}
           months={result.months}
           days={result.days}
-          onClose={() => setShowCelebrationModal(false)}
+          onClose={() => {
+            setShowCelebrationModal(false);
+            if (typeof document !== 'undefined') {
+              document.body.style.overflow = '';
+            }
+          }}
         />
       )}
 

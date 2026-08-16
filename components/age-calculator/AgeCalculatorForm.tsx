@@ -51,8 +51,13 @@ export default function AgeCalculatorForm({
     }
 
     setErrors({});
-    setHasCalculated(true);
-    onCalculate(dob, targetDate);
+    try {
+      setHasCalculated(true);
+      onCalculate(dob, targetDate);
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : 'An error occurred during calculation.';
+      setErrors({ dob: msg });
+    }
   };
 
   const handleReset = () => {
