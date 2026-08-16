@@ -22,7 +22,9 @@ export default function HomePage() {
   const [initialDOB, setInitialDOB] = useState<string>('');
   const [showCelebrationModal, setShowCelebrationModal] = useState<boolean>(false);
   const [calcError, setCalcError] = useState<string | null>(null);
+  const [isNewlyCalculated, setIsNewlyCalculated] = useState<boolean>(false);
 
+  // Load saved DOB on initial mount
   useEffect(() => {
     const savedDOB = localStorage.getItem('agepulse_dob');
     if (savedDOB) {
@@ -36,15 +38,32 @@ export default function HomePage() {
     }
   }, []);
 
+  // ONLY AFTER successful result exists and is rendered, open 3D celebration popup
+  useEffect(() => {
+    if (result && isNewlyCalculated) {
+      console.log('RESULT_RENDERED', result.formattedDOB);
+      
+      // Scroll down to result section
+      const el = document.getElementById('result-dashboard');
+      if (el) {
+        el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+
+      // Trigger celebration modal only after result exists in DOM
+      const timer = setTimeout(() => {
+        console.log('POPUP_OPEN');
+        setShowCelebrationModal(true);
+        setIsNewlyCalculated(false);
+      }, 400);
+
+      return () => clearTimeout(timer);
+    }
+  }, [result, isNewlyCalculated]);
+
   const handleCalculate = (dob: string, targetDate: string) => {
-    // Reset modal state and error state on every new calculation
+    console.log('CALCULATION_STARTED', { dob, targetDate });
     setShowCelebrationModal(false);
     setCalcError(null);
-
-    // Guarantee body overflow is restored
-    if (typeof document !== 'undefined') {
-      document.body.style.overflow = '';
-    }
 
     try {
       // 1. Validate DOB and target date
@@ -53,36 +72,24 @@ export default function HomePage() {
         setCalcError(validationErrors.dob || validationErrors.targetDate || 'Invalid input dates.');
         return;
       }
+      console.log('DOB_VALIDATED', { dob, targetDate });
 
       // 2. Calculate real age result synchronously
       const res = calculateAge(dob, targetDate);
+      console.log('CALCULATION_SUCCESS', res.formattedDOB);
       
       // 3. Commit result to state immediately
       setResult(res);
+      setIsNewlyCalculated(true);
+      console.log('RESULT_STATE_SET', res.formattedDOB);
 
       if (typeof window !== 'undefined') {
         localStorage.setItem('agepulse_dob', res.dobStr || dob);
-
-        // 4. Smooth scroll down to result card FIRST
-        setTimeout(() => {
-          const el = document.getElementById('result-dashboard');
-          if (el) {
-            el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-          }
-        }, 50);
-
-        // 5. ONLY AFTER successful result creation and rendering, open celebration modal
-        setTimeout(() => {
-          setShowCelebrationModal(true);
-        }, 400);
       }
     } catch (err) {
       console.error('Calculation error caught in HomePage:', err);
-      // Guarantee modal is closed and overflow is clean on any calculation error
       setShowCelebrationModal(false);
-      if (typeof document !== 'undefined') {
-        document.body.style.overflow = '';
-      }
+      setIsNewlyCalculated(false);
       setCalcError(err instanceof Error ? err.message : 'Age calculation failed. Please check your dates.');
     }
   };
@@ -94,10 +101,8 @@ export default function HomePage() {
     setResult(null);
     setInitialDOB('');
     setShowCelebrationModal(false);
+    setIsNewlyCalculated(false);
     setCalcError(null);
-    if (typeof document !== 'undefined') {
-      document.body.style.overflow = '';
-    }
   };
 
   return (
@@ -129,18 +134,13 @@ export default function HomePage() {
         )}
       </section>
 
-      {/* Interactive Celebration Modal Overlay (Triggers only after result renders) */}
+      {/* Interactive Celebration Modal Overlay (Triggers only after result exists) */}
       {showCelebrationModal && result && (
         <CelebrationModal
           years={result.years}
           months={result.months}
           days={result.days}
-          onClose={() => {
-            setShowCelebrationModal(false);
-            if (typeof document !== 'undefined') {
-              document.body.style.overflow = '';
-            }
-          }}
+          onClose={() => setShowCelebrationModal(false)}
         />
       )}
 
