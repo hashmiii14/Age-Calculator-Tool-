@@ -11,8 +11,6 @@ import {
 import { AgeResult } from '../../lib/age/types';
 import BirthDateDiscoveryCard from '../discovery/BirthDateDiscoveryCard';
 import ZodiacAstrologySection from '../astrology/ZodiacAstrologySection';
-import BirthdayCountdown from './BirthdayCountdown';
-import AgeMilestoneTimeline from './AgeMilestoneTimeline';
 import ShareCardGenerator from '../share/ShareCardGenerator';
 import CuteCharacter from '../ui/CuteCharacter';
 
@@ -166,7 +164,7 @@ export default function AgeResultDashboard({ result }: AgeResultDashboardProps) 
             <span className="text-lg sm:text-2xl font-extrabold text-purpleText-900 dark:text-white font-serif block truncate mt-0.5">
               {result.totalHours.toLocaleString()}
             </span>
-            <span className="text-[10px] font-bold text-purpleText-400 block mt-1">Hours Lived</span>
+            <span className="text-[10px] font-bold text-purpleText-400 block mt-1">Approx. Hours</span>
           </div>
 
           {/* Total Minutes */}
@@ -175,7 +173,7 @@ export default function AgeResultDashboard({ result }: AgeResultDashboardProps) 
             <span className="text-lg sm:text-2xl font-extrabold text-pinkPastel-500 font-serif block truncate mt-0.5">
               {result.totalMinutes.toLocaleString()}
             </span>
-            <span className="text-[10px] font-bold text-purpleText-400 block mt-1">Minutes Lived</span>
+            <span className="text-[10px] font-bold text-purpleText-400 block mt-1">Approx. Minutes</span>
           </div>
 
           {/* Zodiac Sign */}
@@ -189,22 +187,11 @@ export default function AgeResultDashboard({ result }: AgeResultDashboardProps) 
         </div>
       </div>
 
-      {/* Birthday Experience & Countdown */}
-      <BirthdayCountdown nextBirthday={result.nextBirthday} nextFiveBirthdays={result.nextFiveBirthdays} />
-
       {/* Birth Date Discoveries */}
       <BirthDateDiscoveryCard result={result} />
 
       {/* Astrology & Personality Overview */}
       <ZodiacAstrologySection userZodiac={result.zodiacProfile} />
-
-      {/* Lifetime Milestones Timeline */}
-      <AgeMilestoneTimeline
-        milestones={result.milestones}
-        nextBigDay={result.nextBigDay}
-        timeline={result.timeline}
-        nextMajorMilestone={result.nextMajorMilestone}
-      />
 
       {/* Share Card Modal */}
       {showShareModal && (
@@ -213,5 +200,3 @@ export default function AgeResultDashboard({ result }: AgeResultDashboardProps) 
     </div>
   );
 }
-
-
