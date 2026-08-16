@@ -159,6 +159,8 @@ export default function RobustDateInput({
       setViewYear(parsed.year);
       setViewMonth(parsed.month);
       onChange(iso);
+    } else {
+      onChange(formatted);
     }
   };
 

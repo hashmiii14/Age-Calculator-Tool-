@@ -1,5 +1,5 @@
 import {
-  parseISODate,
+  parseAnyDateString,
   getDaysInMonth,
   isLeapYear,
   formatDateLong,
@@ -37,15 +37,15 @@ export function validateAgeInputs(
 ): ValidationErrors {
   const errors: ValidationErrors = {};
 
-  const dob = parseISODate(dobStr);
+  const dob = parseAnyDateString(dobStr);
   if (!dob) {
-    errors.dob = 'Please enter a valid date of birth (YYYY-MM-DD).';
+    errors.dob = 'Please enter a valid date of birth (e.g. DD-MM-YYYY or YYYY-MM-DD).';
     return errors;
   }
 
-  const target = parseISODate(targetDateStr);
+  const target = parseAnyDateString(targetDateStr);
   if (!target) {
-    errors.targetDate = 'Please enter a valid target date (YYYY-MM-DD).';
+    errors.targetDate = 'Please enter a valid target date (e.g. DD-MM-YYYY or YYYY-MM-DD).';
     return errors;
   }
 
@@ -77,8 +77,8 @@ export function calculateNextFiveBirthdays(
   dobStr: string,
   targetDateStr: string
 ): UpcomingBirthday[] {
-  const dob = parseISODate(dobStr);
-  const target = parseISODate(targetDateStr);
+  const dob = parseAnyDateString(dobStr);
+  const target = parseAnyDateString(targetDateStr);
   if (!dob || !target) return [];
 
   const results: UpcomingBirthday[] = [];
@@ -137,8 +137,8 @@ export function calculateAgeProgress(
   dobStr: string,
   targetDateStr: string
 ): AgeProgress {
-  const dob = parseISODate(dobStr)!;
-  const target = parseISODate(targetDateStr)!;
+  const dob = parseAnyDateString(dobStr)!;
+  const target = parseAnyDateString(targetDateStr)!;
 
   let lastBdayYear = target.year;
   const getBdayDate = (y: number): ParsedDate => {
@@ -187,8 +187,8 @@ export function calculateNextMajorMilestone(
   const milestoneAges = [1, 5, 10, 18, 21, 25, 30, 40, 50, 60, 70, 75, 80, 90, 100];
   const targetAge = milestoneAges.find((a) => a > currentYears) || (Math.floor(currentYears / 10) + 1) * 10;
 
-  const dob = parseISODate(dobStr)!;
-  const target = parseISODate(targetDateStr)!;
+  const dob = parseAnyDateString(dobStr)!;
+  const target = parseAnyDateString(targetDateStr)!;
 
   let mYear = dob.year + targetAge;
   let mMonth = dob.month;
@@ -241,7 +241,7 @@ export function calculateMilestoneTimeline(
   currentYears: number,
   dobStr: string
 ): AgeTimelineNode[] {
-  const dob = parseISODate(dobStr)!;
+  const dob = parseAnyDateString(dobStr)!;
   const milestoneAges = [1, 5, 10, 13, 16, 18, 21, 25, 30, 40, 50, 60, 70, 80];
 
   const nextAge = milestoneAges.find((a) => a > currentYears) || 80;
@@ -274,8 +274,8 @@ export function calculateMilestones(
   dobStr: string,
   targetDateStr: string
 ): AgeMilestone[] {
-  const dob = parseISODate(dobStr);
-  const target = parseISODate(targetDateStr);
+  const dob = parseAnyDateString(dobStr);
+  const target = parseAnyDateString(targetDateStr);
   if (!dob || !target) return [];
 
   const dobDate = toLocalDate(dob);
@@ -285,19 +285,21 @@ export function calculateMilestones(
 
   return targets.map((mDays) => {
     const mDate = new Date(dobDate.getTime() + mDays * 24 * 60 * 60 * 1000);
-    const y = mDate.getFullYear();
-    const m = (mDate.getMonth() + 1).toString().padStart(2, '0');
-    const d = mDate.getDate().toString().padStart(2, '0');
-    const dateStr = `${y}-${m}-${d}`;
+    const mYear = mDate.getFullYear();
+    const mMonth = mDate.getMonth() + 1;
+    const mDay = mDate.getDate();
 
-    const diffDays = Math.round((mDate.getTime() - targetDate.getTime()) / (1000 * 60 * 60 * 24));
-    const isPassed = diffDays <= 0;
+    const mParsed: ParsedDate = { year: mYear, month: mMonth, day: mDay };
+    const dateStr = formatISODate(mParsed);
+
+    const daysRemaining = getDifferenceInDays(target, mParsed);
+    const isPassed = daysRemaining <= 0;
 
     return {
       milestoneDays: mDays,
       targetDateStr: dateStr,
       formattedTargetDate: formatDateLong(dateStr),
-      daysRemaining: isPassed ? 0 : diffDays,
+      daysRemaining: Math.abs(daysRemaining),
       isPassed,
     };
   });
@@ -315,8 +317,11 @@ export function calculateAge(
     throw new Error(errors.dob || errors.targetDate);
   }
 
-  const dob = parseISODate(dobStr)!;
-  const target = parseISODate(targetDateStr)!;
+  const dob = parseAnyDateString(dobStr)!;
+  const target = parseAnyDateString(targetDateStr)!;
+
+  const normalizedDOBStr = formatISODate(dob);
+  const normalizedTargetStr = formatISODate(target);
 
   let years = target.year - dob.year;
   let months = target.month - dob.month;
@@ -350,15 +355,15 @@ export function calculateAge(
   const totalSeconds = totalMinutes * 60;
 
   const dayOfYear = getDayOfYear(dob);
-  const nextBirthday = calculateNextBirthday(dobStr, targetDateStr);
-  const nextFiveBirthdays = calculateNextFiveBirthdays(dobStr, targetDateStr);
-  const milestones = calculateMilestones(dobStr, targetDateStr);
+  const nextBirthday = calculateNextBirthday(normalizedDOBStr, normalizedTargetStr);
+  const nextFiveBirthdays = calculateNextFiveBirthdays(normalizedDOBStr, normalizedTargetStr);
+  const milestones = calculateMilestones(normalizedDOBStr, normalizedTargetStr);
   const nextBigDay = calculateNextBigDayMilestone(milestones);
-  const progress = calculateAgeProgress(dobStr, targetDateStr);
-  const nextMajorMilestone = calculateNextMajorMilestone(years, dobStr, targetDateStr);
-  const timeline = calculateMilestoneTimeline(years, dobStr);
+  const progress = calculateAgeProgress(normalizedDOBStr, normalizedTargetStr);
+  const nextMajorMilestone = calculateNextMajorMilestone(years, normalizedDOBStr, normalizedTargetStr);
+  const timeline = calculateMilestoneTimeline(years, normalizedDOBStr);
 
-  const dobWeekday = getDayOfWeek(dobStr);
+  const dobWeekday = getDayOfWeek(normalizedDOBStr);
 
   const quickFacts: QuickFact[] = [
     {
@@ -440,8 +445,8 @@ export function calculateAgeComparison(
   const ageA = calculateAge(dobAStr, targetDateStr);
   const ageB = calculateAge(dobBStr, targetDateStr);
 
-  const dobADate = toLocalDate(parseISODate(dobAStr)!);
-  const dobBDate = toLocalDate(parseISODate(dobBStr)!);
+  const dobADate = toLocalDate(parseAnyDateString(dobAStr)!);
+  const dobBDate = toLocalDate(parseAnyDateString(dobBStr)!);
 
   const earlierStr = dobADate.getTime() <= dobBDate.getTime() ? dobAStr : dobBStr;
   const laterStr = dobADate.getTime() <= dobBDate.getTime() ? dobBStr : dobAStr;
@@ -477,8 +482,8 @@ export function calculateDateDifference(
     throw new Error(errors.dob || errors.targetDate);
   }
 
-  const start = parseISODate(startDateStr)!;
-  const end = parseISODate(endDateStr)!;
+  const start = parseAnyDateString(startDateStr)!;
+  const end = parseAnyDateString(endDateStr)!;
 
   let years = end.year - start.year;
   let months = end.month - start.month;
@@ -534,8 +539,8 @@ export function calculateNextBirthday(
   dobStr: string,
   currentDateStr: string
 ): NextBirthdayResult {
-  const dob = parseISODate(dobStr);
-  const current = parseISODate(currentDateStr);
+  const dob = parseAnyDateString(dobStr);
+  const current = parseAnyDateString(currentDateStr);
 
   if (!dob || !current) {
     throw new Error('Invalid dates provided for next birthday calculation.');

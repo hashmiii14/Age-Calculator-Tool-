@@ -48,29 +48,34 @@ export function parseISODate(dateStr: string): ParsedDate | null {
  */
 export function parseAnyDateString(dateStr: string): ParsedDate | null {
   if (!dateStr || typeof dateStr !== 'string') return null;
+
+  // Fast path YYYY-MM-DD
+  const isoParsed = parseISODate(dateStr);
+  if (isoParsed) return isoParsed;
+
   const clean = dateStr.trim().replace(/\s*[\/\.\-\s]\s*/g, '-');
   if (!clean) return null;
 
-  // Try YYYY-MM-DD
+  // Try YYYY-MM-DD or YYYY-M-D
   const matchYMD = /^(\d{4})-(\d{1,2})-(\d{1,2})$/.exec(clean);
   if (matchYMD) {
     const year = parseInt(matchYMD[1], 10);
     const month = parseInt(matchYMD[2], 10);
     const day = parseInt(matchYMD[3], 10);
-    if (month >= 1 && month <= 12 && year >= 1900 && year <= 2035) {
+    if (month >= 1 && month <= 12 && year >= 1800 && year <= 2100) {
       if (day >= 1 && day <= getDaysInMonth(year, month)) {
         return { year, month, day };
       }
     }
   }
 
-  // Try DD-MM-YYYY
+  // Try DD-MM-YYYY or D-M-YYYY
   const matchDMY = /^(\d{1,2})-(\d{1,2})-(\d{4})$/.exec(clean);
   if (matchDMY) {
     const day = parseInt(matchDMY[1], 10);
     const month = parseInt(matchDMY[2], 10);
     const year = parseInt(matchDMY[3], 10);
-    if (month >= 1 && month <= 12 && year >= 1900 && year <= 2035) {
+    if (month >= 1 && month <= 12 && year >= 1800 && year <= 2100) {
       if (day >= 1 && day <= getDaysInMonth(year, month)) {
         return { year, month, day };
       }
@@ -83,7 +88,7 @@ export function parseAnyDateString(dateStr: string): ParsedDate | null {
     const day = parseInt(matchCompact[1], 10);
     const month = parseInt(matchCompact[2], 10);
     const year = parseInt(matchCompact[3], 10);
-    if (month >= 1 && month <= 12 && year >= 1900 && year <= 2035) {
+    if (month >= 1 && month <= 12 && year >= 1800 && year <= 2100) {
       if (day >= 1 && day <= getDaysInMonth(year, month)) {
         return { year, month, day };
       }
@@ -125,7 +130,7 @@ export function getTodayISODate(): string {
  * Returns a human-readable date format, e.g. "Tuesday, March 14, 2006".
  */
 export function formatDateLong(dateStr: string): string {
-  const parsed = parseISODate(dateStr);
+  const parsed = parseAnyDateString(dateStr);
   if (!parsed) return dateStr;
   const dt = toLocalDate(parsed);
   return dt.toLocaleDateString('en-US', {
@@ -140,7 +145,7 @@ export function formatDateLong(dateStr: string): string {
  * Returns the weekday name for a date string, e.g. "Tuesday".
  */
 export function getDayOfWeek(dateStr: string): string {
-  const parsed = parseISODate(dateStr);
+  const parsed = parseAnyDateString(dateStr);
   if (!parsed) return '';
   const dt = toLocalDate(parsed);
   return dt.toLocaleDateString('en-US', { weekday: 'long' });

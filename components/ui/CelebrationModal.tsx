@@ -26,8 +26,8 @@ export default function CelebrationModal({
     // Launch confetti on modal open
     try {
       confetti({
-        particleCount: 70,
-        spread: 70,
+        particleCount: 80,
+        spread: 80,
         origin: { y: 0.5 },
         disableForReducedMotion: true,
       });
@@ -43,12 +43,8 @@ export default function CelebrationModal({
     };
     window.addEventListener('keydown', handleKeyDown);
 
-    // Lock body scrolling while open
-    document.body.style.overflow = 'hidden';
-
     return () => {
       window.removeEventListener('keydown', handleKeyDown);
-      document.body.style.overflow = '';
     };
   }, [onClose]);
 
@@ -57,12 +53,14 @@ export default function CelebrationModal({
     if (onViewBirthday) {
       onViewBirthday();
     } else {
-      const el = document.getElementById('birthday-section');
-      if (el) {
-        el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      } else {
-        window.location.href = '/birthday-countdown';
-      }
+      setTimeout(() => {
+        const el = document.getElementById('birthday-section');
+        if (el) {
+          el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        } else {
+          window.location.href = '/birthday-countdown';
+        }
+      }, 50);
     }
   };
 
@@ -71,30 +69,37 @@ export default function CelebrationModal({
     if (onViewMilestones) {
       onViewMilestones();
     } else {
-      const el = document.getElementById('milestones-section');
-      if (el) {
-        el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      } else {
-        window.location.href = '/age-milestones';
-      }
+      setTimeout(() => {
+        const el = document.getElementById('milestones-section');
+        if (el) {
+          el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        } else {
+          window.location.href = '/age-milestones';
+        }
+      }, 50);
     }
   };
 
   return (
     <div
-      className="fixed inset-0 z-[9999] flex items-center justify-center p-4 bg-purpleText-950/70 backdrop-blur-md animate-fadeIn"
+      className="fixed inset-0 z-[9999] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm transition-opacity"
+      onClick={(e) => {
+        if (e.target === e.currentTarget) {
+          onClose();
+        }
+      }}
       role="dialog"
       aria-modal="true"
       aria-labelledby="celebration-modal-title"
     >
-      {/* Outer Card with Viewport Safety */}
-      <div className="relative w-full max-w-lg rounded-4xl bg-gradient-to-b from-white via-pinkPastel-50 to-pinkPastel-100 dark:from-purpleText-900 dark:to-purpleText-950 border-3 border-pinkPastel-300 dark:border-purpleText-700 shadow-cute p-6 sm:p-8 text-center space-y-5 animate-fade-up overflow-hidden max-h-[90dvh] overflow-y-auto">
+      {/* Outer Card with High Contrast Solid Styling */}
+      <div className="relative w-full max-w-lg rounded-3xl sm:rounded-4xl bg-white dark:bg-purpleText-900 border-4 border-pinkPastel-400 dark:border-purpleText-700 shadow-2xl p-6 sm:p-8 text-center space-y-5 overflow-hidden max-h-[85vh] overflow-y-auto text-purpleText-900 dark:text-white">
 
         {/* Decorative Floating Hearts & Stars */}
-        <div className="absolute top-3 left-4 text-pinkPastel-400 animate-float opacity-70 pointer-events-none">
+        <div className="absolute top-3 left-4 text-pinkPastel-400 opacity-70 pointer-events-none">
           <Heart className="w-5 h-5 fill-pinkPastel-300" />
         </div>
-        <div className="absolute bottom-4 right-4 text-pinkPastel-400 animate-float opacity-70 pointer-events-none" style={{ animationDelay: '1.5s' }}>
+        <div className="absolute bottom-4 right-4 text-pinkPastel-400 opacity-70 pointer-events-none">
           <Sparkles className="w-6 h-6 text-pinkPastel-500" />
         </div>
 
@@ -102,7 +107,7 @@ export default function CelebrationModal({
         <button
           type="button"
           onClick={onClose}
-          className="absolute top-4 right-4 p-2 rounded-2xl bg-white/80 dark:bg-purpleText-800 text-purpleText-600 dark:text-purpleText-300 hover:text-pinkPastel-500 transition-colors focus:outline-none cursor-pointer border border-pinkPastel-200 dark:border-purpleText-700"
+          className="absolute top-4 right-4 p-2 rounded-2xl bg-pinkPastel-100 dark:bg-purpleText-800 text-purpleText-800 dark:text-white hover:bg-pinkPastel-500 hover:text-white transition-colors focus:outline-none cursor-pointer border border-pinkPastel-300 dark:border-purpleText-700"
           aria-label="Close celebration popup"
         >
           <X className="w-5 h-5" />
@@ -113,7 +118,7 @@ export default function CelebrationModal({
           <CuteCharacter variant="celebrating" size={96} className="drop-shadow-md" />
         </div>
 
-        {/* Heading & Quote */}
+        {/* Heading & Subtitle */}
         <div className="space-y-2">
           <div className="inline-flex items-center space-x-1.5 px-3.5 py-1 rounded-full bg-pinkPastel-100 dark:bg-purpleText-800 text-pinkPastel-600 dark:text-pinkPastel-300 text-xs font-black uppercase tracking-wider">
             <PartyPopper className="w-3.5 h-3.5 text-pinkPastel-500" />
@@ -133,7 +138,7 @@ export default function CelebrationModal({
         </div>
 
         {/* Compact Result Display Badge */}
-        <div className="py-3 px-4 rounded-3xl bg-white dark:bg-purpleText-900 border-2 border-pinkPastel-200 dark:border-purpleText-800 shadow-sm inline-block max-w-full">
+        <div className="py-3 px-5 rounded-3xl bg-pinkPastel-50 dark:bg-purpleText-950 border-2 border-pinkPastel-200 dark:border-purpleText-800 shadow-sm inline-block max-w-full">
           <span className="text-xl sm:text-3xl font-black font-serif text-purpleText-900 dark:text-white tracking-tight">
             {years} <span className="text-pinkPastel-500 text-base sm:text-xl font-bold">Years</span> • {months} <span className="text-pinkPastel-500 text-base sm:text-xl font-bold">Months</span> • {days} <span className="text-pinkPastel-500 text-base sm:text-xl font-bold">Days</span>
           </span>
@@ -162,7 +167,7 @@ export default function CelebrationModal({
           <button
             type="button"
             onClick={onClose}
-            className="w-full sm:w-auto px-4 py-3 rounded-2xl text-purpleText-500 dark:text-purpleText-400 hover:text-purpleText-900 dark:hover:text-white font-extrabold text-xs uppercase tracking-wider cursor-pointer"
+            className="w-full sm:w-auto px-5 py-3 rounded-2xl bg-purpleText-100 dark:bg-purpleText-800 text-purpleText-900 dark:text-white hover:bg-pinkPastel-500 hover:text-white font-extrabold text-xs uppercase tracking-wider transition-all cursor-pointer"
           >
             Close
           </button>
