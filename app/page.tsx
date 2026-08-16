@@ -8,7 +8,6 @@ import HomepageBirthdayBanner from '../components/home/HomepageBirthdayBanner';
 import DaysLivedSection from '../components/home/DaysLivedSection';
 import BirthdayCountdown from '../components/age-calculator/BirthdayCountdown';
 import AgeMilestoneTimeline from '../components/age-calculator/AgeMilestoneTimeline';
-import CelebrationModal from '../components/ui/CelebrationModal';
 import DateToolsGrid from '../components/tools/DateToolsGrid';
 import AboutUsSection from '../components/content/AboutUsSection';
 import PrivacyPolicySection from '../components/content/PrivacyPolicySection';
@@ -20,9 +19,7 @@ import { AgeResult } from '../lib/age/types';
 export default function HomePage() {
   const [result, setResult] = useState<AgeResult | null>(null);
   const [initialDOB, setInitialDOB] = useState<string>('');
-  const [showCelebrationModal, setShowCelebrationModal] = useState<boolean>(false);
   const [calcError, setCalcError] = useState<string | null>(null);
-  const [isNewlyCalculated, setIsNewlyCalculated] = useState<boolean>(false);
 
   // Load saved DOB on initial mount
   useEffect(() => {
@@ -38,27 +35,7 @@ export default function HomePage() {
     }
   }, []);
 
-  // ONLY AFTER successful result exists and is rendered, open 3D celebration popup
-  useEffect(() => {
-    if (result && isNewlyCalculated) {
-      // Scroll down to result section
-      const el = document.getElementById('result-dashboard');
-      if (el) {
-        el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      }
-
-      // Trigger celebration modal only after result exists in DOM
-      const timer = setTimeout(() => {
-        setShowCelebrationModal(true);
-        setIsNewlyCalculated(false);
-      }, 400);
-
-      return () => clearTimeout(timer);
-    }
-  }, [result, isNewlyCalculated]);
-
   const handleCalculate = (dob: string, targetDate: string) => {
-    setShowCelebrationModal(false);
     setCalcError(null);
 
     try {
@@ -72,17 +49,22 @@ export default function HomePage() {
       // 2. Calculate real age result synchronously
       const res = calculateAge(dob, targetDate);
       
-      // 3. Commit result to state immediately
+      // 3. Immediately render result on page
       setResult(res);
-      setIsNewlyCalculated(true);
 
       if (typeof window !== 'undefined') {
         localStorage.setItem('agepulse_dob', res.dobStr || dob);
+
+        // Smooth scroll down to result section
+        setTimeout(() => {
+          const el = document.getElementById('result-dashboard');
+          if (el) {
+            el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }
+        }, 50);
       }
     } catch (err) {
       console.error('Calculation error caught in HomePage:', err);
-      setShowCelebrationModal(false);
-      setIsNewlyCalculated(false);
       setCalcError(err instanceof Error ? err.message : 'Age calculation failed. Please check your dates.');
     }
   };
@@ -93,8 +75,6 @@ export default function HomePage() {
     }
     setResult(null);
     setInitialDOB('');
-    setShowCelebrationModal(false);
-    setIsNewlyCalculated(false);
     setCalcError(null);
   };
 
@@ -126,16 +106,6 @@ export default function HomePage() {
           </div>
         )}
       </section>
-
-      {/* Interactive Celebration Modal Overlay (Triggers only after result exists) */}
-      {showCelebrationModal && result && (
-        <CelebrationModal
-          years={result.years}
-          months={result.months}
-          days={result.days}
-          onClose={() => setShowCelebrationModal(false)}
-        />
-      )}
 
       {/* 2. BIRTHDAY SECTION */}
       <section id="birthday-section" aria-label="Birthday Countdown" className="space-y-6 scroll-mt-24">
