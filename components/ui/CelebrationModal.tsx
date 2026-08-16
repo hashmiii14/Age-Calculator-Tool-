@@ -1,8 +1,7 @@
 'use client';
 
 import React, { useEffect } from 'react';
-import Link from 'next/link';
-import { X, Trophy, PartyPopper, Heart, Sparkles } from 'lucide-react';
+import { X, Trophy, PartyPopper, Heart, Sparkles, Gift } from 'lucide-react';
 import confetti from 'canvas-confetti';
 import CuteCharacter from './CuteCharacter';
 
@@ -11,8 +10,8 @@ interface CelebrationModalProps {
   months: number;
   days: number;
   onClose: () => void;
+  onViewBirthday?: () => void;
   onViewMilestones?: () => void;
-  onViewCountdown?: () => void;
 }
 
 export default function CelebrationModal({
@@ -20,8 +19,8 @@ export default function CelebrationModal({
   months,
   days,
   onClose,
+  onViewBirthday,
   onViewMilestones,
-  onViewCountdown,
 }: CelebrationModalProps) {
   useEffect(() => {
     // Launch confetti on modal open
@@ -53,6 +52,34 @@ export default function CelebrationModal({
     };
   }, [onClose]);
 
+  const handleScrollToBirthday = () => {
+    onClose();
+    if (onViewBirthday) {
+      onViewBirthday();
+    } else {
+      const el = document.getElementById('birthday-section');
+      if (el) {
+        el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      } else {
+        window.location.href = '/birthday-countdown';
+      }
+    }
+  };
+
+  const handleScrollToMilestones = () => {
+    onClose();
+    if (onViewMilestones) {
+      onViewMilestones();
+    } else {
+      const el = document.getElementById('milestones-section');
+      if (el) {
+        el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      } else {
+        window.location.href = '/age-milestones';
+      }
+    }
+  };
+
   return (
     <div
       className="fixed inset-0 z-[9999] flex items-center justify-center p-4 bg-purpleText-950/70 backdrop-blur-md animate-fadeIn"
@@ -60,8 +87,8 @@ export default function CelebrationModal({
       aria-modal="true"
       aria-labelledby="celebration-modal-title"
     >
-      {/* Outer Card with Floating Elements */}
-      <div className="relative w-full max-w-lg rounded-4xl bg-gradient-to-b from-white via-pinkPastel-50 to-pinkPastel-100 dark:from-purpleText-900 dark:to-purpleText-950 border-3 border-pinkPastel-300 dark:border-purpleText-700 shadow-cute p-6 sm:p-8 text-center space-y-5 animate-fade-up overflow-hidden max-h-[90vh] overflow-y-auto">
+      {/* Outer Card with Viewport Safety */}
+      <div className="relative w-full max-w-lg rounded-4xl bg-gradient-to-b from-white via-pinkPastel-50 to-pinkPastel-100 dark:from-purpleText-900 dark:to-purpleText-950 border-3 border-pinkPastel-300 dark:border-purpleText-700 shadow-cute p-6 sm:p-8 text-center space-y-5 animate-fade-up overflow-hidden max-h-[90dvh] overflow-y-auto">
 
         {/* Decorative Floating Hearts & Stars */}
         <div className="absolute top-3 left-4 text-pinkPastel-400 animate-float opacity-70 pointer-events-none">
@@ -81,7 +108,7 @@ export default function CelebrationModal({
           <X className="w-5 h-5" />
         </button>
 
-        {/* Mascot & Illustration */}
+        {/* Mascot Illustration */}
         <div className="flex justify-center pt-2">
           <CuteCharacter variant="celebrating" size={96} className="drop-shadow-md" />
         </div>
@@ -114,29 +141,23 @@ export default function CelebrationModal({
 
         {/* Action Buttons */}
         <div className="pt-2 flex flex-col sm:flex-row items-center justify-center gap-2.5">
-          <Link
-            href="/age-milestones"
-            onClick={() => {
-              if (onViewMilestones) onViewMilestones();
-              onClose();
-            }}
+          <button
+            type="button"
+            onClick={handleScrollToBirthday}
             className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-3 rounded-2xl bg-pinkPastel-500 hover:bg-pinkPastel-600 text-white font-extrabold text-xs uppercase tracking-wider shadow-cute transition-all cursor-pointer"
           >
-            <Trophy className="w-4 h-4" />
-            <span>View My Milestones</span>
-          </Link>
+            <Gift className="w-4 h-4" />
+            <span>View Birthday</span>
+          </button>
 
-          <Link
-            href="/birthday-countdown"
-            onClick={() => {
-              if (onViewCountdown) onViewCountdown();
-              onClose();
-            }}
+          <button
+            type="button"
+            onClick={handleScrollToMilestones}
             className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-3 rounded-2xl bg-pinkPastel-100 dark:bg-purpleText-800 text-pinkPastel-600 dark:text-pinkPastel-300 hover:bg-pinkPastel-200 font-extrabold text-xs uppercase tracking-wider transition-all cursor-pointer border border-pinkPastel-200 dark:border-purpleText-700"
           >
-            <PartyPopper className="w-4 h-4 text-pinkPastel-500" />
-            <span>Birthday Countdown</span>
-          </Link>
+            <Trophy className="w-4 h-4 text-pinkPastel-500" />
+            <span>View Milestones</span>
+          </button>
 
           <button
             type="button"

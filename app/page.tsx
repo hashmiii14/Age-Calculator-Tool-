@@ -6,9 +6,10 @@ import AgeCalculatorForm from '../components/age-calculator/AgeCalculatorForm';
 import AgeResultDashboard from '../components/age-calculator/AgeResultDashboard';
 import HomepageBirthdayBanner from '../components/home/HomepageBirthdayBanner';
 import DaysLivedSection from '../components/home/DaysLivedSection';
+import BirthdayCountdown from '../components/age-calculator/BirthdayCountdown';
+import AgeMilestoneTimeline from '../components/age-calculator/AgeMilestoneTimeline';
 import CelebrationModal from '../components/ui/CelebrationModal';
 import DateToolsGrid from '../components/tools/DateToolsGrid';
-import FAQAccordion from '../components/content/FAQAccordion';
 import AboutUsSection from '../components/content/AboutUsSection';
 import PrivacyPolicySection from '../components/content/PrivacyPolicySection';
 import ContactSection from '../components/content/ContactSection';
@@ -36,18 +37,25 @@ export default function HomePage() {
 
   const handleCalculate = (dob: string, targetDate: string) => {
     try {
+      // 1. Calculate real age result
       const res = calculateAge(dob, targetDate);
+      
+      // 2. Immediately render result on page
       setResult(res);
       localStorage.setItem('agepulse_dob', dob);
-      setShowCelebrationModal(true);
 
-      // Smooth scroll to result dashboard on mobile/tablet
+      // 3. Smooth scroll to result on page
       setTimeout(() => {
         const el = document.getElementById('result-dashboard');
         if (el) {
           el.scrollIntoView({ behavior: 'smooth', block: 'start' });
         }
-      }, 100);
+      }, 50);
+
+      // 4. Open celebration popup after result is rendered
+      setTimeout(() => {
+        setShowCelebrationModal(true);
+      }, 400);
     } catch (err) {
       console.error('Calculation error:', err);
     }
@@ -61,20 +69,28 @@ export default function HomePage() {
   };
 
   return (
-    <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-8 space-y-8 animate-fade-up">
-      {/* Hero Section */}
-      <CuteHero />
+    <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-8 space-y-10 sm:space-y-12 animate-fade-up">
 
-      {/* CORE PRODUCT: Age Calculator Form Card */}
-      <section aria-label="Age Calculator">
+      {/* 1. CALCULATOR SECTION */}
+      <section id="calculator-section" aria-label="Age Calculator" className="space-y-6">
+        <CuteHero />
+        
         <AgeCalculatorForm
           onCalculate={handleCalculate}
           onReset={handleReset}
           initialDOB={initialDOB}
         />
+
+        {/* Revealed Calculation Result Dashboard (Rendered immediately on page) */}
+        {result && (
+          <div id="result-dashboard" className="space-y-6 pt-2">
+            <AgeResultDashboard result={result} />
+            <DaysLivedSection result={result} />
+          </div>
+        )}
       </section>
 
-      {/* Interactive Celebration Modal Overlay (Triggers on calculation) */}
+      {/* Interactive Celebration Modal Overlay (Triggers after result renders) */}
       {showCelebrationModal && result && (
         <CelebrationModal
           years={result.years}
@@ -84,41 +100,48 @@ export default function HomePage() {
         />
       )}
 
-      {/* Revealed Calculation Result Dashboard */}
-      {result && (
-        <>
-          <section aria-label="Calculation Result">
-            <AgeResultDashboard result={result} />
-          </section>
-
-          {/* "You've Been Here For..." Days Lived Section */}
-          <section aria-label="Lifetime Days Lived">
-            <DaysLivedSection result={result} />
-          </section>
-        </>
-      )}
-
-      {/* Birthday Promo Section Banner */}
-      <section aria-label="Birthday Countdown Banner">
+      {/* 2. BIRTHDAY SECTION */}
+      <section id="birthday-section" aria-label="Birthday Countdown" className="space-y-6 scroll-mt-24">
         <HomepageBirthdayBanner />
+        <BirthdayCountdown
+          initialDOB={result?.dobStr || initialDOB}
+          nextBirthday={result?.nextBirthday}
+          nextFiveBirthdays={result?.nextFiveBirthdays}
+        />
       </section>
 
-      {/* Secondary Tools */}
-      <section aria-label="Related Date Tools">
+      {/* 3. MILESTONE SECTION */}
+      <section id="milestones-section" aria-label="Lifetime Milestones" className="space-y-6 scroll-mt-24">
+        {result && (
+          <AgeMilestoneTimeline
+            milestones={result.milestones}
+            nextBigDay={result.nextBigDay}
+            timeline={result.timeline}
+            nextMajorMilestone={result.nextMajorMilestone}
+          />
+        )}
+      </section>
+
+      {/* 4. MORE TOOLS SECTION */}
+      <section id="more-tools-section" aria-label="More Date Tools" className="space-y-4 scroll-mt-24">
         <DateToolsGrid />
       </section>
 
-      {/* Concise FAQ Accordion */}
-      <section aria-label="Frequently Asked Questions">
-        <FAQAccordion />
+      {/* 5. PRIVACY POLICY SECTION */}
+      <section id="privacy-section" aria-label="Privacy Policy" className="scroll-mt-24">
+        <PrivacyPolicySection />
       </section>
 
-      {/* SEO & Informational Content */}
-      <div className="space-y-8 pt-4 border-t border-pinkPastel-200 dark:border-purpleText-800">
-        <AboutUsSection />
-        <PrivacyPolicySection />
+      {/* 6. CONTACT SECTION */}
+      <section id="contact-section" aria-label="Contact Us" className="scroll-mt-24">
         <ContactSection />
-      </div>
+      </section>
+
+      {/* 7. ABOUT SECTION */}
+      <section id="about-section" aria-label="About AgePulse" className="scroll-mt-24">
+        <AboutUsSection />
+      </section>
+
     </div>
   );
 }

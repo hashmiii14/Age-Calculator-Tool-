@@ -242,9 +242,9 @@ export function calculateMilestoneTimeline(
   dobStr: string
 ): AgeTimelineNode[] {
   const dob = parseISODate(dobStr)!;
-  const milestoneAges = [0, 10, 18, 21, 25, 30, 40, 50, 75, 100];
+  const milestoneAges = [1, 5, 10, 13, 16, 18, 21, 25, 30, 40, 50, 60, 70, 80];
 
-  const nextAge = milestoneAges.find((a) => a > currentYears) || 100;
+  const nextAge = milestoneAges.find((a) => a > currentYears) || 80;
 
   return milestoneAges.map((age) => {
     let mYear = dob.year + age;
@@ -259,7 +259,7 @@ export function calculateMilestoneTimeline(
 
     return {
       age,
-      label: age === 0 ? 'Birth' : `${age} Years`,
+      label: `${age} Years`,
       isReached: age <= currentYears,
       isNext: age === nextAge,
       formattedDate: formatDateLong(dateStr),
@@ -268,7 +268,7 @@ export function calculateMilestoneTimeline(
 }
 
 /**
- * Calculates lifetime day milestones (1k, 5k, 10k, 15k, 20k, 25k, 30k days lived).
+ * Calculates lifetime day milestones (1k, 5k, 10k, 20k, 30k, 40k, 50k days lived).
  */
 export function calculateMilestones(
   dobStr: string,
@@ -281,7 +281,7 @@ export function calculateMilestones(
   const dobDate = toLocalDate(dob);
   const targetDate = toLocalDate(target);
 
-  const targets = [1000, 5000, 10000, 15000, 20000, 25000, 30000];
+  const targets = [1000, 5000, 10000, 20000, 30000, 40000, 50000];
 
   return targets.map((mDays) => {
     const mDate = new Date(dobDate.getTime() + mDays * 24 * 60 * 60 * 1000);

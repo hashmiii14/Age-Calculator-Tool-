@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { Heart, Clock, Calendar, Info } from 'lucide-react';
+import { Heart, Info } from 'lucide-react';
 import { AgeResult } from '../../lib/age/types';
 
 interface DaysLivedSectionProps {
@@ -9,6 +9,8 @@ interface DaysLivedSectionProps {
 }
 
 export default function DaysLivedSection({ result }: DaysLivedSectionProps) {
+  const approxYears = (result.totalDays / 365.2425).toFixed(2);
+
   return (
     <section className="w-full bg-white dark:bg-purpleText-900 rounded-3xl sm:rounded-4xl p-6 sm:p-8 border-2 border-pinkPastel-200 dark:border-purpleText-800 shadow-cute space-y-6">
       <div className="flex flex-col sm:flex-row items-center justify-between gap-3 text-center sm:text-left border-b border-pinkPastel-100 dark:border-purpleText-800 pb-4">
@@ -46,37 +48,53 @@ export default function DaysLivedSection({ result }: DaysLivedSectionProps) {
       </div>
 
       {/* Supporting breakdown grid */}
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-center">
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 text-center">
+        <div className="p-4 rounded-2xl bg-pinkPastel-50/70 dark:bg-purpleText-950/60 border border-pinkPastel-100 dark:border-purpleText-800/80">
+          <span className="text-[10px] font-black uppercase tracking-widest text-purpleText-400 block">Years Alive</span>
+          <span className="text-lg sm:text-xl font-extrabold font-serif text-pinkPastel-500 block mt-0.5">
+            {approxYears}
+          </span>
+          <span className="text-[10px] font-bold text-purpleText-400 block mt-0.5">Approx. Decimal</span>
+        </div>
+
         <div className="p-4 rounded-2xl bg-pinkPastel-50/70 dark:bg-purpleText-950/60 border border-pinkPastel-100 dark:border-purpleText-800/80">
           <span className="text-[10px] font-black uppercase tracking-widest text-purpleText-400 block">Months</span>
-          <span className="text-xl sm:text-2xl font-extrabold font-serif text-purpleText-900 dark:text-white block mt-0.5">
+          <span className="text-lg sm:text-xl font-extrabold font-serif text-purpleText-900 dark:text-white block mt-0.5">
             {result.totalMonths.toLocaleString()}
           </span>
-          <span className="text-[10px] font-bold text-pinkPastel-500 block mt-0.5">Total Months</span>
+          <span className="text-[10px] font-bold text-purpleText-400 block mt-0.5">Total Months</span>
         </div>
 
         <div className="p-4 rounded-2xl bg-pinkPastel-50/70 dark:bg-purpleText-950/60 border border-pinkPastel-100 dark:border-purpleText-800/80">
           <span className="text-[10px] font-black uppercase tracking-widest text-purpleText-400 block">Weeks</span>
-          <span className="text-xl sm:text-2xl font-extrabold font-serif text-purpleText-900 dark:text-white block mt-0.5">
+          <span className="text-lg sm:text-xl font-extrabold font-serif text-purpleText-900 dark:text-white block mt-0.5">
             {result.totalWeeks.toLocaleString()}
           </span>
-          <span className="text-[10px] font-bold text-pinkPastel-500 block mt-0.5">Total Weeks</span>
+          <span className="text-[10px] font-bold text-purpleText-400 block mt-0.5">Total Weeks</span>
         </div>
 
         <div className="p-4 rounded-2xl bg-pinkPastel-50/70 dark:bg-purpleText-950/60 border border-pinkPastel-100 dark:border-purpleText-800/80">
           <span className="text-[10px] font-black uppercase tracking-widest text-purpleText-400 block">Hours</span>
-          <span className="text-xl sm:text-2xl font-extrabold font-serif text-purpleText-900 dark:text-white block mt-0.5">
+          <span className="text-lg sm:text-xl font-extrabold font-serif text-purpleText-900 dark:text-white block mt-0.5">
             {result.totalHours.toLocaleString()}
           </span>
-          <span className="text-[10px] font-bold text-purpleText-400 block mt-0.5">Estimated Hours</span>
+          <span className="text-[10px] font-bold text-purpleText-400 block mt-0.5">Approx. Hours</span>
         </div>
 
         <div className="p-4 rounded-2xl bg-pinkPastel-50/70 dark:bg-purpleText-950/60 border border-pinkPastel-100 dark:border-purpleText-800/80">
           <span className="text-[10px] font-black uppercase tracking-widest text-purpleText-400 block">Minutes</span>
-          <span className="text-xl sm:text-2xl font-extrabold font-serif text-purpleText-900 dark:text-white block mt-0.5">
+          <span className="text-lg sm:text-xl font-extrabold font-serif text-purpleText-900 dark:text-white block mt-0.5">
             {result.totalMinutes.toLocaleString()}
           </span>
-          <span className="text-[10px] font-bold text-purpleText-400 block mt-0.5">Estimated Minutes</span>
+          <span className="text-[10px] font-bold text-purpleText-400 block mt-0.5">Approx. Minutes</span>
+        </div>
+
+        <div className="p-4 rounded-2xl bg-pinkPastel-50/70 dark:bg-purpleText-950/60 border border-pinkPastel-100 dark:border-purpleText-800/80">
+          <span className="text-[10px] font-black uppercase tracking-widest text-purpleText-400 block">Seconds</span>
+          <span className="text-lg sm:text-xl font-extrabold font-serif text-pinkPastel-500 block mt-0.5">
+            {result.totalSeconds.toLocaleString()}
+          </span>
+          <span className="text-[10px] font-bold text-purpleText-400 block mt-0.5">Approx. Seconds</span>
         </div>
       </div>
     </section>
