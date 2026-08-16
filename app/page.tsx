@@ -41,8 +41,6 @@ export default function HomePage() {
   // ONLY AFTER successful result exists and is rendered, open 3D celebration popup
   useEffect(() => {
     if (result && isNewlyCalculated) {
-      console.log('RESULT_RENDERED', result.formattedDOB);
-      
       // Scroll down to result section
       const el = document.getElementById('result-dashboard');
       if (el) {
@@ -51,7 +49,6 @@ export default function HomePage() {
 
       // Trigger celebration modal only after result exists in DOM
       const timer = setTimeout(() => {
-        console.log('POPUP_OPEN');
         setShowCelebrationModal(true);
         setIsNewlyCalculated(false);
       }, 400);
@@ -61,7 +58,6 @@ export default function HomePage() {
   }, [result, isNewlyCalculated]);
 
   const handleCalculate = (dob: string, targetDate: string) => {
-    console.log('CALCULATION_STARTED', { dob, targetDate });
     setShowCelebrationModal(false);
     setCalcError(null);
 
@@ -72,16 +68,13 @@ export default function HomePage() {
         setCalcError(validationErrors.dob || validationErrors.targetDate || 'Invalid input dates.');
         return;
       }
-      console.log('DOB_VALIDATED', { dob, targetDate });
 
       // 2. Calculate real age result synchronously
       const res = calculateAge(dob, targetDate);
-      console.log('CALCULATION_SUCCESS', res.formattedDOB);
       
       // 3. Commit result to state immediately
       setResult(res);
       setIsNewlyCalculated(true);
-      console.log('RESULT_STATE_SET', res.formattedDOB);
 
       if (typeof window !== 'undefined') {
         localStorage.setItem('agepulse_dob', res.dobStr || dob);

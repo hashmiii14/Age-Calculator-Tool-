@@ -37,7 +37,6 @@ export default function AgeCalculatorForm({
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('CALCULATE_CLICK', { dob, targetDate });
 
     if (!dob) {
       setErrors({ dob: 'Please enter your date of birth.' });
@@ -51,7 +50,6 @@ export default function AgeCalculatorForm({
       return;
     }
 
-    console.log('DOB_VALIDATED', { dob, targetDate });
     setErrors({});
     try {
       setHasCalculated(true);
