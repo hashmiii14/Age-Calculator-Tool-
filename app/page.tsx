@@ -1,70 +1,120 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import CuteHero from '../components/home/CuteHero';
-import HowItWorksSection from '../components/home/HowItWorksSection';
-import WhyAgePulseSection from '../components/home/WhyAgePulseSection';
+import AgeCalculatorForm from '../components/age-calculator/AgeCalculatorForm';
 import AgeResultDashboard from '../components/age-calculator/AgeResultDashboard';
+import HomepageBirthdayBanner from '../components/home/HomepageBirthdayBanner';
+import DaysLivedSection from '../components/home/DaysLivedSection';
+import CelebrationModal from '../components/ui/CelebrationModal';
 import DateToolsGrid from '../components/tools/DateToolsGrid';
+import FAQAccordion from '../components/content/FAQAccordion';
 import AboutUsSection from '../components/content/AboutUsSection';
 import PrivacyPolicySection from '../components/content/PrivacyPolicySection';
 import ContactSection from '../components/content/ContactSection';
 import { calculateAge } from '../lib/age/ageEngine';
+import { getTodayISODate } from '../lib/age/dateUtils';
 import { AgeResult } from '../lib/age/types';
 
 export default function HomePage() {
-  const [calculationResult, setCalculationResult] = useState<AgeResult | null>(null);
+  const [result, setResult] = useState<AgeResult | null>(null);
+  const [initialDOB, setInitialDOB] = useState<string>('');
+  const [showCelebrationModal, setShowCelebrationModal] = useState<boolean>(false);
+
+  useEffect(() => {
+    const savedDOB = localStorage.getItem('agepulse_dob');
+    if (savedDOB) {
+      try {
+        setInitialDOB(savedDOB);
+        const res = calculateAge(savedDOB, getTodayISODate());
+        setResult(res);
+      } catch {
+        localStorage.removeItem('agepulse_dob');
+      }
+    }
+  }, []);
 
   const handleCalculate = (dob: string, targetDate: string) => {
     try {
       const res = calculateAge(dob, targetDate);
-      setCalculationResult(res);
+      setResult(res);
+      localStorage.setItem('agepulse_dob', dob);
+      setShowCelebrationModal(true);
 
+      // Smooth scroll to result dashboard on mobile/tablet
       setTimeout(() => {
-        const resultElement = document.getElementById('result-dashboard');
-        if (resultElement) {
-          resultElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        const el = document.getElementById('result-dashboard');
+        if (el) {
+          el.scrollIntoView({ behavior: 'smooth', block: 'start' });
         }
       }, 100);
-    } catch (e) {
-      console.error('Calculation error:', e);
+    } catch (err) {
+      console.error('Calculation error:', err);
     }
   };
 
   const handleReset = () => {
-    setCalculationResult(null);
+    localStorage.removeItem('agepulse_dob');
+    setResult(null);
+    setInitialDOB('');
+    setShowCelebrationModal(false);
   };
 
   return (
-    <div className="space-y-12 sm:space-y-16 pb-16">
-      
-      {/* 1. Hero Composition with Age Calculator as Right Column Centerpiece */}
-      <CuteHero
-        onCalculate={handleCalculate}
-        onReset={handleReset}
-      />
+    <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-8 space-y-8 animate-fade-up">
+      {/* Hero Section */}
+      <CuteHero />
 
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
-        {/* Ad Banner Placeholder */}
-        <div className="ad-slot hidden sm:flex items-center justify-center text-xs font-semibold text-roseProduct-400">
-          <span>Ad Advertisement Space</span>
-        </div>
+      {/* CORE PRODUCT: Age Calculator Form Card */}
+      <section aria-label="Age Calculator">
+        <AgeCalculatorForm
+          onCalculate={handleCalculate}
+          onReset={handleReset}
+          initialDOB={initialDOB}
+        />
+      </section>
 
-        {/* 2. Revealed Result Dashboard (When Calculated) */}
-        {calculationResult && (
-          <AgeResultDashboard result={calculationResult} />
-        )}
-      </div>
+      {/* Interactive Celebration Modal Overlay (Triggers on calculation) */}
+      {showCelebrationModal && result && (
+        <CelebrationModal
+          years={result.years}
+          months={result.months}
+          days={result.days}
+          onClose={() => setShowCelebrationModal(false)}
+        />
+      )}
 
-      {/* 3. How It Works Section */}
-      <HowItWorksSection />
+      {/* Revealed Calculation Result Dashboard */}
+      {result && (
+        <>
+          <section aria-label="Calculation Result">
+            <AgeResultDashboard result={result} />
+          </section>
 
-      {/* 4. Why AgePulse Section */}
-      <WhyAgePulseSection />
+          {/* "You've Been Here For..." Days Lived Section */}
+          <section aria-label="Lifetime Days Lived">
+            <DaysLivedSection result={result} />
+          </section>
+        </>
+      )}
 
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
-        {/* 5. Date Tools Navigation Grid */}
+      {/* Birthday Promo Section Banner */}
+      <section aria-label="Birthday Countdown Banner">
+        <HomepageBirthdayBanner />
+      </section>
+
+      {/* Secondary Tools */}
+      <section aria-label="Related Date Tools">
         <DateToolsGrid />
+      </section>
+
+      {/* Concise FAQ Accordion */}
+      <section aria-label="Frequently Asked Questions">
+        <FAQAccordion />
+      </section>
+
+      {/* SEO & Informational Content */}
+      <div className="space-y-8 pt-4 border-t border-pinkPastel-200 dark:border-purpleText-800">
         <AboutUsSection />
         <PrivacyPolicySection />
         <ContactSection />
@@ -72,6 +122,3 @@ export default function HomePage() {
     </div>
   );
 }
-
-
-

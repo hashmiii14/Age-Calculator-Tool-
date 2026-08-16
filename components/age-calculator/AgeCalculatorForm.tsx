@@ -1,9 +1,10 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { RefreshCw, ArrowRight, AlertCircle, RotateCcw } from 'lucide-react';
+import { RefreshCw, Calculator, AlertCircle, RotateCcw } from 'lucide-react';
 import RobustDateInput from '../ui/RobustDateInput';
 import PresetButtons from '../ui/PresetButtons';
+import CuteCharacter from '../ui/CuteCharacter';
 import { getTodayISODate } from '../../lib/age/dateUtils';
 import { validateAgeInputs } from '../../lib/age/ageEngine';
 import { ValidationErrors } from '../../lib/age/types';
@@ -26,6 +27,7 @@ export default function AgeCalculatorForm({
     initialTargetDate || getTodayISODate()
   );
   const [errors, setErrors] = useState<ValidationErrors>({});
+  const [, setHasCalculated] = useState(false);
 
   useEffect(() => {
     if (!targetDate) {
@@ -49,6 +51,7 @@ export default function AgeCalculatorForm({
     }
 
     setErrors({});
+    setHasCalculated(true);
     onCalculate(dob, targetDate);
   };
 
@@ -56,6 +59,7 @@ export default function AgeCalculatorForm({
     setDob('');
     setTargetDate(getTodayISODate());
     setErrors({});
+    setHasCalculated(false);
     onReset();
   };
 
@@ -67,29 +71,31 @@ export default function AgeCalculatorForm({
   };
 
   return (
-    <div id="calculator-form" className="w-full bg-white dark:bg-charcoal-900 rounded-2xl sm:rounded-3xl p-6 sm:p-7 border border-roseProduct-200 dark:border-charcoal-700 shadow-card transition-all relative">
-      
-      {/* Form Header */}
-      <div className="border-b border-blush-200 dark:border-charcoal-800 pb-3 mb-5">
-        <h2 className="text-xs font-bold uppercase tracking-wider text-roseProduct-500 font-sans">
-          AGE CALCULATOR
-        </h2>
-        <p className="text-sm font-semibold text-charcoal-900 dark:text-white mt-0.5">
-          Enter your birth date to calculate exact age
-        </p>
+    <div id="calculator-form" className="w-full bg-white dark:bg-purpleText-900 rounded-3xl sm:rounded-4xl p-5 sm:p-7 border-2 border-pinkPastel-200 dark:border-purpleText-800 shadow-cute transition-all relative">
+      {/* Header section */}
+      <div className="flex items-center justify-between border-b border-pinkPastel-100 dark:border-purpleText-800 pb-3.5 mb-5">
+        <div>
+          <h2 className="text-xl sm:text-2xl font-extrabold font-serif tracking-tight text-purpleText-900 dark:text-white">
+            Age <span className="text-pinkPastel-500 font-serif">Calculator</span>
+          </h2>
+          <p className="text-xs sm:text-sm text-purpleText-600 dark:text-purpleText-400 mt-0.5 font-medium">
+            Calculate exact age in years, months, and days
+          </p>
+        </div>
+
+        <CuteCharacter variant="calendar" size={54} className="hidden sm:block" />
       </div>
 
       <form onSubmit={handleSubmit} noValidate className="space-y-5">
-        <div className="space-y-4">
-          
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-5 sm:gap-6">
           {/* Date of Birth Field */}
           <div className="space-y-1.5">
             <label
               htmlFor="dob-picker"
-              className="block text-xs font-bold uppercase tracking-wider text-charcoal-800 dark:text-charcoal-200 flex items-center justify-between"
+              className="block text-xs font-black uppercase tracking-wider text-purpleText-900 dark:text-purpleText-100 flex items-center justify-between"
             >
-              <span>Date of Birth</span>
-              <span className="text-[11px] text-roseProduct-500 font-semibold">* Required</span>
+              <span>DATE OF BIRTH</span>
+              <span className="text-[11px] text-pinkPastel-500 font-extrabold">* Required</span>
             </label>
 
             <RobustDateInput
@@ -104,8 +110,8 @@ export default function AgeCalculatorForm({
             />
 
             {errors.dob && (
-              <p className="text-xs font-semibold text-roseProduct-600 dark:text-roseProduct-400 flex items-center space-x-1.5 mt-1 animate-fadeIn">
-                <AlertCircle className="w-3.5 h-3.5 flex-shrink-0 text-roseProduct-500" />
+              <p className="text-xs font-bold text-pinkPastel-600 dark:text-pinkPastel-400 flex items-center space-x-1.5 mt-1 animate-fadeIn">
+                <AlertCircle className="w-3.5 h-3.5 flex-shrink-0 text-pinkPastel-500" />
                 <span>{errors.dob}</span>
               </p>
             )}
@@ -119,16 +125,16 @@ export default function AgeCalculatorForm({
           </div>
 
           {/* Today's Date / Age On Field */}
-          <div className="space-y-1.5 pt-1">
+          <div className="space-y-1.5">
             <label
               htmlFor="target-picker"
-              className="block text-xs font-bold uppercase tracking-wider text-charcoal-800 dark:text-charcoal-200 flex items-center justify-between"
+              className="block text-xs font-black uppercase tracking-wider text-purpleText-900 dark:text-purpleText-100 flex items-center justify-between"
             >
-              <span>Today&apos;s Date / Age On</span>
+              <span>TODAY&apos;S DATE / AGE ON</span>
               <button
                 type="button"
                 onClick={handleUseTodayTarget}
-                className="text-xs font-semibold text-roseProduct-500 hover:underline flex items-center space-x-1 focus:outline-none cursor-pointer"
+                className="text-xs font-extrabold text-pinkPastel-500 hover:underline flex items-center space-x-1 focus:outline-none cursor-pointer"
               >
                 <RefreshCw className="w-3 h-3" />
                 <span>Use Today</span>
@@ -147,39 +153,41 @@ export default function AgeCalculatorForm({
             />
 
             {errors.targetDate && (
-              <p className="text-xs font-semibold text-roseProduct-600 dark:text-roseProduct-400 flex items-center space-x-1.5 mt-1 animate-fadeIn">
-                <AlertCircle className="w-3.5 h-3.5 flex-shrink-0 text-roseProduct-500" />
+              <p className="text-xs font-bold text-pinkPastel-600 dark:text-pinkPastel-400 flex items-center space-x-1.5 mt-1 animate-fadeIn">
+                <AlertCircle className="w-3.5 h-3.5 flex-shrink-0 text-pinkPastel-500" />
                 <span>{errors.targetDate}</span>
               </p>
             )}
+
+            <p className="text-xs text-purpleText-600 dark:text-purpleText-400 mt-1 font-medium">
+              Defaults to today. Choose any past or future date to calculate age on that day.
+            </p>
           </div>
         </div>
 
         {/* Action Buttons */}
-        <div className="flex items-center gap-3 pt-2">
+        <div className="flex flex-col sm:flex-row items-center gap-3 pt-2">
           <button
             type="submit"
-            className="btn-calculate flex-1 cursor-pointer"
+            className="btn-calculate w-full sm:flex-1 cursor-pointer"
           >
+            <Calculator className="w-5 h-5" />
             <span>Calculate Age</span>
-            <ArrowRight className="w-4 h-4" />
           </button>
 
           <button
             type="button"
             onClick={handleReset}
-            className="btn-reset cursor-pointer"
-            title="Reset form"
+            className="btn-reset w-full sm:w-auto cursor-pointer"
           >
             <RotateCcw className="w-4 h-4" />
-            <span className="hidden sm:inline">Reset</span>
+            <span>Reset</span>
           </button>
         </div>
       </form>
     </div>
   );
 }
-
 
 
 

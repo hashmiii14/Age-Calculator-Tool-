@@ -2,7 +2,8 @@
 
 import React, { useState } from 'react';
 import Breadcrumbs from '../../components/ui/Breadcrumbs';
-import { Send, CheckCircle2 } from 'lucide-react';
+import { Send, CheckCircle2, Mail, Heart } from 'lucide-react';
+import CuteCharacter from '../../components/ui/CuteCharacter';
 
 export default function ContactPage() {
   const [submitted, setSubmitted] = useState(false);
@@ -19,33 +20,48 @@ export default function ContactPage() {
   };
 
   return (
-    <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 space-y-8 text-slate-200">
+    <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 space-y-8 text-purpleText-900 dark:text-purpleText-100">
       <Breadcrumbs items={[{ label: 'Contact Us' }]} />
 
       <section className="space-y-3 text-center max-w-xl mx-auto">
-        <h1 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight font-serif">
-          Contact AgePulse
+        <div className="inline-flex items-center space-x-2 px-3.5 py-1.5 rounded-full bg-pinkPastel-100 dark:bg-purpleText-800 text-pinkPastel-600 dark:text-pinkPastel-300 text-xs font-extrabold uppercase tracking-wider">
+          <Mail className="w-3.5 h-3.5 text-pinkPastel-500" />
+          <span>Get In Touch</span>
+        </div>
+
+        <h1 className="text-3xl sm:text-5xl font-black text-purpleText-900 dark:text-white tracking-tight font-serif">
+          Contact <span className="text-pinkPastel-500 font-serif italic">AgePulse</span>
         </h1>
-        <p className="text-slate-300 text-sm sm:text-base">
-          Have feedback, bug reports, or feature suggestions? Send us a message below or email us directly at <strong className="text-[#E85D36] font-mono">mdhashmi955@gmail.com</strong>.
+        <p className="text-sm sm:text-base text-purpleText-600 dark:text-purpleText-300 font-medium">
+          Have feedback, feature requests, or questions? Send us a message or email us directly at{' '}
+          <a href="mailto:mdhashmi955@gmail.com" className="text-pinkPastel-500 font-bold underline">
+            mdhashmi955@gmail.com
+          </a>.
         </p>
       </section>
 
-      <div className="max-w-xl mx-auto bg-slate-900 p-6 sm:p-8 rounded-3xl border border-slate-800 shadow-2xl">
+      <div className="max-w-xl mx-auto bg-white dark:bg-purpleText-900 p-6 sm:p-8 rounded-3xl sm:rounded-4xl border-2 border-pinkPastel-200 dark:border-purpleText-800 shadow-cute">
         {submitted ? (
           <div className="text-center py-8 space-y-4 animate-fadeIn">
-            <div className="w-12 h-12 rounded-full bg-emerald-950 text-emerald-400 border border-emerald-800 flex items-center justify-center mx-auto">
-              <CheckCircle2 className="w-6 h-6" />
+            <div className="w-14 h-14 rounded-3xl bg-pinkPastel-100 dark:bg-purpleText-800 text-pinkPastel-500 flex items-center justify-center mx-auto border-2 border-pinkPastel-300 dark:border-purpleText-700">
+              <CheckCircle2 className="w-7 h-7" />
             </div>
-            <h3 className="text-xl font-bold text-white">Opening Email Client</h3>
-            <p className="text-sm text-slate-300">
-              Your message draft has been generated in your default email application. You can also email us directly at <strong className="text-[#E85D36] font-mono">mdhashmi955@gmail.com</strong>.
+            <h3 className="text-2xl font-black font-serif text-purpleText-900 dark:text-white">Email Draft Prepared!</h3>
+            <p className="text-xs sm:text-sm text-purpleText-600 dark:text-purpleText-300 font-medium leading-relaxed max-w-sm mx-auto">
+              Your default email application has opened with your message. If it did not launch automatically, send an email directly to{' '}
+              <a href="mailto:mdhashmi955@gmail.com" className="text-pinkPastel-500 font-bold underline">
+                mdhashmi955@gmail.com
+              </a>.
             </p>
           </div>
         ) : (
           <form onSubmit={handleSubmit} className="space-y-5">
-            <div>
-              <label htmlFor="contact-name" className="block text-xs font-semibold uppercase tracking-wider text-slate-300 mb-1">
+            <div className="flex justify-center pb-2">
+              <CuteCharacter variant="celebrating" size={80} className="drop-shadow-sm" />
+            </div>
+
+            <div className="space-y-1">
+              <label htmlFor="contact-name" className="block text-xs font-black uppercase tracking-wider text-purpleText-900 dark:text-purpleText-100">
                 Your Name
               </label>
               <input
@@ -55,13 +71,13 @@ export default function ContactPage() {
                 onChange={(e) => setName(e.target.value)}
                 required
                 placeholder="Jane Doe"
-                className="w-full px-4 py-3 rounded-xl border border-slate-700 bg-slate-800 text-white focus:ring-2 focus:ring-orange-500 focus:outline-none"
+                className="w-full px-4 py-3 rounded-2xl border-2 border-pinkPastel-200 dark:border-purpleText-800 bg-white dark:bg-purpleText-950 text-purpleText-900 dark:text-white focus:border-pinkPastel-500 focus:outline-none text-sm font-bold placeholder-purpleText-400"
               />
             </div>
 
-            <div>
-              <label htmlFor="contact-email" className="block text-xs font-semibold uppercase tracking-wider text-slate-300 mb-1">
-                Email Address
+            <div className="space-y-1">
+              <label htmlFor="contact-email" className="block text-xs font-black uppercase tracking-wider text-purpleText-900 dark:text-purpleText-100">
+                Your Email Address
               </label>
               <input
                 id="contact-email"
@@ -70,13 +86,13 @@ export default function ContactPage() {
                 onChange={(e) => setEmail(e.target.value)}
                 required
                 placeholder="jane@example.com"
-                className="w-full px-4 py-3 rounded-xl border border-slate-700 bg-slate-800 text-white focus:ring-2 focus:ring-orange-500 focus:outline-none"
+                className="w-full px-4 py-3 rounded-2xl border-2 border-pinkPastel-200 dark:border-purpleText-800 bg-white dark:bg-purpleText-950 text-purpleText-900 dark:text-white focus:border-pinkPastel-500 focus:outline-none text-sm font-bold placeholder-purpleText-400"
               />
             </div>
 
-            <div>
-              <label htmlFor="contact-msg" className="block text-xs font-semibold uppercase tracking-wider text-slate-300 mb-1">
-                Message
+            <div className="space-y-1">
+              <label htmlFor="contact-msg" className="block text-xs font-black uppercase tracking-wider text-purpleText-900 dark:text-purpleText-100">
+                Your Message
               </label>
               <textarea
                 id="contact-msg"
@@ -85,19 +101,26 @@ export default function ContactPage() {
                 onChange={(e) => setMessage(e.target.value)}
                 required
                 placeholder="How can we help you?"
-                className="w-full px-4 py-3 rounded-xl border border-slate-700 bg-slate-800 text-white focus:ring-2 focus:ring-orange-500 focus:outline-none"
+                className="w-full px-4 py-3 rounded-2xl border-2 border-pinkPastel-200 dark:border-purpleText-800 bg-white dark:bg-purpleText-950 text-purpleText-900 dark:text-white focus:border-pinkPastel-500 focus:outline-none text-sm font-bold placeholder-purpleText-400"
               />
             </div>
 
             <button
               type="submit"
-              className="w-full py-3.5 px-6 rounded-xl bg-orange-600 hover:bg-orange-700 text-white font-semibold text-sm shadow-md transition-colors flex items-center justify-center space-x-2 focus:outline-none focus:ring-2 focus:ring-orange-500"
+              className="btn-calculate w-full cursor-pointer py-3.5"
             >
               <Send className="w-4 h-4" />
               <span>Send Message</span>
             </button>
           </form>
         )}
+      </div>
+
+      <div className="text-center text-xs text-purpleText-500 dark:text-purpleText-400 font-medium">
+        Email us directly at{' '}
+        <a href="mailto:mdhashmi955@gmail.com" className="text-pinkPastel-500 font-bold hover:underline">
+          mdhashmi955@gmail.com
+        </a>
       </div>
     </div>
   );
